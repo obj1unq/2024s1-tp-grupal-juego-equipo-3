@@ -6,17 +6,17 @@ import mosquito.*
 
 program Game {
 	gameConfiguration.init()
-		// generate random walls
-//	#{1,2,3,4,5,6,7,8,9,10}.forEach { _ => 
-//		var wall = new Wall()
-//		wall.setPosition(new Range(start = 0, end = 9).anyOne(),new Range(start = 0, end = 9).anyOne())
-//		game.addVisual(wall)
-//	}
+	// generate random walls
+	//	#{1,2,3,4,5,6,7,8,9,10}.forEach { _ => 
+	//		var wall = new Wall()
+	//		wall.setPosition(new Range(start = 0, end = 9).anyOne(),new Range(start = 0, end = 9).anyOne())
+	//		game.addVisual(wall)
+	//	}
 	
 	var mosquitos = [  ]
 	(0 .. 5).forEach{ m =>
 		var mosquito = new Mosquito()
-		mosquito.position(new Position(x = 0.randomUpTo(12), y = 0.randomUpTo(12)))
+		mosquito.position(new Position(x = 0.randomUpTo( game.height() - 1), y = 0.randomUpTo(game.height() - 1)))
 		mosquitos.add(mosquito)
 	}
 	
