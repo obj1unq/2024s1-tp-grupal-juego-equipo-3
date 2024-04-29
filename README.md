@@ -1,4 +1,4 @@
-![juego-prueba](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/03636038-6a45-4fb9-9c8f-1036e3b56c78)# Nombre del juego (Próximamente)
+# Nombre del juego (Próximamente)
 
 ## Equipo de desarrollo
 
@@ -9,7 +9,7 @@
 
 ## Capturas
 
-![Juego-Prototipo](![juego-prueba](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/2f3fba67-f097-4f4b-b28d-78cf6f4a5b58)
+![juego-protitpo](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/a625fee8-0916-4236-8f04-44c9528e742c)
 
 ## Reglas de Juego / Instrucciones (Tentativo)
 
