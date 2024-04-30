@@ -1,7 +1,7 @@
 import wollok.game.*
 import extras.*
 import main_character.*
-import walls.*
+import obstacles.*
 import mosquito.*
 import randomizer.*
 

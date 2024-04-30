@@ -1,7 +1,7 @@
 import wollok.game.*
 import main_character.*
 import randomizer.*
-import walls.*
+import obstacles.*
 
 object gameConfiguration {
 
@@ -33,15 +33,14 @@ object teclado {
 
 object obstacleGeneration {
 
-	method configurate() {
-		(0 .. 20).forEach{ i =>
-			var stone = new Stone()
-			game.addVisualIn(stone, randomizer.emptyPosition())
-		}
-	}
-	
-	// TODO: Agregar plantas y ladrillos a la generación aleatoria
+	const property obstacles = [ plant, brick, stone ]
 
+	method configurate() {
+		var obstacle = (0 .. 30).map({ i => obstacles.anyOne().crear(randomizer.emptyPosition()) })
+		obstacle.forEach({ i => game.addVisual(i)})
+	}
+
+// TODO: Agregar plantas y ladrillos a la generación aleatoria
 }
 
 /*method configurate() {
