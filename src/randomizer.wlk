@@ -2,9 +2,11 @@ import wollok.game.*
 object randomizer {
 		
 	method position() {
+		const gameWidth = game.width() - 2
+		const gameHeight = game.height() - 4
 		return 	game.at( 
-					(0 .. game.width() - 1 ).anyOne(),
-					(0..  game.height() - 1).anyOne()
+					(1 .. gameWidth).anyOne(),
+					(1 ..  gameHeight).anyOne()
 		) 
 	}
 	
@@ -16,6 +18,11 @@ object randomizer {
 		else {
 			return self.emptyPosition()
 		}
+	}
+	
+	// NUEVA: Generación de número al azar entre un mínimo y un máximo para alternan sprites
+	method randomNumber(min, max){
+		return min.randomUpTo(max).roundUp(0)
 	}
 	
 }

@@ -7,24 +7,24 @@ object mainCharacter {
 
 	method image() = "entrenador.png"
 
-
+	// TODO: Limitar movimiento dentro de los límites del tablero
 	method irA(newPosition, newDirection) {
 		self.direction(newDirection)
 		position = newPosition
 	}
-	
-	method sayDirection(){
-		game.say(self, direction.say()) 
+
+	method sayDirection() {
+		game.say(self, direction.say())
 	}
-	
-	method evadeCollide(){
+
+	method evadeCollide() {
 		position = direction.newPosition(self.position())
 	}
+
 }
 
-
-
 object leftDirection {
+
 	method newPosition(currentPosition) {
 		return new Position(x = currentPosition.x() + 1, y = currentPosition.y())
 	}
@@ -36,6 +36,7 @@ object leftDirection {
 }
 
 object downDirection {
+
 	method newPosition(currentPosition) {
 		return new Position(x = currentPosition.x(), y = currentPosition.y() + 1)
 	}
@@ -47,6 +48,7 @@ object downDirection {
 }
 
 object rightDirection {
+
 	method newPosition(currentPosition) {
 		return new Position(x = currentPosition.x() - 1, y = currentPosition.y())
 	}
@@ -57,7 +59,8 @@ object rightDirection {
 
 }
 
-object toptDirection {
+object topDirection {
+
 	method newPosition(currentPosition) {
 		return new Position(x = currentPosition.x(), y = currentPosition.y() - 1)
 	}
@@ -67,3 +70,4 @@ object toptDirection {
 	}
 
 }
+
