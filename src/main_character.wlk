@@ -5,8 +5,8 @@ object mainCharacter {
 	var property direction
 	var property position = game.at(4, 4)
 
-	method image() = "entrenador.png"
-
+	method image() = "characterfront.png"
+	
 	// TODO: Limitar movimiento dentro de los límites del tablero
 	method irA(newPosition, newDirection) {
 		self.direction(newDirection)
