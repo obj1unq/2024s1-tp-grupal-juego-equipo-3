@@ -12,20 +12,19 @@ object gameConfiguration {
 		game.width(20)
 		game.cellSize(64)
 		obstacleGeneration.configurate()
-		teclado.configurate()
+		keyboardConfig.configurate()
 		game.addVisual(mainCharacter)
 	}
 
 }
 
-object teclado {
+object keyboardConfig {
 
 	method configurate() {
-		// keyboard.any().onPressDo{ juegoPepita.chequearEstadoJuego()}
-		keyboard.left().onPressDo{ mainCharacter.irA(mainCharacter.position().left(1), leftDirection)}
-		keyboard.right().onPressDo{ mainCharacter.irA(mainCharacter.position().right(1), rightDirection)}
-		keyboard.up().onPressDo{ mainCharacter.irA(mainCharacter.position().up(1), topDirection)}
-		keyboard.down().onPressDo{ mainCharacter.irA(mainCharacter.position().down(1), downDirection)}
+		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
+		keyboard.right().onPressDo{ mainCharacter.goesTo(rigthDirection)}
+		keyboard.up().onPressDo{ mainCharacter.goesTo(topDirection)}
+		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
 	}
 
@@ -40,32 +39,5 @@ object obstacleGeneration {
 		obstacle.forEach({ i => game.addVisual(i)})
 	}
 
-// TODO: Agregar plantas y ladrillos a la generación aleatoria
 }
 
-/*method configurate() {
- * 	const ancho = game.width() - 2
- * 	const alto = game.height() - 2
- * 	const posicionesParaGenerarMuros = []
- * 	(0 .. ancho).forEach{ num =>
- * 		const wall = new Obstacle()
- * 		wall.setPosition(num, alto)
- * 		posicionesParaGenerarMuros.add(wall)
- * 	}
- * 	(0 .. ancho).forEach{ num =>
- * 		const wall = new Obstacle()
- * 		wall.setPosition(num, 0)
- * 		posicionesParaGenerarMuros.add(wall)
- * 	}
- * 	(0 .. alto).forEach{ num =>
- * 		const wall = new Obstacle()
- * 		wall.setPosition(ancho, num)
- * 		posicionesParaGenerarMuros.add(wall)
- * 	}
- * 	(0 .. alto).forEach{ num =>
- * 		const wall = new Obstacle()
- * 		wall.setPosition(0, num)
- * 		posicionesParaGenerarMuros.add(wall)
- * 	}
- * 		 posicionesParaGenerarMuros.forEach{ w => game.addVisualIn(w, w.position())}
- }*/

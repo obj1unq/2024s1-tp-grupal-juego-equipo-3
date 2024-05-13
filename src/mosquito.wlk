@@ -8,10 +8,11 @@ class Mosquito {
   method setPosition(x, y){
   		position = game.at(x, y)
   }
-  
-  method whenCollide(mainCharacter){
-  		mainCharacter.evadeCollide()
-  }
+
+//  REVISAR
+//  method whenCollide(mainCharacter){
+//  		mainCharacter.evadeCollide()
+//  }
   
   method moving(){ 
   	self.position(new Position(x = self.position().x() +1, y = self.position().y() +1))

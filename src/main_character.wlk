@@ -1,4 +1,5 @@
 import wollok.game.*
+import limit.*
 
 object mainCharacter {
 
@@ -6,11 +7,14 @@ object mainCharacter {
 	var property position = game.at(4, 4)
 
 	method image() = "characterfront.png"
-	
+
 	// TODO: Limitar movimiento dentro de los límites del tablero
-	method irA(newPosition, newDirection) {
-		self.direction(newDirection)
-		position = newPosition
+	method goesTo(newDirection) {
+		const newPosition = newDirection.nextMove(position)
+		if (limit.in(newPosition)) {
+			self.direction(newDirection)
+			self.position(newPosition)
+		}
 	}
 
 	method sayDirection() {
@@ -18,51 +22,68 @@ object mainCharacter {
 	}
 
 	method evadeCollide() {
-		position = direction.newPosition(self.position())
+		const newDirection = self.direction().opossite()
+		self.goesTo(newDirection)
 	}
 
 }
 
 object leftDirection {
 
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x() + 1, y = currentPosition.y())
+	method nextMove(position) {
+		return game.at(position.x() - 1, position.y())
 	}
 
 	method say() {
 		return 'left'
 	}
 
+	method opossite() {
+		return rigthDirection
+	}
+
 }
 
 object downDirection {
 
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x(), y = currentPosition.y() + 1)
+	method nextMove(position) {
+		return game.at(position.x(), position.y() - 1)
 	}
 
 	method say() {
 		return 'down'
 	}
 
+	method opossite() {
+		return topDirection
+	}
+
 }
 
-object rightDirection {
+object rigthDirection {
 
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x() - 1, y = currentPosition.y())
+	method nextMove(position) {
+		return game.at(position.x() + 1, position.y())
+	}
+
+	method opossite() {
+		return leftDirection
 	}
 
 	method say() {
-		return 'right'
+		return 'rigth'
 	}
 
 }
 
 object topDirection {
 
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x(), y = currentPosition.y() - 1)
+	method nextMove(position) {
+		return game.at(position.x(), position.y() + 1)
+	}
+
+	method opossite() {
+		return downDirection
 	}
 
 	method say() {
