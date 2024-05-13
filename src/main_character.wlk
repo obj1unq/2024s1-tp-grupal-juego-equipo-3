@@ -1,12 +1,14 @@
 import wollok.game.*
+import spiral.*
 
 object mainCharacter {
 
 	var property direction
 	var property position = game.at(4, 4)
+	const property mochila = []
 
 	method image() = "characterfront.png"
-	
+
 	// TODO: Limitar movimiento dentro de los límites del tablero
 	method irA(newPosition, newDirection) {
 		self.direction(newDirection)
@@ -15,6 +17,10 @@ object mainCharacter {
 
 	method sayDirection() {
 		game.say(self, direction.say())
+	}
+
+	method takeElement(element) {
+		element.taken()
 	}
 
 	method evadeCollide() {
