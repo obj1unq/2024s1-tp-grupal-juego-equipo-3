@@ -1,4 +1,4 @@
-import wollok.game.*
+simport wollok.game.*
 import limit.*
 import extras.*
 
@@ -39,7 +39,7 @@ object leftDirection {
 	}
 
 	method opossite() {
-		return rigthDirection
+		return rightDirection
 	}
 
 }
@@ -60,7 +60,7 @@ object downDirection {
 
 }
 
-object rigthDirection {
+object rightDirection {
 
 	method nextMove(position) {
 		return game.at(position.x() + 1, position.y())
@@ -71,7 +71,7 @@ object rigthDirection {
 	}
 
 	method say() {
-		return 'rigth'
+		return 'right'
 	}
 
 }
