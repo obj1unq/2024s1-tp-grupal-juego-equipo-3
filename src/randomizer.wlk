@@ -2,8 +2,8 @@ import wollok.game.*
 object randomizer {
 		
 	method position() {
-		const gameWidth = game.width() - 2
-		const gameHeight = game.height() - 4
+		const gameWidth = game.width() - 1
+		const gameHeight = game.height() - 1
 		return 	game.at( 
 					(1 .. gameWidth).anyOne(),
 					(1 ..  gameHeight).anyOne()
