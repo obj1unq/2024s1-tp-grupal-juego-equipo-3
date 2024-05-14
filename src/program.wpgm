@@ -12,6 +12,6 @@ program Game {
 		 * 	// TODO: Randomizar las posiciones
 		 * game.onTick(2000, "mosquitos moving", { => mosquitos.forEach({ unMosquito => unMosquito.moving()}) })
 		 * 	// TODO: Corregir movimiento de los mosquitos*/
-	game.onCollideDo(mainCharacter, { o => o.whenCollide(mainCharacter) })
+		// game.onCollideDo(mainCharacter, { o => o.whenCollide(mainCharacter) })
 	game.start()
 }

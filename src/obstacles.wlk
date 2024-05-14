@@ -13,12 +13,6 @@ class Obstacle {
 		return imageFile + asset + ".png"
 	}
 
-	method whenCollide(character) {
-//		const direction = character.direction().opossite()
-//		character.goesTo(direction)
-		character.evadeCollide()
-	}
-
 }
 
 // Creación de clases que heredan de obstacle

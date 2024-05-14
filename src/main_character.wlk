@@ -11,7 +11,7 @@ object mainCharacter {
 	// TODO: Limitar movimiento dentro de los límites del tablero
 	method goesTo(newDirection) {
 		const newPosition = newDirection.nextMove(position)
-		if (limit.in(newPosition)) {
+		if (limit.in(newPosition) && game.getObjectsIn(newPosition).get(0).isSolid()) {
 			self.direction(newDirection)
 			self.position(newPosition)
 		}
@@ -39,7 +39,7 @@ object leftDirection {
 	}
 
 	method opossite() {
-		return rigthDirection
+		return rightDirection
 	}
 
 }
@@ -60,7 +60,7 @@ object downDirection {
 
 }
 
-object rigthDirection {
+object rightDirection {
 
 	method nextMove(position) {
 		return game.at(position.x() + 1, position.y())
@@ -71,7 +71,7 @@ object rigthDirection {
 	}
 
 	method say() {
-		return 'rigth'
+		return 'right'
 	}
 
 }

@@ -11,9 +11,9 @@ object gameConfiguration {
 		game.height(16)
 		game.width(20)
 		game.cellSize(64)
+		game.addVisual(mainCharacter)
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
-		game.addVisual(mainCharacter)
 	}
 
 }
@@ -22,7 +22,7 @@ object keyboardConfig {
 
 	method configurate() {
 		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
-		keyboard.right().onPressDo{ mainCharacter.goesTo(rigthDirection)}
+		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(topDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
