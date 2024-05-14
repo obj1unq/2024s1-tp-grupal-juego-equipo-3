@@ -2,6 +2,7 @@ import wollok.game.*
 import main_character.*
 import randomizer.*
 import obstacles.*
+import spiral.*
 
 object gameConfiguration {
 
@@ -27,13 +28,10 @@ object teclado {
 		keyboard.up().onPressDo{ mainCharacter.irA(mainCharacter.position().up(1), topDirection)}
 		keyboard.down().onPressDo{ mainCharacter.irA(mainCharacter.position().down(1), downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
-		keyboard.t().onPressDo{ mainCharacter.takeElement()}
+		keyboard.f().onPressDo{ mainCharacter.foundElement()}
 	}
 
 }
-
-
-
 
 object obstacleGeneration {
 

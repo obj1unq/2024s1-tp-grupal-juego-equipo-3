@@ -19,9 +19,23 @@ object mainCharacter {
 		game.say(self, direction.say())
 	}
 
-	method takeElement(element) {
-		element.taken()
+	method foundElement() {
+		//uniqueColliders para enviarle al elemento un mensaje con self
+		// y que reconozca que se encontró con él. Este elemento debe
+		// saber que debe guardarse en mochila con validateMochila() y si es agarrable()
 	}
+
+//	method validateMochila() {
+//		if (not mochila.size() < 2) {
+//			self.error("no puedo guardar más cajas de espirales")
+//		}
+//	}
+//
+//	method validateElement(element) {
+//		if (not element.esAgarrable()) {
+//			self.error("no lo puedo agarrar")
+//		}
+//	}
 
 	method evadeCollide() {
 		position = direction.newPosition(self.position())

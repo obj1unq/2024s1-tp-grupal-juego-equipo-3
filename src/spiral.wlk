@@ -8,7 +8,7 @@ object spiralBoxManager {
 
 	method makeBoxSpirals() {
 		if (spiralBoxBoard.size() < 2) {
-			spiralBoxBoard.add(spiralBoxFactory.makeSpiral())
+			spiralBoxBoard.add(spiralBoxFactory.makeBoxSpiral())
 		}
 	}
 
@@ -27,7 +27,7 @@ object spiralBoxFactory {
 class SpiralBox {
 
 	var property position = randomizer.emptyPosition()
-	const property = []
+	const property spirals = 10
 
 	method image() {
 		return trash01.png // temporal hasta que tengamos imagen de caja de espirales
@@ -42,7 +42,7 @@ class SpiralBox {
 	}
 
 	method taken(mainCharacter) {
-		mainCharacter.takeElement()
+		mainCharacter.guardarEnLaMochila()
 	}
 
 }
