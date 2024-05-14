@@ -1,5 +1,6 @@
 import wollok.game.*
 import limit.*
+import extras.*
 
 object mainCharacter {
 
@@ -8,10 +9,9 @@ object mainCharacter {
 
 	method image() = "characterfront.png"
 
-	// TODO: Limitar movimiento dentro de los límites del tablero
 	method goesTo(newDirection) {
 		const newPosition = newDirection.nextMove(position)
-		if (limit.in(newPosition)) {
+		if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
 			self.direction(newDirection)
 			self.position(newPosition)
 		}

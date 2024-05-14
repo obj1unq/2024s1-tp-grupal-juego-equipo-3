@@ -3,8 +3,6 @@ import randomizer.*
 
 class Obstacle {
 
-	// TODO: Revisar dónde configurar las colisiones
-	// TODO: Ver que métodos y atributos se pueden heredar desde la clase Obstacle
 	var property position
 	const imageFile
 	const asset
@@ -14,9 +12,11 @@ class Obstacle {
 	}
 
 	method whenCollide(character) {
-//		const direction = character.direction().opossite()
-//		character.goesTo(direction)
 		character.evadeCollide()
+	}
+	
+	method isSolid(){
+		return true
 	}
 
 }
