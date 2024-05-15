@@ -48,7 +48,7 @@ class Mosquito1 inherits Mosquito {
 			self.position(nuevaPosicion)
 		}
 	}
-C:\Users\publico\git\2024s1-tp-grupal-juego-equipo-3
+
 
 	method nextMove() {
 		// var posiciones = [game.at(self.position().x(), (1..-1).anyOne()),
