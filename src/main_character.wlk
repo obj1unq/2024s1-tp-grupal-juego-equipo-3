@@ -1,4 +1,4 @@
-simport wollok.game.*
+import wollok.game.*
 import limit.*
 import extras.*
 
