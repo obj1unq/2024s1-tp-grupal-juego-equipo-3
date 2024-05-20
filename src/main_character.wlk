@@ -1,18 +1,23 @@
 import wollok.game.*
-import spiral.*
+import posiciones.*
+import character.*
+import mosquito.*
 
-object mainCharacter {
+object mainCharacter inherits Character {
 
-	var property direction
+	var property direction = null
 	var property position = game.at(4, 4)
 	const property mochila = #{}
 
 	method image() = "characterfront.png"
 
-	// TODO: Limitar movimiento dentro de los límites del tablero
-	method irA(newPosition, newDirection) {
-		self.direction(newDirection)
-		position = newPosition
+	method goesTo(newDirection) {
+		const newPosition = newDirection.nextMove(position)
+		if (self.canGo(newPosition)){
+		//if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
+			self.direction(newDirection)
+			self.position(newPosition)
+		}
 	}
 
 	method sayDirection() {
@@ -61,55 +66,12 @@ object mainCharacter {
 //	self.error("No tengo mas espirales")
 //}
 	method evadeCollide() {
-		position = direction.newPosition(self.position())
+		const newDirection = self.direction().opossite()
+		self.goesTo(newDirection)
 	}
-
-}
-
-object leftDirection {
-
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x() + 1, y = currentPosition.y())
-	}
-
-	method say() {
-		return 'left'
-	}
-
-}
-
-object downDirection {
-
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x(), y = currentPosition.y() + 1)
-	}
-
-	method say() {
-		return 'down'
-	}
-
-}
-
-object rightDirection {
-
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x() - 1, y = currentPosition.y())
-	}
-
-	method say() {
-		return 'right'
-	}
-
-}
-
-object topDirection {
-
-	method newPosition(currentPosition) {
-		return new Position(x = currentPosition.x(), y = currentPosition.y() - 1)
-	}
-
-	method say() {
-		return 'top'
+	
+	method chopped(mosquito){ //VER PICADO
+		mosquito.effect()
 	}
 
 }
