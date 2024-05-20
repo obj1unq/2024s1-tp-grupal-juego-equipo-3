@@ -5,7 +5,7 @@ object mainCharacter {
 
 	var property direction
 	var property position = game.at(4, 4)
-	const property mochila = []
+	const property mochila = #{}
 
 	method image() = "characterfront.png"
 
@@ -20,23 +20,46 @@ object mainCharacter {
 	}
 
 	method foundElement() {
-		//uniqueColliders para enviarle al elemento un mensaje con self
-		// y que reconozca que se encontró con él. Este elemento debe
-		// saber que debe guardarse en mochila con validateMochila() y si es agarrable()
+		self.validateElementFounded()
+		const elementosEncontrados = game.colliders(self).copyWithout(self)
+		elementosEncontrados.forEach{ element => element.taken(self)}
 	}
 
-//	method validateMochila() {
-//		if (not mochila.size() < 2) {
-//			self.error("no puedo guardar más cajas de espirales")
-//		}
-//	}
-//
-//	method validateElement(element) {
-//		if (not element.esAgarrable()) {
-//			self.error("no lo puedo agarrar")
-//		}
-//	}
+	method validateElementFounded() {
+		if (game.colliders(self).isEmpty()) {
+			self.error("Nada para agarrar")
+		}
+	}
 
+	method guardarEnLaMochila(element) {
+		mochila.add(element)
+	}
+
+	method putSpiral() {
+		self.validateEmptyPosition()
+		self.validateSpiralBox()
+		self.validateSpiralsInBox()
+	}
+
+	method validateEmptyPosition() {
+		if (not game.colliders(self).isEmpty()) {
+			self.error("No puedo dejar el espiral aquí")
+		}
+	}
+
+	method validateSpiralBox() {
+		if (mochila.isEmpty()) {
+			self.error("No tengo cajas de espirales")
+		}
+	}
+
+	method validateSpiralsInBox() {
+		if(mochila{spiralBox.spirals()} == 0
+	)
+	}
+
+	self.error("No tengo mas espirales")
+}
 	method evadeCollide() {
 		position = direction.newPosition(self.position())
 	}
