@@ -1,6 +1,6 @@
 import wollok.game.*
 
-object limit {
+object limit { // ver si es necesaria con el objeto character
 
 	const property maxX = game.width() - 2
 	const property minX = 1
