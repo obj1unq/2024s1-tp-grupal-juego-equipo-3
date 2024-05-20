@@ -7,10 +7,6 @@ import mosquito.*
 import posiciones.*
 import character.*
 
-const gameHeight = 15
-const gameWidth = 15
-const randomBlocks = 15
-
 object gameConfiguration {
 
 	const gameHeight = 15
