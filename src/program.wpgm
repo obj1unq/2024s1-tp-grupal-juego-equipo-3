@@ -1,5 +1,6 @@
 import wollok.game.*
 import extras.*
+import spiral.*
 
 program Game {
 	gameConfiguration.init()
