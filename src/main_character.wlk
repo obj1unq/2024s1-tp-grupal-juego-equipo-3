@@ -38,7 +38,7 @@ object mainCharacter {
 	method putSpiral() {
 		self.validateEmptyPosition()
 		self.validateSpiralBox()
-		self.validateSpiralsInBox()
+//		self.validateSpiralsInBox()
 	}
 
 	method validateEmptyPosition() {
@@ -53,13 +53,13 @@ object mainCharacter {
 		}
 	}
 
-	method validateSpiralsInBox() {
-		if(mochila{spiralBox.spirals()} == 0
-	)
-	}
+//	method validateSpiralsInBox() {
+//		if(mochila{spiralBox.spirals()} == 0
+//	)
+//	}
 
-	self.error("No tengo mas espirales")
-}
+//	self.error("No tengo mas espirales")
+//}
 	method evadeCollide() {
 		position = direction.newPosition(self.position())
 	}

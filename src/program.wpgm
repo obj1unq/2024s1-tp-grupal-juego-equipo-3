@@ -8,25 +8,6 @@ import spiral.*
 
 program Game {
 	gameConfiguration.init()
-		/*generate random walls
-		 * // #{1,2,3,4,5,6,7,8,9,10}.forEach { _ => 
-		 * // var wall = new Wall()
-		 * // wall.setPosition(new Range(start = 0, end = 9).anyOne(),new Range(start = 0, end = 9).anyOne())
-		 * // game.addVisual(wall)
-		 * // }
-		 * /*var mosquitos = [  ]
-		 * (0 .. 5).forEach{ m =>
-		 * 	var mosquito = new Mosquito()
-		 * 	mosquito.position(new Position(x = 0.randomUpTo( game.height() - 1), y = 0.randomUpTo(game.height() - 1)))
-		 * 	mosquitos.add(mosquito)
-		 } // Usar map*/
-	var mosquitos = (0 .. 5).map({ i => new Mosquito(position = new Position(x = 0.randomUpTo(game.height() - 1), y = 0.randomUpTo(game.height() - 1)))})
-	mosquitos.forEach{ m => game.addVisual(m) }
-		// TODO: Randomizar las posiciones
-	game.onTick(2000, "mosquitos moving", { => mosquitos.forEach({ unMosquito => unMosquito.moving()}) })
-		// TODO: Corregir movimiento de los mosquitos
-	game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { spiralBoxManager.makeBoxSpirals() }
-	game.whenCollideDo(mainCharacter, { m => m.whenCollide(mainCharacter) })
-		// TODO: Usar onCollideDo
+	game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { spiralBoxManager.makeBoxSpirals() })
 	game.start()
 }
