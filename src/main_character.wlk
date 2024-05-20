@@ -46,7 +46,7 @@ object mainCharacter inherits Character {
 	method putSpiral() {
 		self.validateEmptyPosition()
 		self.validateSpiralBox()
-		self.validateSpiralsInBox()
+//		self.validateSpiralsInBox()
 	}
 
 	method validateEmptyPosition() {
@@ -61,13 +61,13 @@ object mainCharacter inherits Character {
 		}
 	}
 
-	method validateSpiralsInBox() {
-		if(mochila{spiralBox.spirals()} == 0
-	)
-	}
+//	method validateSpiralsInBox() {
+//		if(mochila{spiralBox.spirals()} == 0
+//	)
+//	}
 
-	self.error("No tengo mas espirales")
-}
+//	self.error("No tengo mas espirales")
+//}
 	method evadeCollide() {
 		const newDirection = self.direction().opossite()
 		self.goesTo(newDirection)

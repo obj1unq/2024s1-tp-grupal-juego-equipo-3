@@ -42,8 +42,8 @@ object keyboardConfig {
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
 		keyboard.f().onPressDo{ mainCharacter.foundElement()}
 		keyboard.p().onPressDo{ mainCharacter.putSpiral()}
-		keyboard.u().onPressDo{ mainCharacter.useSpray()}
-		keyboard.t().onPressDo{ mainCharacter.cleanTrash()}
+//		keyboard.u().onPressDo{ mainCharacter.useSpray()}
+//		keyboard.t().onPressDo{ mainCharacter.cleanTrash()}
 	}
 
 }
