@@ -8,12 +8,6 @@ import spiral.*
 
 program Game {
 	gameConfiguration.init()
-		/*var mosquitos = (0 .. 5).map({ i => new Mosquito(position = new Position(x = 0.randomUpTo(game.height() - 1), y = 0.randomUpTo(game.height() - 1)))})
-		 * mosquitos.forEach{ m => game.addVisual(m) }
-		 * 	// TODO: Randomizar las posiciones
-		 * game.onTick(2000, "mosquitos moving", { => mosquitos.forEach({ unMosquito => unMosquito.moving()}) })
-		 * 	// TODO: Corregir movimiento de los mosquitos*/
-		// game.onCollideDo(mainCharacter, { o => o.whenCollide(mainCharacter) })
-		game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { spiralBoxManager.makeBoxSpirals() }
+	game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { spiralBoxManager.makeBoxSpirals() })
 	game.start()
 }
