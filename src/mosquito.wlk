@@ -1,93 +1,96 @@
 import wollok.game.*
 import randomizer.*
 import posiciones.*
+import main_character.*
+import character.*
 
-class Mosquito {
+class Mosquito inherits Character {
 
-	const escenario = tablero
 	var property position = randomizer.position()
 
 	method image() = "mosquito01.png"
 
-	method setPosition(x, y) {
-		position = game.at(x, y)
+	method colition() { // VER
+		game.onCollideDo(mainCharacter, { mainCharacter.chopped(self)})
 	}
 
-	method colision(mainCharacter) {
-		mainCharacter.picado()
+	method moving() {
+		game.onTick(1000, "", { self.typeMove()})
 	}
 
-	method esAtravesable() {
-		return true
-	}
+	method typeMove()
 
-	method moving()
+	method effect() // VER efecto que deja al picar cada mosquito
 
 }
 
+//Tipo de mosquitos
+class MosquitoHard inherits Mosquito {
 
-object mosquitosManager {
-
-	const mosquitos = [ mosquito1Factory, mosquito2Factory ]
-
-	method crearMosquitos() {
-		mosquitos.anyOne().crearMosquito()
-	}
-
-}
-
-class Mosquito1 inherits Mosquito {
-
-	override method moving() {
-		game.onTick(2000, "", { self.move()})
-	}
-
-	method move() {
-		const nuevaPosicion = self.nextMove()
-		if (escenario.puedeIr(self.position(), nuevaPosicion)) {
-			self.position(nuevaPosicion)
+	override method typeMove() { // Ver como buscar posiciones libres 
+		const newPosition = self.nextPosition()
+			// if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition)) {
+		if (self.canGo(newPosition)) {
+			self.position(newPosition)
 		}
 	}
 
+	method nextPosition() {
+		const directions = [ leftDirection, downDirection, upDirection, rightDirection ]
+		return (directions.anyOne()).nextMove(self.position())
+	}
 
-	method nextMove() {
-		// var posiciones = [game.at(self.position().x(), (1..-1).anyOne()),
-		// game.at((1..-1).anyOne(), self.position().y())  ]
-		const direcciones = [ arriba, abajo, izquierda, derecha ]
-		return direcciones.anyOne().siguiente(position) // posiciones.anyOne()
+	override method effect() {
 	}
 
 }
 
+class MosquitoSoft inherits Mosquito {
+
+	override method typeMove() {
+	}
+
+	override method effect() {
+	}
+
+}
+
+//Factory 
 class MosquitoFactory {
 
-	method crearMosquito() {
-		const mosquito = self.crear()
+	method createMosquito() {
+		const mosquito = self.create()
 		game.addVisual(mosquito)
 		mosquito.moving()
 	}
 
-	method crear()
+	method create()
 
 }
 
-object mosquito1Factory inherits MosquitoFactory {
+object mosquitoHardFactory inherits MosquitoFactory {
 
-	override method crear() {
-		return new Mosquito1()
+	override method create() {
+		return new MosquitoHard()
 	}
 
 }
 
-object mosquito2Factory inherits MosquitoFactory {
+object mosquitoSoftFactory inherits MosquitoFactory {
 
-	override method crear() {
-		return new Mosquito1()
+	override method create() {
+		return new MosquitoSoft()
 	}
 
 }
 
-class Mosquito2 inherits Mosquito {
+object mosquitosManager {
+
+	const mosquitos = [ mosquitoHardFactory ] // [mosquitoHardFactory,mosquitoSoftFactory ]
+
+	method createMosquitos() {
+		game.onTick(2000, "", { mosquitos.anyOne().createMosquito()})
+	}
 
 }
 

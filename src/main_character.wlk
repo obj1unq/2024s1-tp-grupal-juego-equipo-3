@@ -2,10 +2,13 @@ import wollok.game.*
 import spiral.*
 import limit.*
 import extras.*
+import posiciones.*
+import character.*
+import mosquito.*
 
-object mainCharacter {
+object mainCharacter inherits Character {
 
-	var property direction
+	var property direction = null
 	var property position = game.at(4, 4)
 	const property mochila = #{}
 
@@ -13,7 +16,8 @@ object mainCharacter {
 
 	method goesTo(newDirection) {
 		const newPosition = newDirection.nextMove(position)
-		if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
+		if (self.canGo(newPosition)){
+		//if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
 			self.direction(newDirection)
 			self.position(newPosition)
 		}
@@ -68,69 +72,9 @@ object mainCharacter {
 		const newDirection = self.direction().opossite()
 		self.goesTo(newDirection)
 	}
-
-}
-
-object leftDirection {
-
-	method nextMove(position) {
-		return game.at(position.x() - 1, position.y())
-	}
-
-	method say() {
-		return 'left'
-	}
-
-	method opossite() {
-		return rightDirection
-	}
-
-}
-
-object downDirection {
-
-	method nextMove(position) {
-		return game.at(position.x(), position.y() - 1)
-	}
-
-	method say() {
-		return 'down'
-	}
-
-	method opossite() {
-		return topDirection
-	}
-
-}
-
-object rightDirection {
-
-	method nextMove(position) {
-		return game.at(position.x() + 1, position.y())
-	}
-
-	method opossite() {
-		return leftDirection
-	}
-
-	method say() {
-		return 'right'
-	}
-
-}
-
-object topDirection {
-
-	method nextMove(position) {
-		return game.at(position.x(), position.y() + 1)
-	}
-
-	method opossite() {
-		return downDirection
-	}
-
-	method say() {
-		return 'top'
+	
+	method chopped(mosquito){ //VER PICADO
+		mosquito.effect()
 	}
 
 }

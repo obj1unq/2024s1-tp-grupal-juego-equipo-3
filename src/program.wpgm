@@ -1,10 +1,5 @@
 import wollok.game.*
 import extras.*
-import main_character.*
-import obstacles.*
-import mosquito.*
-import randomizer.*
-import spiral.*
 
 program Game {
 	gameConfiguration.init()

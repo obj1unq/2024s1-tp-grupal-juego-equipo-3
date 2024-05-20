@@ -14,9 +14,29 @@ class Obstacle {
 	method whenCollide(character) {
 		character.evadeCollide()
 	}
-	
-	method isSolid(){
+
+	method isSolid() {
 		return true
+	}
+
+}
+
+object obstacleGeneration {
+
+	const property obstacles = [ plant, brick, stone ]
+	const randomBlocks = 15
+
+	method configurate() {
+		var obstacle = (0 .. randomBlocks).map({ i => obstacles.anyOne().create(randomizer.emptyPosition()) })
+		obstacle.forEach({ i => game.addVisual(i)})
+	}
+
+	method isObstacleIn(position) {
+		const elements = game.getObjectsIn(position)
+//		return if (elements.isEmpty()) {
+//			false
+//		} else elements.first().isSolid()
+		return !elements.isEmpty() && elements.first().isSolid()
 	}
 
 }
@@ -39,17 +59,17 @@ object plant {
 
 	const assets = 3
 
-	method crear(position) {
-		return new Plant(position = position, asset = randomizer.randomNumber(1, assets))
+	method create(position) {
+		return new Plant(position = position, asset = randomizer.randomNumber(1, assets)) //Ver como hacer polimorfismo con los demas objetos 
 	}
 
 }
 
-object brick {
+object brick{
 
 	const assets = 3
 
-	method crear(position) {
+	method create(position) {
 		return new Brick(position = position, asset = randomizer.randomNumber(1, assets))
 	}
 
@@ -59,7 +79,7 @@ object stone {
 
 	const assets = 2
 
-	method crear(position) {
+	method create(position) {
 		return new Stone(position = position, asset = randomizer.randomNumber(1, assets))
 	}
 
