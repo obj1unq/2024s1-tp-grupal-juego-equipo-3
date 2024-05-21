@@ -4,6 +4,5 @@ import spiral.*
 
 program Game {
 	gameConfiguration.init()
-	game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { spiralBoxManager.makeBoxSpirals() })
 	game.start()
 }

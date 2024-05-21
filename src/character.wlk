@@ -1,6 +1,8 @@
 import wollok.game.*
-import obstacles.* 
+import obstacles.*
+
 class Character {
+
 	const property maxX = game.width() - 2
 	const property minX = 1
 	const property maxY = game.height() - 4
@@ -9,12 +11,14 @@ class Character {
 	method in(position) {
 		return position.x().between(minX, maxX) and position.y().between(minY, maxY)
 	}
-	
-	method canGo(position){
+
+	method canGo(position) {
 		return self.in(position) and not obstacleGeneration.isObstacleIn(position)
 	}
-	
-	method isSolid(){
-		return false
-	}
+
+	method isSolid()
+
+	method isTakeable()
+
 }
+

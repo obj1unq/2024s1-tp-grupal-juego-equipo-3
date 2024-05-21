@@ -22,6 +22,15 @@ class Mosquito inherits Character {
 
 	method effect() // VER efecto que deja al picar cada mosquito
 
+	
+	override method isTakeable() {
+		return false
+	}
+
+	override method isSolid() {
+		return false
+	}
+
 }
 
 //Tipo de mosquitos

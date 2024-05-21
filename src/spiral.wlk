@@ -6,7 +6,11 @@ object spiralBoxManager {
 
 	const property spiralBoxBoard = []
 
-	method makeBoxSpirals() {
+	method createBoxSpirals() {
+		game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { self.makeTwoBoxSpirals()})
+	}
+
+	method makeTwoBoxSpirals() {
 		if (spiralBoxBoard.size() < 2) {
 			spiralBoxBoard.add(spiralBoxFactory.makeBoxSpiral())
 		}
@@ -33,42 +37,35 @@ class Element {
 
 	var property position = randomizer.emptyPosition()
 
-	method esAtravesable() {
+	method isSolid() {
+		return false
+	}
+
+	method isTakeable() {
 		return true
 	}
 
-	method esAgarrable() {
-		return true
-	}
-
-	method taken(mainCharacter)
+	method taken(personaje)
 
 }
 
 class SpiralBox inherits Element {
 
-	var property spirals = 10
+	var property spirals = 5
 
 	method image() {
 		return "trash01.png" // temporal hasta que tengamos imagen de caja de espirales
 	}
 
 	override method taken(personaje) {
-		self.validateElement()
-		self.validateMochila(personaje)
-		personaje.guardarEnLaMochila(self)
+		self.validateBag(personaje)
+		personaje.storeInBag(self)
 		spiralBoxManager.removeBoxSpiral(self)
 	}
-
-	method validateMochila(personaje) {
-		if (not (personaje.mochila().any(self))) {
+// TODO: hacer un objeto MOCHILA que guarde diferentes atributos (chatarra, mosquitos, spirales)
+	method validateBag(personaje) {
+		if (personaje.bag().contains(self)) {
 			self.error("no puedo guardar más cajas de espirales")
-		}
-	}
-
-	method validateElement() {
-		if (not self.esAgarrable()) {
-			self.error("no lo puedo agarrar")
 		}
 	}
 
@@ -82,11 +79,11 @@ class Spiral {
 		return "trash05.png" // temporal hasta que tengamos imagen de espiral
 	}
 
-	method esAtravesable() {
-		return true
+	method isSolid() {
+		return false
 	}
 
-	method esAgarrable() {
+	method isTakeable() {
 		return true
 	}
 

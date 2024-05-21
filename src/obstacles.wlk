@@ -1,7 +1,8 @@
 import wollok.game.*
 import randomizer.*
+import character.*
 
-class Obstacle {
+class Obstacle inherits Character {
 
 	var property position
 	const imageFile
@@ -15,8 +16,12 @@ class Obstacle {
 		character.evadeCollide()
 	}
 
-	method isSolid() {
+	override method isSolid() {
 		return true
+	}
+
+	override method isTakeable() {
+		return false
 	}
 
 }
@@ -60,12 +65,12 @@ object plant {
 	const assets = 3
 
 	method create(position) {
-		return new Plant(position = position, asset = randomizer.randomNumber(1, assets)) //Ver como hacer polimorfismo con los demas objetos 
+		return new Plant(position = position, asset = randomizer.randomNumber(1, assets)) // Ver como hacer polimorfismo con los demas objetos 
 	}
 
 }
 
-object brick{
+object brick {
 
 	const assets = 3
 
