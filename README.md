@@ -9,7 +9,7 @@
 
 ## Capturas
 
-![juego-protitpo](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/a625fee8-0916-4236-8f04-44c9528e742c)
+![demostracion](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/b04e5215-2db9-4065-a403-2100b4db5535)
 
 ## Reglas de Juego / Instrucciones (Tentativo)
 
