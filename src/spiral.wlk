@@ -1,6 +1,7 @@
 import wollok.game.*
 import randomizer.*
 import main_character.*
+import mosquito.*
 
 object spiralBoxManager {
 
@@ -75,6 +76,20 @@ class Spiral {
 
 	method image() {
 		return "trash05.png" // temporal hasta que tengamos imagen de espiral
+	}
+
+	method activate() {
+		game.onTick(500, "EFECTO ESPIRAL", { self.checkAndKill()})
+	}
+
+	method checkAndKill() {
+		const aroundPositions = [ self.position(), self.position().up(1).left(1), self.position().left(1), self.position().left(1).down(1), self.position().down(1), self.position().down(1).right(1), self.position().right(1), self.position().right(1).up(1), self.position().up(1) ]
+		aroundPositions.forEach{ thisPosition => self.killMosquito(thisPosition)}
+	}
+
+	method killMosquito(currentlyPosition) {
+	// const elementsToKill = game.getObjectsIn(currentlyPosition)
+	// elementsToKill.delete()
 	}
 
 	method isSolid() {

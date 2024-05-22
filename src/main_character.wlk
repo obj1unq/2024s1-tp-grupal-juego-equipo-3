@@ -41,10 +41,11 @@ object mainCharacter inherits Character {
 	method putSpiral() {
 		self.validateEmptyPositionForPut()
 		self.validateSpirals()
+		bag.discountSpiral()
 		const spiral = new Spiral()
 		spiral.position(self.position())
 		game.addVisual(spiral)
-		bag.discountSpiral()
+		spiral.activate()
 	}
 
 	method validateEmptyPositionForPut() {
