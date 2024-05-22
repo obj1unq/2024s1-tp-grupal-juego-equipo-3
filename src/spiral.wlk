@@ -45,27 +45,25 @@ class Element {
 		return true
 	}
 
-	method taken(personaje)
+	method taken()
 
 }
 
 class SpiralBox inherits Element {
 
-	var property spirals = 5
-
 	method image() {
 		return "trash01.png" // temporal hasta que tengamos imagen de caja de espirales
 	}
 
-	override method taken(personaje) {
-		self.validateBag(personaje)
-		personaje.storeInBag(self)
+	override method taken() {
+		self.validateBag()
+		bag.storeInBag(self)
 		spiralBoxManager.removeBoxSpiral(self)
 	}
-// TODO: hacer un objeto MOCHILA que guarde diferentes atributos (chatarra, mosquitos, spirales)
-	method validateBag(personaje) {
-		if (personaje.bag().contains(self)) {
-			self.error("no puedo guardar más cajas de espirales")
+
+	method validateBag() {
+		if (bag.spirals() > 0) {
+			self.error("todavía tengo espirales en la caja")
 		}
 	}
 
@@ -85,6 +83,22 @@ class Spiral {
 
 	method isTakeable() {
 		return true
+	}
+
+}
+
+object bag {
+
+	var property spirals = 0
+	var property trashes = 0
+	var property mosquitoes = 0
+
+	method storeInBag(element) {
+		spirals = 5
+	}
+
+	method discountSpiral() {
+		spirals -= 1
 	}
 
 }

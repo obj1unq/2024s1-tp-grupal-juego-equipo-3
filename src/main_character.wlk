@@ -10,7 +10,6 @@ object mainCharacter inherits Character {
 
 	var property direction = null
 	var property position = game.at(4, 4)
-	const property bag = #{}
 
 	method image() = "characterfront.png"
 
@@ -28,45 +27,38 @@ object mainCharacter inherits Character {
 	}
 
 	method foundElement() {
-		self.validateElementFounded()
+		self.validateFoundedElement()
 		const foundedElements = game.colliders(self)
-		foundedElements.forEach{ element => element.taken(self)}
+		foundedElements.forEach{ element => element.taken()}
 	}
 
-	method validateElementFounded() {
+	method validateFoundedElement() {
 		if (game.colliders(self).isEmpty() or game.colliders(self).any({ element => not element.isTakeable() })) {
 			self.error("Nada para agarrar")
 		}
 	}
 
-	method storeInBag(element) {
-		bag.add(element)
-	}
-
 	method putSpiral() {
-		self.validateEmptyPosition()
-		self.validateSpiralBox()
-//		self.validateSpiralsInBox()
+		self.validateEmptyPositionForPut()
+		self.validateSpirals()
+		const spiral = new Spiral()
+		spiral.position(self.position())
+		game.addVisual(spiral)
+		bag.discountSpiral()
 	}
 
-	method validateEmptyPosition() {
+	method validateEmptyPositionForPut() {
 		if (not game.colliders(self).isEmpty()) {
-			self.error("No puedo dejar el espiral aquí")
+			self.error("No puedo dejar nada aquí")
 		}
 	}
 
-	method validateSpiralBox() {
-		if (bag.isEmpty()) {
-			self.error("No tengo cajas de espirales")
+	method validateSpirals() {
+		if (bag.spirals() < 1) {
+			self.error("No tengo espirales")
 		}
 	}
 
-//	method validateSpiralsInBox() {
-//		if(bag{spiralBox.spirals()} == 0
-//	)
-//	}
-//	self.error("No tengo mas espirales")
-//}
 	method evadeCollide() {
 		const newDirection = self.direction().opossite()
 		self.goesTo(newDirection)
