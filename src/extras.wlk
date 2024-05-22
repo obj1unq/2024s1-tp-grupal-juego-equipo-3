@@ -2,6 +2,7 @@ import wollok.game.*
 import main_character.*
 import randomizer.*
 import obstacles.*
+import spiral.*
 import mosquito.*
 import posiciones.*
 import character.*
@@ -21,6 +22,7 @@ object gameConfiguration {
 		(0 .. 3).forEach({ n => mosquitoHardFactory.createMosquito()})
 //      (0..3).forEach({ n=> [mosquitoHardFactory,mosquitoSoftFactory].anyOne().createMosquito() })
 		mosquitosManager.createMosquitos()
+		spiralBoxManager.createBoxSpirals()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
 	}
@@ -35,9 +37,11 @@ object keyboardConfig {
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
+		keyboard.f().onPressDo{ mainCharacter.foundElement()}
+		keyboard.p().onPressDo{ mainCharacter.putSpiral()}
+//		keyboard.u().onPressDo{ mainCharacter.useSpray()}
+//		keyboard.t().onPressDo{ mainCharacter.cleanTrash()}
 	}
 
 }
-
-
 
