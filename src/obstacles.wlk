@@ -1,8 +1,8 @@
 import wollok.game.*
 import randomizer.*
-import character.*
+import globalConfig.*
 
-class Obstacle inherits Character {
+class Obstacle inherits GlobalConfig {
 
 	var property position
 	const imageFile

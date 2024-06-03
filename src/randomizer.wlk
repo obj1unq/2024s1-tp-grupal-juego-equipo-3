@@ -1,10 +1,10 @@
 import wollok.game.*
-import limit.*
+import globalConfig.*
 
-object randomizer {
+object randomizer inherits GlobalConfig {
 
 	method position() {
-		return game.at((1 .. limit.maxX()).anyOne(), (1 .. limit.maxY()).anyOne())
+		return game.at((1 .. self.maxX()).anyOne(), (1 .. self.maxY()).anyOne())
 	}
 
 	method emptyPosition() {
@@ -19,6 +19,12 @@ object randomizer {
 	// NUEVA: Generación de número al azar entre un mínimo y un máximo para alternan sprites
 	method randomNumber(min, max) {
 		return min.randomUpTo(max).roundUp(0)
+	}
+
+	method isSolid() {
+	}
+
+	method isTakeable() {
 	}
 
 }

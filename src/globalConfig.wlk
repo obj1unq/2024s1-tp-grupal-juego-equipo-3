@@ -1,7 +1,7 @@
 import wollok.game.*
 import obstacles.*
 
-class Character {
+class GlobalConfig {
 
 	const property maxX = game.width() - 2
 	const property minX = 1

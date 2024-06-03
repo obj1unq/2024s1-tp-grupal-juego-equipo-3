@@ -2,9 +2,9 @@ import wollok.game.*
 import randomizer.*
 import posiciones.*
 import main_character.*
-import character.*
+import globalConfig.*
 
-class Mosquito inherits Character {
+class Mosquito inherits GlobalConfig {
 
 	var property position = randomizer.position()
 
