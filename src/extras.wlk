@@ -4,12 +4,12 @@ import randomizer.*
 import obstacles.*
 import mosquito.*
 import posiciones.*
-import character.*
+import globalConfig.*
 
 object gameConfiguration {
 
-	const gameHeight = 15
-	const gameWidth = 15
+	const gameHeight = 16
+	const gameWidth = 20
 
 	method init() {
 		game.title("game")
@@ -18,8 +18,8 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.cellSize(64)
 		game.addVisual(mainCharacter)
-		(0 .. 3).forEach({ n => mosquitoHardFactory.createMosquito()})
-//      (0..3).forEach({ n=> [mosquitoHardFactory,mosquitoSoftFactory].anyOne().createMosquito() })
+		(0 .. 3).forEach({ n => mosquitoSoftFactory.createMosquito()})
+		(0 .. 2).forEach({ n=> mosquitoHardFactory.createMosquito() })
 		mosquitosManager.createMosquitos()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()

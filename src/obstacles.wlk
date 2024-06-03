@@ -24,7 +24,7 @@ class Obstacle {
 object obstacleGeneration {
 
 	const property obstacles = [ plant, brick, stone ]
-	const randomBlocks = 15
+	const randomBlocks = 20
 
 	method configurate() {
 		var obstacle = (0 .. randomBlocks).map({ i => obstacles.anyOne().create(randomizer.emptyPosition()) })
@@ -33,9 +33,6 @@ object obstacleGeneration {
 
 	method isObstacleIn(position) {
 		const elements = game.getObjectsIn(position)
-//		return if (elements.isEmpty()) {
-//			false
-//		} else elements.first().isSolid()
 		return !elements.isEmpty() && elements.first().isSolid()
 	}
 
