@@ -8,7 +8,7 @@ class Mosquito inherits GlobalConfig {
 
 	var property position = randomizer.position()
 
-	method image() = "mosquito01.png"
+	method image()
 
 	method colition() { // VER
 		game.onCollideDo(mainCharacter, { mainCharacter.chopped(self)})
@@ -22,15 +22,12 @@ class Mosquito inherits GlobalConfig {
 
 	method effect() // VER efecto que deja al picar cada mosquito
 
-	// Utilizado para identificar a los mosquitos en período de prueba
-	method text() {
-		return self.toString()
-	}
-
 }
 
 //Tipo de mosquitos
 class MosquitoSoft inherits Mosquito {
+
+	override method image() = "mosquito01.png"
 
 	override method typeMove(character) { // Ver como buscar posiciones libres 
 		const newPosition = self.nextPosition()
@@ -53,6 +50,8 @@ class MosquitoSoft inherits Mosquito {
 // Invertí el comportamiento entre mosquitoHard y mosquitoSoft
 // TODO: Buscarles nombres más significativos a ambos
 class MosquitoHard inherits Mosquito {
+
+	override method image() = "mosquito02.png"
 
 	override method typeMove(character) {
 		const newPosition = self.nextPosition(character)

@@ -5,10 +5,10 @@ import mosquito.*
 
 object mainCharacter inherits GlobalConfig {
 
-	var property direction = null
+	var property direction = downDirection
 	var property position = game.at(4, 4)
 
-	method image() = "characterfront.png"
+	method image() = "ch" + direction + ".png"
 
 	method goesTo(newDirection) {
 		const newPosition = newDirection.nextMove(position)
