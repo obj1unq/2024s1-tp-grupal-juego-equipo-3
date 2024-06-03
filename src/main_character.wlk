@@ -1,9 +1,9 @@
 import wollok.game.*
 import posiciones.*
-import character.*
+import globalConfig.*
 import mosquito.*
 
-object mainCharacter inherits Character {
+object mainCharacter inherits GlobalConfig {
 
 	var property direction = null
 	var property position = game.at(4, 4)

@@ -1,10 +1,10 @@
 import wollok.game.*
-import limit.*
+import globalConfig.*
 
-object randomizer {
+object randomizer inherits GlobalConfig {
 
 	method position() {
-		return game.at((1 .. limit.maxX()).anyOne(), (1 .. limit.maxY()).anyOne())
+		return game.at((1 .. self.maxX()).anyOne(), (1 .. self.maxY()).anyOne())
 	}
 
 	method emptyPosition() {
