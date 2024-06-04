@@ -64,13 +64,23 @@ object upDirection {
 
 }
 
-object axisX {
+class Axis {
+
+	method nextDirection(target, owner)
+
+	method nextMove(owner, target) {
+		return self.nextDirection(target, owner).nextMove(owner.position())
+	}
+
+}
+
+object axisX inherits Axis {
 
 	method distance(target, owner) {
 		return (target.position().x() - owner.position().x()).abs()
 	}
 
-	method nextDirection(target, owner) {
+	override method nextDirection(target, owner) {
 		if (target.position().x() > owner.position().x()) {
 			return rightDirection
 		} else {
@@ -84,13 +94,13 @@ object axisX {
 
 }
 
-object axisY {
+object axisY inherits Axis {
 
 	method distance(target, owner) {
 		return (target.position().y() - owner.position().y()).abs()
 	}
 
-	method nextDirection(target, owner) {
+	override method nextDirection(target, owner) {
 		if (target.position().y() > owner.position().y()) {
 			return upDirection
 		} else {

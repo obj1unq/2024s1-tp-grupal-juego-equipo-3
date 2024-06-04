@@ -56,9 +56,9 @@ class MosquitoHard inherits Mosquito {
 		const distanceX = axisX.distance(character, self)
 		const distanceY = axisY.distance(character, self)
 		const axis = if (distanceX > distanceY) axisX else axisY
-		var nextPosition = axis.nextDirection(character, self).nextMove(self.position())
+		var nextPosition = axis.nextMove(self, character)
 		if (not self.canGo(nextPosition)) {
-			nextPosition = axis.opossite().nextDirection(character, self).nextMove(self.position())
+			nextPosition = axis.opossite().nextMove(self, character)
 			if (not self.canGo(nextPosition)) {
 				nextPosition = super()
 			}
