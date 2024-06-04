@@ -1,8 +1,8 @@
 import wollok.game.*
 import randomizer.*
-import globalConfig.*
+import character.*
 
-class Obstacle inherits GlobalConfig {
+class Obstacle inherits Character {
 
 	var property position
 	const imageFile
@@ -22,6 +22,9 @@ class Obstacle inherits GlobalConfig {
 
 	override method isTakeable() {
 		return false
+	}
+
+	override method spiralEffect() {
 	}
 
 }

@@ -2,9 +2,9 @@ import wollok.game.*
 import randomizer.*
 import posiciones.*
 import main_character.*
-import globalConfig.*
+import character.*
 
-class Mosquito inherits GlobalConfig {
+class Mosquito inherits Character {
 
 	var property position = randomizer.position()
 
@@ -16,6 +16,9 @@ class Mosquito inherits GlobalConfig {
 
 	method moving() {
 		game.onTick(1000, "", { self.typeMove()})
+	}
+
+	override method spiralEffect() {
 	}
 
 	method typeMove()

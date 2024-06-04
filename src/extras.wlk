@@ -5,7 +5,7 @@ import obstacles.*
 import spiral.*
 import mosquito.*
 import posiciones.*
-import globalConfig.*
+import character.*
 
 object gameConfiguration {
 

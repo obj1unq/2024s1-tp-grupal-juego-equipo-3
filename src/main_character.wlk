@@ -2,10 +2,10 @@ import wollok.game.*
 import spiral.*
 import extras.*
 import posiciones.*
-import globalConfig.*
+import character.*
 import mosquito.*
 
-object mainCharacter inherits GlobalConfig {
+object mainCharacter inherits Character {
 
 	var property direction = null
 	var property position = game.at(4, 4)
@@ -74,6 +74,9 @@ object mainCharacter inherits GlobalConfig {
 
 	override method isSolid() {
 		return false
+	}
+
+	override method spiralEffect() {
 	}
 
 }

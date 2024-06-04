@@ -48,6 +48,8 @@ class Element {
 
 	method taken()
 
+	method spiralEffect()
+
 }
 
 class SpiralBox inherits Element {
@@ -68,6 +70,9 @@ class SpiralBox inherits Element {
 		}
 	}
 
+	override method spiralEffect() {
+	}
+
 }
 
 class Spiral {
@@ -83,13 +88,17 @@ class Spiral {
 	}
 
 	method checkAndKill() {
-		const aroundPositions = [ self.position(), self.position().up(1).left(1), self.position().left(1), self.position().left(1).down(1), self.position().down(1), self.position().down(1).right(1), self.position().right(1), self.position().right(1).up(1), self.position().up(1) ]
-		aroundPositions.forEach{ thisPosition => self.killMosquito(thisPosition)}
+		self.elementsArround()
 	}
 
-	method killMosquito(currentlyPosition) {
-	// const elementsToKill = game.getObjectsIn(currentlyPosition)
-	// elementsToKill.delete()
+	method elementsArround() {
+		const aroundPositions = #{ self.position(), self.position().up(1).left(1), self.position().left(1), self.position().left(1).down(1), self.position().down(1), self.position().down(1).right(1), self.position().right(1), self.position().right(1).up(1), self.position().up(1) }
+		aroundPositions.forEach{ thisPosition => self.killArround(thisPosition)}
+	}
+
+	method killArround(thisPosition) {
+		const savedItems = #{ game.getObjectsIn(thisPosition) }
+		savedItems.forEach{ element => element.spiralEffect()}
 	}
 
 	method isSolid() {
@@ -114,6 +123,9 @@ object bag {
 
 	method discountSpiral() {
 		spirals -= 1
+	}
+
+	method spiralEffect() {
 	}
 
 }
