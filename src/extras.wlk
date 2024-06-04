@@ -30,6 +30,7 @@ object gameConfiguration {
 object keyboardConfig {
 
 	method configurate() {
+		game.onCollideDo(mainCharacter, {objeto => objeto.colition(mainCharacter)})
 		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}

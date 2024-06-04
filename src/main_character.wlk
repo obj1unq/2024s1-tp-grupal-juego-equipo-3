@@ -3,19 +3,28 @@ import posiciones.*
 import globalConfig.*
 import mosquito.*
 
-object mainCharacter inherits GlobalConfig {
+object mainCharacter inherits Character{
 
 	var property direction = null
 	var property position = game.at(4, 4)
+	var property lives = 2
+	var estaInvertido = false
 
 	method image() = "characterfront.png"
 
 	method goesTo(newDirection) {
-		const newPosition = newDirection.nextMove(position)
-		if (self.canGo(newPosition)){
-		//if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
+		const newPosition = self.nextMove(newDirection)
+		if (self.canGo(newPosition)) {
 			self.direction(newDirection)
 			self.position(newPosition)
+		}
+	}
+
+	method nextMove(newDirection) {
+		return if (estaInvertido) {
+			newDirection.opossite().nextMove(position)
+		} else {
+			newDirection.nextMove(position)
 		}
 	}
 
@@ -27,9 +36,30 @@ object mainCharacter inherits GlobalConfig {
 		const newDirection = self.direction().opossite()
 		self.goesTo(newDirection)
 	}
+
+	method colition(algo) {
+		
+	}
+
+	method changeMoving() {
+		estaInvertido = true
+	}
 	
-	method chopped(mosquito){ //VER PICADO
-		mosquito.effect()
+	method restarVida(){
+		if(lives == 1){
+			self.morir()
+		} else {
+			lives-= 1 
+		}
+	}
+	
+	method morir(){
+		game.removeVisual(self)
+		//CONFIGURAR FINAL 
+	}
+	
+	override method isTakeable(){
+		return false 
 	}
 
 }

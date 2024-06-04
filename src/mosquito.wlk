@@ -4,18 +4,14 @@ import posiciones.*
 import main_character.*
 import globalConfig.*
 
-class Mosquito inherits GlobalConfig {
+class Mosquito inherits Character {
 
 	var property position = randomizer.position()
 
 	method image() = "mosquito01.png"
 
-	method colition() { // VER
-		game.onCollideDo(mainCharacter, { mainCharacter.chopped(self)})
-	}
-
 	method moving() {
-		game.onTick(1500, "", { self.typeMove(mainCharacter)})
+		game.onTick(1500, self.eventMosquito(), { self.typeMove(mainCharacter)})
 	}
 
 	method typeMove(character)
@@ -27,6 +23,28 @@ class Mosquito inherits GlobalConfig {
 		return self.toString()
 	}
 
+	method eventMosquito() {
+		return "mosquitoMoving" + self.identity()
+	}
+
+	method dead() {
+		game.removeVisual(self)
+		game.removeTickEvent(self.eventMosquito())
+	}
+
+	override method colition(algo) {
+		self.dead()
+		algo.restarVida()
+	}
+
+	override method isTakeable() {
+		return false
+	}
+	
+	override method isSolid(){
+		return false 
+	}
+
 }
 
 //Tipo de mosquitos
@@ -34,7 +52,6 @@ class MosquitoSoft inherits Mosquito {
 
 	override method typeMove(character) { // Ver como buscar posiciones libres 
 		const newPosition = self.nextPosition()
-			// if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition)) {
 		if (self.canGo(newPosition)) {
 			self.position(newPosition)
 		}
@@ -43,9 +60,6 @@ class MosquitoSoft inherits Mosquito {
 	method nextPosition() {
 		const directions = [ leftDirection, downDirection, upDirection, rightDirection ]
 		return (directions.anyOne()).nextMove(self.position())
-	}
-
-	override method effect() {
 	}
 
 }
@@ -83,7 +97,9 @@ class MosquitoHard inherits Mosquito {
 		}
 	}
 
-	override method effect() {
+	override method colition(algo) {
+		super(algo)
+		algo.changeMoving()
 	}
 
 }
