@@ -24,4 +24,6 @@ class Character {
 	method isTakeable()
 	
 	method colition(algo)
+	
+	method spiralEffect()
 }
