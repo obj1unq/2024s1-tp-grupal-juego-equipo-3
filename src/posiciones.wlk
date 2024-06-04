@@ -4,7 +4,6 @@ object leftDirection {
 
 	method nextMove(position) {
 		return position.left(1)
-
 	}
 
 	method say() {
@@ -21,7 +20,6 @@ object downDirection {
 
 	method nextMove(position) {
 		return position.down(1)
-
 	}
 
 	method say() {
@@ -38,7 +36,6 @@ object rightDirection {
 
 	method nextMove(position) {
 		return position.right(1)
-
 	}
 
 	method opossite() {
@@ -63,6 +60,46 @@ object upDirection {
 
 	method say() {
 		return 'up'
+	}
+
+}
+
+object axisX {
+
+	method distance(target, owner) {
+		return (target.position().x() - owner.position().x()).abs()
+	}
+
+	method nextDirection(target, owner) {
+		if (target.position().x() > owner.position().x()) {
+			return rightDirection
+		} else {
+			return leftDirection
+		}
+	}
+
+	method opossite() {
+		return axisY
+	}
+
+}
+
+object axisY {
+
+	method distance(target, owner) {
+		return (target.position().y() - owner.position().y()).abs()
+	}
+
+	method nextDirection(target, owner) {
+		if (target.position().y() > owner.position().y()) {
+			return upDirection
+		} else {
+			return downDirection
+		}
+	}
+
+	method opossite() {
+		return axisX
 	}
 
 }

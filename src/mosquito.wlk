@@ -8,28 +8,17 @@ class Mosquito inherits GlobalConfig {
 
 	var property position = randomizer.position()
 
-	method image()
+	method image() = "mosquito01.png"
 
 	method colition() { // VER
 		game.onCollideDo(mainCharacter, { mainCharacter.chopped(self)})
 	}
 
 	method moving() {
-		game.onTick(1500, "", { self.typeMove(mainCharacter)})
+		game.onTick(1500, "", { self.typeMove()})
 	}
 
-	method typeMove(character)
-
-	method effect() // VER efecto que deja al picar cada mosquito
-
-}
-
-//Tipo de mosquitos
-class MosquitoSoft inherits Mosquito {
-
-	override method image() = "mosquito01.png"
-
-	override method typeMove(character) { // Ver como buscar posiciones libres 
+	method typeMove() { // Ver como buscar posiciones libres 
 		const newPosition = self.nextPosition()
 			// if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition)) {
 		if (self.canGo(newPosition)) {
@@ -42,6 +31,13 @@ class MosquitoSoft inherits Mosquito {
 		return (directions.anyOne()).nextMove(self.position())
 	}
 
+	method effect() // VER efecto que deja al picar cada mosquito
+
+}
+
+//Tipo de mosquitos
+class MosquitoSoft inherits Mosquito {
+
 	override method effect() {
 	}
 
@@ -51,35 +47,23 @@ class MosquitoSoft inherits Mosquito {
 // TODO: Buscarles nombres más significativos a ambos
 class MosquitoHard inherits Mosquito {
 
+	const character = mainCharacter
+
 	override method image() = "mosquito02.png"
 
-	override method typeMove(character) {
-		const newPosition = self.nextPosition(character)
-			// TODO: Redireccionar en caso de que no pueda avanzar
-		if (self.canGo(newPosition)) {
-			self.position(newPosition)
+	override method nextPosition() {
+		// TODO: Ver si es posible refactorizar !!!!!!!!!!!
+		const distanceX = axisX.distance(character, self)
+		const distanceY = axisY.distance(character, self)
+		const axis = if (distanceX > distanceY) axisX else axisY
+		var nextPosition = axis.nextDirection(character, self).nextMove(self.position())
+		if (not self.canGo(nextPosition)) {
+			nextPosition = axis.opossite().nextDirection(character, self).nextMove(self.position())
+			if (not self.canGo(nextPosition)) {
+				nextPosition = super()
+			}
 		}
-	}
-
-	method nextPosition(character) {
-		// TODO: Ver si es posible refactorizar
-		const directionX = [ rightDirection, leftDirection ]
-		const directionY = [ upDirection, downDirection ]
-		const distanceX = character.position().x() - self.position().x()
-		const distanceY = character.position().y() - self.position().y()
-		return if (distanceX.abs() > distanceY.abs()) {
-			self.getDirection(distanceX, directionX).nextMove(self.position())
-		} else {
-			self.getDirection(distanceY, directionY).nextMove(self.position())
-		}
-	}
-
-	method getDirection(distance, direction) {
-		return if (distance >= 0) {
-			direction.get(0)
-		} else {
-			direction.get(1)
-		}
+		return nextPosition
 	}
 
 	override method effect() {
