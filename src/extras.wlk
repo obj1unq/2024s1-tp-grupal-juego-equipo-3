@@ -18,7 +18,7 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.cellSize(64)
 		game.addVisual(mainCharacter)
-		(0 .. 3).forEach({ n => mosquitoSoftFactory.createMosquito()})
+		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
 		(0 .. 2).forEach({ n=> mosquitoHardFactory.createMosquito() })
 		mosquitosManager.createMosquitos()
 		obstacleGeneration.configurate()
@@ -35,6 +35,7 @@ object keyboardConfig {
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
+		game.onCollideDo(mainCharacter, {o => o.collision()})
 	}
 
 }

@@ -4,34 +4,19 @@ import posiciones.*
 import main_character.*
 import globalConfig.*
 
-class Mosquito inherits GlobalConfig {
+class Mosquito inherits Character {
 
 	var property position = randomizer.position()
+	const character = mainCharacter
 
-	method image()
-
-	method colition() { // VER
-		game.onCollideDo(mainCharacter, { mainCharacter.chopped(self)})
-	}
+	method image() = "mosquito01.png"
 
 	method moving() {
-		game.onTick(1500, "", { self.typeMove(mainCharacter)})
+		game.onTick(1500, self.eventMosquito(), { self.typeMove()})
 	}
 
-	method typeMove(character)
-
-	method effect() // VER efecto que deja al picar cada mosquito
-
-}
-
-//Tipo de mosquitos
-class MosquitoSoft inherits Mosquito {
-
-	override method image() = "mosquito01.png"
-
-	override method typeMove(character) { // Ver como buscar posiciones libres 
+	method typeMove() {
 		const newPosition = self.nextPosition()
-			// if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition)) {
 		if (self.canGo(newPosition)) {
 			self.position(newPosition)
 		}
@@ -42,48 +27,54 @@ class MosquitoSoft inherits Mosquito {
 		return (directions.anyOne()).nextMove(self.position())
 	}
 
-	override method effect() {
+	method eventMosquito() {
+		return "mosquitoMoving" + self.identity()
+	}
+
+//	override method spiralEffect() {
+//		self.dead()
+//	}
+
+	method dead() {
+		game.removeVisual(self)
+		game.removeTickEvent(self.eventMosquito())
+	}
+
+	override method collision() {
+		self.dead()
+		character.restarVida()
+	}
+	
+	override method isTakeable(){
+		return false
 	}
 
 }
 
-// Invertí el comportamiento entre mosquitoHard y mosquitoSoft
+//Tipo de mosquitos
 // TODO: Buscarles nombres más significativos a ambos
 class MosquitoHard inherits Mosquito {
 
 	override method image() = "mosquito02.png"
 
-	override method typeMove(character) {
-		const newPosition = self.nextPosition(character)
-			// TODO: Redireccionar en caso de que no pueda avanzar
-		if (self.canGo(newPosition)) {
-			self.position(newPosition)
+	override method nextPosition() {
+		const distanceX = axisX.distance(character, self)
+		const distanceY = axisY.distance(character, self)
+		const axis = if (distanceX > distanceY) axisX else axisY
+		var nextPosition = axis.nextMove(self, character)
+		if (not self.canGo(nextPosition)) {
+			nextPosition = axis.opossite().nextMove(self, character)
+			if (not self.canGo(nextPosition)) {
+				nextPosition = super()
+			}
 		}
+		return nextPosition
 	}
-
-	method nextPosition(character) {
-		// TODO: Ver si es posible refactorizar
-		const directionX = [ rightDirection, leftDirection ]
-		const directionY = [ upDirection, downDirection ]
-		const distanceX = character.position().x() - self.position().x()
-		const distanceY = character.position().y() - self.position().y()
-		return if (distanceX.abs() > distanceY.abs()) {
-			self.getDirection(distanceX, directionX).nextMove(self.position())
-		} else {
-			self.getDirection(distanceY, directionY).nextMove(self.position())
-		}
-	}
-
-	method getDirection(distance, direction) {
-		return if (distance >= 0) {
-			direction.get(0)
-		} else {
-			direction.get(1)
-		}
-	}
-
-	override method effect() {
-	}
+	
+	override method collision() {
+        super()
+        character.changeMoving()
+    }
 
 }
 
@@ -100,6 +91,14 @@ class MosquitoFactory {
 
 }
 
+object mosquitoFactory inherits MosquitoFactory {
+
+	override method create() {
+		return new Mosquito()
+	}
+
+}
+
 object mosquitoHardFactory inherits MosquitoFactory {
 
 	override method create() {
@@ -108,20 +107,11 @@ object mosquitoHardFactory inherits MosquitoFactory {
 
 }
 
-object mosquitoSoftFactory inherits MosquitoFactory {
-
-	override method create() {
-		return new MosquitoSoft()
-	}
-
-}
-
 object mosquitosManager {
 
-	const mosquitos = [ mosquitoHardFactory, mosquitoSoftFactory ]
+	const mosquitos = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
-		// Creé el mensaje que le asigna un mensaje a cada mosquito
 		game.onTick(10000, "" + self.identity(), { mosquitos.anyOne().createMosquito()})
 	}
 
