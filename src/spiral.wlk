@@ -11,13 +11,16 @@ object spiralBoxManager {
 		game.onTick(3000, "CREAR CAJAS DE ESPIRALES", { self.makeTwoBoxSpirals()})
 	}
 
+//method createCollectable() {
+//game.onTick(3000, self.typeOfCollectable(), {self.makeCollectable()}
+//}
 	method makeTwoBoxSpirals() {
 		if (spiralBoxBoard.size() < 2) {
 			spiralBoxBoard.add(spiralBoxFactory.makeBoxSpiral())
 		}
 	}
 
-	method removeBoxSpiral(spiralBox) {
+	method removeBoxSpiral(spiralBox) { // remove collectable
 		game.removeVisual(spiralBox)
 		spiralBoxBoard.remove(spiralBox)
 	}
@@ -60,7 +63,7 @@ class SpiralBox inherits Element {
 
 	override method taken() {
 		self.validateBag()
-		bag.storeInBag(self)
+		bag.storeInBag()
 		spiralBoxManager.removeBoxSpiral(self)
 	}
 
@@ -68,9 +71,6 @@ class SpiralBox inherits Element {
 		if (bag.spirals() > 0) {
 			self.error("todavía tengo espirales en la caja")
 		}
-	}
-
-	override method spiralEffect() {
 	}
 
 }
@@ -97,7 +97,7 @@ class Spiral {
 	}
 
 	method killArround(thisPosition) {
-		const savedItems = #{ game.getObjectsIn(thisPosition) }
+		const savedItems = game.getObjectsIn(thisPosition)
 		savedItems.forEach{ element => element.spiralEffect()}
 	}
 
@@ -117,15 +117,12 @@ object bag {
 	var property trashes = 0
 	var property mosquitoes = 0
 
-	method storeInBag(element) {
+	method storeInBag() {
 		spirals = 5
 	}
 
 	method discountSpiral() {
 		spirals -= 1
-	}
-
-	method spiralEffect() {
 	}
 
 }
