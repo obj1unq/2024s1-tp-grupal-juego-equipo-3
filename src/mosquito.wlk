@@ -80,11 +80,12 @@ class MosquitoHard inherits Mosquito {
 
 //Factory 
 class MosquitoFactory {
-
+	var property mosquitoo = null
 	method createMosquito() {
 		const mosquito = self.create()
 		game.addVisual(mosquito)
 		mosquito.moving()
+		mosquitoo = mosquito
 	}
 
 	method create()
@@ -108,11 +109,17 @@ object mosquitoHardFactory inherits MosquitoFactory {
 }
 
 object mosquitosManager {
-
-	const mosquitos = [ mosquitoHardFactory, mosquitoFactory ]
-
+	
+	const mosquitos = []
 	method createMosquitos() {
-		game.onTick(10000, "" + self.identity(), { mosquitos.anyOne().createMosquito()})
+		game.onTick(10000, "CREACION" + self.identity(), { self.createMosquito()})
+	}
+	
+	method createMosquito(){
+		const miFactory = #{mosquitoHardFactory, mosquitoFactory}.anyOne()
+		const mosquito = miFactory.mosquitoo()
+		miFactory.createMosquito()
+	    mosquitos.add(mosquito)
 	}
 
 }
