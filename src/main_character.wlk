@@ -7,17 +7,24 @@ object mainCharacter inherits Character {
 
 	var property direction = downDirection
 	var property position = game.at(4, 4)
-		var property lifes = 2
-	var estaInvertido = false
+	var property lifes = 2
+	var estaInvertido = false //TODO: Ver cómo indicar que fue picado por un hard
 
 	method image() = "ch" + direction + ".png"
 
 	method goesTo(newDirection) {
-		const newPosition = newDirection.nextMove(position)
+		const newPosition = self.nextMove(newDirection)
 		if (self.canGo(newPosition)) {
-			// if (limit.in(newPosition) and not obstacleGeneration.isObstacleIn(newPosition) ) {
 			self.direction(newDirection)
 			self.position(newPosition)
+		}
+	}
+
+	method nextMove(newDirection) {
+		return if (estaInvertido) {
+			newDirection.opossite().nextMove(position)
+		} else {
+			newDirection.nextMove(position)
 		}
 	}
 
