@@ -110,8 +110,7 @@ object mosquitoHardFactory inherits MosquitoFactory {
 
 object mosquitosManager {
 	
-	const property  mosquitos = #{}
-	
+
 	method createMosquitos() {
 		game.onTick(5000, "CREACION" + self.identity(), { self.createMosquito()})
 	}
@@ -119,7 +118,10 @@ object mosquitosManager {
 	method createMosquito(){
 		var miFactory = [mosquitoHardFactory,mosquitoFactory].anyOne()
 		miFactory.createMosquito()
-		mosquitos.addAll(miFactory.mosquitos())
+	}
+	
+	method mosquitos(){
+		return [mosquitoHardFactory,mosquitoFactory].flatMap({f => f.mosquitos()})
 	}
 
 }
