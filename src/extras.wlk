@@ -18,7 +18,7 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.cellSize(64)
 		game.addVisual(mainCharacter)
-		(0 .. 3).forEach({ n => mosquitosManager.createMosquito()})
+		(0 .. 3).forEach({ n => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
