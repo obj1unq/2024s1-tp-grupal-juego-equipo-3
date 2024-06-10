@@ -19,8 +19,9 @@ object gameConfiguration {
 		game.cellSize(64)
 		game.addVisual(mainCharacter)
 		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
-		(0 .. 2).forEach({ n=> mosquitoHardFactory.createMosquito() })
+		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
 		mosquitosManager.createMosquitos()
+		spiralBoxManager.createBoxSpirals()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
 	}
@@ -35,10 +36,12 @@ object keyboardConfig {
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
-		game.onCollideDo(mainCharacter, {o => o.collision()})
+		keyboard.f().onPressDo{ mainCharacter.foundElement()}
+		keyboard.p().onPressDo{ mainCharacter.putSpiral()}
+//		keyboard.u().onPressDo{ mainCharacter.useSpray()}
+//		keyboard.t().onPressDo{ mainCharacter.cleanTrash()}
+		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
 
 }
-
-
 
