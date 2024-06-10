@@ -8,7 +8,7 @@ object mainCharacter inherits Character {
 	var property direction = downDirection
 	var property position = game.at(4, 4)
 	var property lifes = 2
-	var estaInvertido = false //TODO: Ver cómo indicar que fue picado por un hard
+	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
 
 	method image() = "ch" + direction + ".png"
 
@@ -65,6 +65,40 @@ object mainCharacter inherits Character {
 
 	override method isTakeable() {
 		return false
+	}
+
+	method foundElement() {
+		self.validateFoundedElement()
+		const foundedElements = game.colliders(self)
+		foundedElements.forEach{ element => element.taken()}
+	}
+
+	method validateFoundedElement() {
+		if (game.colliders(self).isEmpty() or game.colliders(self).any({ element => not element.isTakeable() })) {
+			self.error("Nada para agarrar")
+		}
+	}
+
+	method putSpiral() {
+		self.validateEmptyPositionForPut()
+		self.validateSpirals()
+		bag.discountSpiral()
+		const spiral = new Spiral()
+		spiral.position(self.position())
+		game.addVisual(spiral)
+		spiral.activate()
+	}
+
+	method validateEmptyPositionForPut() {
+		if (not game.colliders(self).isEmpty()) {
+			self.error("No puedo dejar nada aquí")
+		}
+	}
+
+	method validateSpirals() {
+		if (bag.spirals() < 1) {
+			self.error("No tengo espirales")
+		}
 	}
 
 }
