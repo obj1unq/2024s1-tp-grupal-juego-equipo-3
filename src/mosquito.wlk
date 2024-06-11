@@ -31,9 +31,10 @@ class Mosquito inherits Character {
 		return "mosquitoMoving" + self.identity()
 	}
 
-//	override method spiralEffect() {
-//		self.dead()
-//	}
+	method spiralEffect() {
+		self.dead()
+	}
+
 	method dead() {
 		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())

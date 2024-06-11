@@ -2,6 +2,7 @@ import wollok.game.*
 import posiciones.*
 import globalConfig.*
 import mosquito.*
+import collectable.*
 
 object mainCharacter inherits Character {
 
@@ -70,7 +71,7 @@ object mainCharacter inherits Character {
 	method foundElement() {
 		self.validateFoundedElement()
 		const foundedElements = game.colliders(self)
-		foundedElements.forEach{ element => element.taken()}
+		foundedElements.forEach{ element => element.take()}
 	}
 
 	method validateFoundedElement() {
@@ -84,7 +85,7 @@ object mainCharacter inherits Character {
 		self.validateSpirals()
 		bag.discountSpiral()
 		const spiral = new Spiral()
-		spiral.position(self.position())
+		spiral.newPosition(self.position())
 		game.addVisual(spiral)
 		spiral.activate()
 	}

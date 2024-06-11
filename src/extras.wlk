@@ -5,6 +5,7 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
+import collectable.*
 
 object gameConfiguration {
 
@@ -21,7 +22,7 @@ object gameConfiguration {
 		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
 		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
 		mosquitosManager.createMosquitos()
-		spiralBoxManager.createBoxSpirals()
+		initialElementManager.createElement()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
 	}
