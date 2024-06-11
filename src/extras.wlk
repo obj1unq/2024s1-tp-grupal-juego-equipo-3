@@ -45,7 +45,9 @@ class MenuElement {
 
 	const property position = game.at(0, 13)
 
-	method image()
+	method image(){
+		return "counters.png"
+	}
 
 }
 
@@ -131,32 +133,26 @@ class Decena inherits Numero {
 
 }
 
-object mosquitoesCounter inherits MenuCounter(position = game.at(8, 13)) {
-
-	override method image() = "mosquitoesCounter.png"
+object mosquitoesCounter inherits MenuCounter(position = game.at(8, 14)) {
 
 	override method number() {
-		return 2
+		return 47
 	}
 
 }
 
-object trashCounter inherits MenuCounter(position = game.at(10, 13)) {
-
-	override method image() = "trashCounter.png"
+object trashCounter inherits MenuCounter(position = game.at(10, 14)) {
 
 	override method number() {
-		return 1
+		return 23
 	}
 
 }
 
-object spiralsCounter inherits MenuCounter(position = game.at(12, 13)) {
-
-	override method image() = "spiralsCounter.png"
+object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 
 	override method number() {
-		return 0
+		return 5
 	}
 
 }
