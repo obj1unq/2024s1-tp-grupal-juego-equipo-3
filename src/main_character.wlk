@@ -8,7 +8,7 @@ object mainCharacter inherits Character {
 	var property direction = downDirection
 	var property position = game.at(4, 4)
 	var property lifes = 2
-	var estaInvertido = false //TODO: Ver cómo indicar que fue picado por un hard
+	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
 
 	method image() = "ch" + direction + ".png"
 
@@ -51,10 +51,9 @@ object mainCharacter inherits Character {
 	}
 
 	method restarVida() {
-		if (lifes == 1) {
+		lifes -= 1
+		if (lifes < 1) {
 			self.morir()
-		} else {
-			lifes -= 1
 		}
 	}
 
