@@ -2,6 +2,6 @@ import wollok.game.*
 import extras.*
 
 program Game {
-	gameConfiguration.init()
+	initialMenu.start()
 	game.start()
 }
