@@ -103,7 +103,7 @@ object helpMenu {
 	const property value = 4
 
 	method goMenu(menu) {
-		menu.option(start)
+		menu.option(help)
 	}
 
 	method previous(menu) {
