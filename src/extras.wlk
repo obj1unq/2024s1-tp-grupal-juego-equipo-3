@@ -29,12 +29,10 @@ object menus {
 	method image() = "menu_" + option.value() + ".png"
 
 	method configurate() {
-		game.clear()
-		console.println(option.value())
 		game.addVisual(self)
-		keyboard.right().onPressDo{ option = option.next()}
-		keyboard.left().onPressDo{ option = option.previous()}
-		keyboard.enter().onPressDo{ option.goMenu()}
+		keyboard.right().onPressDo{ option.next(self)}
+		keyboard.left().onPressDo{ option.previous(self)}
+		keyboard.enter().onPressDo{ option.goMenu(self)}
 	}
 
 }
@@ -43,7 +41,7 @@ object start {
 
 	const property value = 1
 
-	method goMenu() {
+	method goMenu(menu) {
 		game.clear()
 		game.addVisual(gameBackground)
 		game.addVisual(mainCharacter)
@@ -54,12 +52,12 @@ object start {
 		keyboardConfig.configurate()
 	}
 
-	method previous() {
-		return exit
+	method previous(menu) {
+		menu.option(exit)
 	}
 
-	method next() {
-		return help
+	method next(menu) {
+		menu.option(help)
 	}
 
 }
@@ -68,22 +66,16 @@ object help {
 
 	const property value = 2
 
-	method goMenu() {
-		game.clear()
-		game.addVisual(helpMenu)
-		self.configurate()
+	method goMenu(menu) {
+		menu.option(helpMenu)
 	}
 
-	method previous() {
-		return start
+	method previous(menu) {
+		menu.option(start)
 	}
 
-	method next() {
-		return exit
-	}
-
-	method configurate() {
-		keyboard.backspace().onPressDo{ helpMenu.back()} // si se presiona enter no funciona
+	method next(menu) {
+		menu.option(exit)
 	}
 
 }
@@ -92,31 +84,32 @@ object exit {
 
 	const property value = 3
 
-	method goMenu() {
+	method goMenu(menu) {
 		game.stop()
 	}
 
-	method previous() {
-		console.println("p3")
-		return help
+	method previous(menu) {
+		menu.option(help)
 	}
 
-	method next() {
-		console.println("n3")
-		return start
+	method next(menu) {
+		menu.option(start)
 	}
 
 }
 
 object helpMenu {
 
-	const property position = game.at(0, 0)
+	const property value = 4
 
-	method image() = "help.png"
+	method goMenu(menu) {
+		menu.option(start)
+	}
 
-	method back() {
-		game.addVisual(menus)
-		menus.configurate()
+	method previous(menu) {
+	}
+
+	method next(menu) {
 	}
 
 }
@@ -141,5 +134,6 @@ object keyboardConfig {
 		}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
+
 }
 
