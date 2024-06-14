@@ -5,6 +5,7 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
+import game_counter.*
 
 object initialMenu {
 
@@ -45,8 +46,12 @@ object start {
 		game.clear()
 		game.addVisual(gameBackground)
 		game.addVisual(mainCharacter)
+		game.addVisual(gameCounter)
+		gameCounter.start()
 		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
 		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
+		game.onTick(1000, "endGame", { if (gameCounter.isTimeout()) endGame.finish()
+		})
 		mosquitosManager.createMosquitos()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
