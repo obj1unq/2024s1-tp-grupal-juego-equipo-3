@@ -15,84 +15,102 @@ class Element {
 		return true
 	}
 
-	method take()
-
-}
-
-object initialElementManager {
-
-	const property factories = [ spiralBoxFactory ] // basuraFactory 
-
-	method createElement() {
-		factories.forEach({ f => f.create()})
-	}
-
-}
-
-class ElementFactory {
-
-	method createSiPuedo() {
-		if (self.puedeCrear()) {
+	method createIfICan() {
+		if (self.canCreate()) {
 			self.create()
 		}
 	}
 
-	method create() {
-	}
+	method create()
 
-	method puedeCrear()
+	method canCreate()
 
-}
-
-object spiralBoxFactory inherits ElementFactory {
-
-	var spiralBoxActual = null
-
-	override method create() {
-		const spiralBox = new SpiralBox()
-		game.addVisual(spiralBox)
-		spiralBoxActual = spiralBox
-	}
-
-	override method puedeCrear() {
-		return spiralActual == null
-	}
-
-	method removeBoxSpiral() {
-		game.removeVisual(spiralActual)
-		spiralBoxActual = null
-	}
+	method take()
 
 }
 
-class SpiralBox inherits Element {
+//object initialElementManager {
+//
+//	const property factories = [ spiralBoxFactory ] // basuraFactory 
+//
+//	method createElement() {
+//		factories.forEach({ f => f.create()})
+//	}
+//
+//}
+//class ElementFactory {
+//
+//	method createSiPuedo() {
+//		if (self.puedeCrear()) {
+//			self.create()
+//		}
+//	}
+//
+//	method create() {
+//	}
+//
+//	method puedeCrear()
+//
+//}
+//object spiralBoxFactory inherits ElementFactory {
+//
+//	var spiralBoxActual = null
+//
+//	override method create() {
+//		const spiralBox = new SpiralBox()
+//		game.addVisual(spiralBox)
+//		spiralBoxActual = spiralBox
+//	}
+//
+//	override method puedeCrear() {
+//		return spiralActual == null
+//	}
+//
+//	method removeBoxSpiral() {
+//		game.removeVisual(spiralActual)
+//		spiralBoxActual = null
+//	}
+//
+//}
+object spiralBox inherits Element {
+
+	var estado = null
 
 	method image() {
 		return "spiralbox" + ".png"
 	}
 
+	override method create() {
+		game.addVisual(self)
+	}
+
+	override method canCreate() {
+		return estado == null
+	}
+
+	method removeBoxSpiral() {
+		game.removeVisual(self)
+		estado = null
+	}
+
 	override method take() {
-		self.validateBag()
 		bag.storeInBag()
-		spiralBoxManager.removeBoxSpiral()
-	}
-
-	method validateBag() {
-		if (bag.spirals() > 0) {
-			self.error("todavía tengo espirales en la caja")
-		}
+		self.removeBoxSpiral()
 	}
 
 }
 
-object spiralFactory inherits ElementFactory {
-
-	override method puedeCrear() {
-		return game.getObjectsIn(position).isEmpty()
-	}
-
-}
-
+//object spiralFactory inherits ElementFactory {
+//
+//	override method puedeCrear() {
+//		return game.getObjectsIn(position).isEmpty()
+//	}
+//
+//}
+/*object TrashFactory {
+ * 	
+ * }
+ */
 class Spiral inherits Element {
 
 	var property newPosition = null
@@ -126,11 +144,18 @@ object bag {
 	var property mosquitoes = 0
 
 	method storeInBag() {
+		self.validateBag()
 		spirals = 5
 	}
 
 	method discountSpiral() {
 		spirals -= 1
+	}
+
+	method validateBag() {
+		if (self.spirals() > 0) {
+			self.error("todavía tengo espirales en la caja")
+		}
 	}
 
 }

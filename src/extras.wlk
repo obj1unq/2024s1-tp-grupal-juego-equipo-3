@@ -22,7 +22,7 @@ object gameConfiguration {
 		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
 		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
 		mosquitosManager.createMosquitos()
-		initialElementManager.createElement()
+		spiralBox.create()
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
 	}
