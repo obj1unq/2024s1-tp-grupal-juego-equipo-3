@@ -1,7 +1,8 @@
 import wollok.game.*
 import extras.*
+import navigation.*
 
 program Game {
-	gameConfiguration.init()
+	gameConfiguration.start()
 	game.start()
 }

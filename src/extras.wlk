@@ -6,19 +6,12 @@ import mosquito.*
 import posiciones.*
 import globalConfig.*
 
-object gameConfiguration {
+object gameConfig {
 
-	const gameHeight = 16
-	const gameWidth = 20
-
-	method init() {
-		game.title("game")
-		game.boardGround("background.png")
+	method build() {
+		game.clear()
 		game.addVisual(mainCharacter)
 		interface.build()
-		game.height(gameHeight)
-		game.width(gameWidth)
-		game.cellSize(64)
 		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
 		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
 		mosquitosManager.createMosquitos()
@@ -37,6 +30,8 @@ object interface {
 		mosquitoesCounter.agregarContador()
 		trashCounter.agregarContador()
 		spiralsCounter.agregarContador()
+		gameCounter.agregarContador()
+		gameCounter.start()
 	}
 
 }
@@ -45,7 +40,7 @@ class MenuElement {
 
 	const property position = game.at(0, 13)
 
-	method image(){
+	method image() {
 		return "counters.png"
 	}
 
@@ -82,7 +77,6 @@ class MenuCounter inherits MenuElement {
 
 	method number()
 
-// Agregar validación
 }
 
 class Numero {
@@ -153,6 +147,35 @@ object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 
 	override method number() {
 		return 5
+	}
+
+}
+
+object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
+
+	const gameDuration = 99
+	const tickEventName = 'gameCounterTick'
+	var property time = 0
+
+	override method number() {
+		return time
+	}
+
+	method isTimeRunningOut() {
+		return time < 10
+	}
+
+	method start() {
+		self.time(gameDuration)
+		game.onTick(1000, tickEventName, {=> time--})
+	}
+
+	method stop() {
+		game.removeTickEvent(tickEventName)
+	}
+
+	method isTimeout() {
+		return time == 0
 	}
 
 }

@@ -28,6 +28,4 @@ class Character {
 
     method collision()
 
-    //method spiralEffect()
-
 }
