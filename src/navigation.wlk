@@ -107,7 +107,7 @@ object controlsMenu {
 object loadScreen {
 
 	var property currentScreen = 0
-	var property screens = 4
+	var property screens = 3
 	var property position = game.at(0, 0)
 
 	method image() = "loading" + currentScreen + ".jpg"

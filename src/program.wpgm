@@ -3,6 +3,8 @@ import extras.*
 import navigation.*
 
 program Game {
+	//TODO: Crear ventana entre aparición de personaje y mosquitos
+	// Pueden aparecer encima del PJ
 	gameConfiguration.start()
 	game.start()
 }
