@@ -48,12 +48,10 @@ object start {
 		game.addVisual(mainCharacter)
 		game.addVisual(gameCounter)
 		gameCounter.start()
-		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
-		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
-		game.onTick(1000, "endGame", { if (gameCounter.isTimeout()) endGame.finish()
-		})
+		(1..5).forEach({m => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
-		obstacleGeneration.configurate()
+		game.onTick(1000, "endGame", { if (gameCounter.isTimeout()) endGame.finish()})
+		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
 
