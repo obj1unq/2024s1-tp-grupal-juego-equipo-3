@@ -28,7 +28,7 @@ object menus {
 	var property option = start
 	const property position = game.at(0, 0)
 
-	method image() = option.toString() + ".png"
+	method image() = option.menuName() + ".png"
 
 	method configurate() {
 		game.addVisual(self)
@@ -40,8 +40,6 @@ object menus {
 }
 
 object start {
-
-	const property value = 1
 
 	method goMenu(menu) {
 		game.clear()
@@ -57,11 +55,13 @@ object start {
 		menu.option(controls)
 	}
 
+	method menuName() {
+		return "start"
+	}
+
 }
 
 object controls {
-
-	const property value = 2
 
 	method goMenu(menu) {
 		menu.option(controlsMenu)
@@ -73,6 +73,10 @@ object controls {
 
 	method next(menu) {
 		menu.option(exit)
+	}
+
+	method menuName() {
+		return "controls"
 	}
 
 }
@@ -93,6 +97,10 @@ object exit {
 		menu.option(start)
 	}
 
+	method menuName() {
+		return "exit"
+	}
+
 }
 
 object controlsMenu {
@@ -101,6 +109,10 @@ object controlsMenu {
 
 	method goMenu(menu) {
 		menu.option(controls)
+	}
+
+	method menuName() {
+		return "controlsMenu"
 	}
 
 }
@@ -115,7 +127,7 @@ object loadScreen {
 
 	method build() {
 		game.addVisual(self)
-		game.onTick(50, "load", { self.load()})
+		game.onTick(3000, "load", { self.load()})
 	}
 
 	method load() {
@@ -139,6 +151,8 @@ object loadScreen {
 
 object gameOver {
 
+	const finalCounters = #{ collectedCounter, bonusCounter, timeBonusCounter, collectedMosquitoesCounter, totalCounter }
+
 	method endGame() {
 		game.clear()
 		menus.option(self)
@@ -147,24 +161,20 @@ object gameOver {
 	}
 
 	method addFinalCounters() {
-		collectedCounter.agregarContador()
-		bonusCounter.agregarContador()
-		timeBonusCounter.agregarContador()
-		collectedMosquitoesCounter.agregarContador()
-		totalCounter.agregarContador()
+		finalCounters.forEach{ counter => counter.addCounter()}
 	}
 
 	method removeFinalCounters() {
-		collectedCounter.removeCounter()
-		bonusCounter.removeCounter()
-		timeBonusCounter.removeCounter()
-		collectedMosquitoesCounter.removeCounter()
-		totalCounter.removeCounter()
+		finalCounters.forEach{ counter => counter.removeCounter()}
 	}
 
 	method goMenu(menu) {
 		self.removeFinalCounters()
 		menu.option(start)
+	}
+
+	method menuName() {
+		return "gameOver"
 	}
 
 }

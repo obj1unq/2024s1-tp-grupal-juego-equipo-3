@@ -24,15 +24,18 @@ object gameConfig {
 
 object interface {
 
+	const menuCounters = #{mosquitoesCounter, trashCounter, spiralsCounter, gameCounter}
+
 	method build() {
 		game.addVisual(menu)
 		game.addVisual(lifeCounter)
 		game.addVisual(repellantCounter)
-		mosquitoesCounter.agregarContador()
-		trashCounter.agregarContador()
-		spiralsCounter.agregarContador()
-		gameCounter.agregarContador()
+		self.addMenuCounters()
 		gameCounter.start()
+	}
+	
+	method addMenuCounters(){
+		menuCounters.forEach{menuElement => menuElement.addCounter()}
 	}
 
 }
@@ -70,7 +73,7 @@ class MenuCounter inherits MenuElement {
 	var unidad = new Unidad(modelo = self, prefix = "u")
 	var decena = new Decena(modelo = self, prefix = "d")
 
-	method agregarContador() {
+	method addCounter() {
 		game.addVisual(self)
 		game.addVisual(unidad)
 		game.addVisual(decena)
@@ -156,7 +159,7 @@ class FinalCounter inherits MenuCounter {
 	var c = new Centena(modelo = self, prefix = "")
 	var m = new Mil(modelo = self, prefix = "")
 
-	override method agregarContador() {
+	override method addCounter() {
 		game.addVisual(self)
 		game.addVisual(u)
 		game.addVisual(d)
@@ -201,7 +204,7 @@ object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 
 	override method number() {
-		return 5555
+		return 9876
 	}
 
 }
@@ -209,7 +212,7 @@ object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 8)) {
 
 	override method number() {
-		return 6666
+		return 9876
 	}
 
 }
@@ -217,7 +220,7 @@ object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 8
 object timeBonusCounter inherits FinalCounter(position = game.at(13, 7)) {
 
 	override method number() {
-		return 7777
+		return 9876
 	}
 
 }
@@ -225,7 +228,7 @@ object timeBonusCounter inherits FinalCounter(position = game.at(13, 7)) {
 object bonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 	override method number() {
-		return 8888
+		return 9876
 	}
 
 }
@@ -233,14 +236,14 @@ object bonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 object totalCounter inherits FinalCounter(position = game.at(13, 5)) {
 
 	override method number() {
-		return 9999
+		return 9876
 	}
 
 }
 
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 3
+	const gameDuration = 20
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
