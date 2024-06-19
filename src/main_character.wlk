@@ -37,7 +37,7 @@ object mainCharacter inherits Character {
 		self.goesTo(newDirection)
 	}
 
-	method collision() {
+	override method collision() {
 	}
 
 	method changeMoving() {

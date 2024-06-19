@@ -17,7 +17,7 @@ class Character {
     }
 
     method canGo(position) {
-        return self.in(position) and not obstacleGeneration.isObstacleIn(position)
+        return self.in(position) and not obstacleManager.isObstacleIn(position)
     }
 
     method isSolid() {
@@ -27,7 +27,5 @@ class Character {
     method isTakeable()
 
     method collision()
-
-    //method spiralEffect()
 
 }

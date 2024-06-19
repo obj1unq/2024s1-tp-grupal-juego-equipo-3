@@ -5,6 +5,7 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
+import sounds.*
 
 object gameConfiguration {
 
@@ -18,11 +19,11 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.cellSize(64)
 		game.addVisual(mainCharacter)
-		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
-		(0 .. 2).forEach({ n=> mosquitoHardFactory.createMosquito() })
+		(1..5).forEach({m => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
-		obstacleGeneration.configurate()
+		obstacleManager.configurate()
 		keyboardConfig.configurate()
+		settingsMusica.iniciarTeclas()
 	}
 
 }
@@ -36,6 +37,7 @@ object keyboardConfig {
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
 		game.onCollideDo(mainCharacter, {o => o.collision()})
+		
 	}
 
 }

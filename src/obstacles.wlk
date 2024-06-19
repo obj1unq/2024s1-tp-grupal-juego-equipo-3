@@ -3,7 +3,7 @@ import randomizer.*
 
 class Obstacle {
 
-	var property position
+	var property position = randomizer.emptyPosition()
 	const imageFile
 	const asset
 
@@ -11,9 +11,9 @@ class Obstacle {
 		return imageFile + asset + ".png"
 	}
 
-	method whenCollide(character) {
-		character.evadeCollide()
-	}
+//	method whenCollide(character) { //Sirve??
+//		character.evadeCollide()
+//	}
 
 	method isSolid() {
 		return true
@@ -21,14 +21,14 @@ class Obstacle {
 
 }
 
-object obstacleGeneration {
+object obstacleManager {
 
-	const property obstacles = [ plant, brick, stone ]
+	const property factories = [ plantFactory, brickFactory, stoneFactory ]
 	const randomBlocks = 20
 
 	method configurate() {
-		var obstacle = (0 .. randomBlocks).map({ i => obstacles.anyOne().create(randomizer.emptyPosition()) })
-		obstacle.forEach({ i => game.addVisual(i)})
+		var obstacles = (0 .. randomBlocks).map({ o => factories.anyOne().create() })
+		obstacles.forEach({ o => game.addVisual(o)})
 	}
 
 	method isObstacleIn(position) {
@@ -38,47 +38,68 @@ object obstacleGeneration {
 
 }
 
-// Creación de clases que heredan de obstacle
-// TODO: Ver cómo refactorizar imageFile e image
-class Plant inherits Obstacle(imageFile = 'plants0') {
+class Plant inherits Obstacle(imageFile = 'plants0', asset = (1..3).anyOne()) {
 
 }
 
-class Stone inherits Obstacle(imageFile = 'stone0') {
+class Stone inherits Obstacle(imageFile = 'stone0', asset = (1..2).anyOne()) {
 
 }
 
-class Brick inherits Obstacle(imageFile = 'brick0') {
+class Brick inherits Obstacle(imageFile = 'brick0', asset = (1..3).anyOne()) {
 
 }
 
-object plant {
+object plantFactory {
 
-	const assets = 3
-
-	method create(position) {
-		return new Plant(position = position, asset = randomizer.randomNumber(1, assets)) //Ver como hacer polimorfismo con los demas objetos 
+	method create() {
+		return new Plant()
 	}
 
 }
 
-object brick{
+object brickFactory{
 
-	const assets = 3
 
-	method create(position) {
-		return new Brick(position = position, asset = randomizer.randomNumber(1, assets))
+	method create() {
+		return new Brick()
 	}
 
 }
 
-object stone {
+object stoneFactory {
 
-	const assets = 2
-
-	method create(position) {
-		return new Stone(position = position, asset = randomizer.randomNumber(1, assets))
+	method create() {
+		return new Stone()
 	}
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+9*-//*************

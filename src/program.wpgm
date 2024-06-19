@@ -1,7 +1,10 @@
 import wollok.game.*
 import extras.*
+import sounds.*
 
 program Game {
 	gameConfiguration.init()
+	game.schedule(0, {=> soundProducer.playCancion("musica.mp3")})
 	game.start()
+
 }
