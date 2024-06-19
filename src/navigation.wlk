@@ -28,7 +28,7 @@ object menus {
 	var property option = start
 	const property position = game.at(0, 0)
 
-	method image() = "menu" + option.value() + ".jpg"
+	method image() = option.toString() + ".png"
 
 	method configurate() {
 		game.addVisual(self)
@@ -46,6 +46,7 @@ object start {
 	method goMenu(menu) {
 		game.clear()
 		loadScreen.build()
+		menu.option(loadScreen)
 	}
 
 	method previous(menu) {
@@ -114,15 +115,15 @@ object loadScreen {
 
 	method build() {
 		game.addVisual(self)
-		game.onTick(3000, "load", {self.load()})
+		game.onTick(50, "load", { self.load()})
 	}
 
 	method load() {
-		if (self.isComplete()){
+		if (self.isComplete()) {
 			self.stop()
 			gameConfig.build()
-		}else{
-			currentScreen ++
+		} else {
+			currentScreen++
 		}
 	}
 
@@ -132,6 +133,38 @@ object loadScreen {
 
 	method isComplete() {
 		return currentScreen == screens
+	}
+
+}
+
+object gameOver {
+
+	method endGame() {
+		game.clear()
+		menus.option(self)
+		menus.configurate()
+		self.addFinalCounters()
+	}
+
+	method addFinalCounters() {
+		collectedCounter.agregarContador()
+		bonusCounter.agregarContador()
+		timeBonusCounter.agregarContador()
+		collectedMosquitoesCounter.agregarContador()
+		totalCounter.agregarContador()
+	}
+
+	method removeFinalCounters() {
+		collectedCounter.removeCounter()
+		bonusCounter.removeCounter()
+		timeBonusCounter.removeCounter()
+		collectedMosquitoesCounter.removeCounter()
+		totalCounter.removeCounter()
+	}
+
+	method goMenu(menu) {
+		self.removeFinalCounters()
+		menu.option(start)
 	}
 
 }

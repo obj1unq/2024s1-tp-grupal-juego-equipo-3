@@ -5,6 +5,7 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
+import navigation.*
 
 object gameConfig {
 
@@ -66,13 +67,19 @@ object repellantCounter inherits MenuElement {
 
 class MenuCounter inherits MenuElement {
 
-	var unidad = new Unidad(modelo = self)
-	var decena = new Decena(modelo = self)
+	var unidad = new Unidad(modelo = self, prefix = "u")
+	var decena = new Decena(modelo = self, prefix = "d")
 
 	method agregarContador() {
 		game.addVisual(self)
 		game.addVisual(unidad)
 		game.addVisual(decena)
+	}
+
+	method removeCounter() {
+		game.removeVisual(self)
+		game.removeVisual(unidad)
+		game.removeVisual(decena)
 	}
 
 	method number()
@@ -82,16 +89,15 @@ class MenuCounter inherits MenuElement {
 class Numero {
 
 	const modelo
+	const prefix
 
 	method position()
 
 	method image() {
-		return self.prefix() + self.number() + ".png"
+		return prefix + self.number() + ".png"
 	}
 
 	method number()
-
-	method prefix()
 
 }
 
@@ -102,11 +108,7 @@ class Unidad inherits Numero {
 	}
 
 	override method number() {
-		return modelo.number() - modelo.number().div(10) * 10
-	}
-
-	override method prefix() {
-		return "u"
+		return modelo.number() % 10
 	}
 
 }
@@ -118,11 +120,56 @@ class Decena inherits Numero {
 	}
 
 	override method number() {
-		return modelo.number().div(10)
+		return modelo.number().div(10) % 10
 	}
 
-	override method prefix() {
-		return "d"
+}
+
+class Centena inherits Numero {
+
+	override method position() {
+		return modelo.position().left(1)
+	}
+
+	override method number() {
+		return modelo.number().div(100) % 10
+	}
+
+}
+
+class Mil inherits Numero {
+
+	override method position() {
+		return modelo.position().left(2)
+	}
+
+	override method number() {
+		return modelo.number().div(1000) % 10
+	}
+
+}
+
+class FinalCounter inherits MenuCounter {
+
+	var u = new Unidad(modelo = self, prefix = "")
+	var d = new Decena(modelo = self, prefix = "")
+	var c = new Centena(modelo = self, prefix = "")
+	var m = new Mil(modelo = self, prefix = "")
+
+	override method agregarContador() {
+		game.addVisual(self)
+		game.addVisual(u)
+		game.addVisual(d)
+		game.addVisual(c)
+		game.addVisual(m)
+	}
+
+	override method removeCounter() {
+		game.removeVisual(self)
+		game.removeVisual(u)
+		game.removeVisual(d)
+		game.removeVisual(c)
+		game.removeVisual(m)
 	}
 
 }
@@ -151,9 +198,49 @@ object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 
 }
 
+object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
+
+	override method number() {
+		return 5555
+	}
+
+}
+
+object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 8)) {
+
+	override method number() {
+		return 6666
+	}
+
+}
+
+object timeBonusCounter inherits FinalCounter(position = game.at(13, 7)) {
+
+	override method number() {
+		return 7777
+	}
+
+}
+
+object bonusCounter inherits FinalCounter(position = game.at(13, 6)) {
+
+	override method number() {
+		return 8888
+	}
+
+}
+
+object totalCounter inherits FinalCounter(position = game.at(13, 5)) {
+
+	override method number() {
+		return 9999
+	}
+
+}
+
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 99
+	const gameDuration = 3
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
@@ -167,11 +254,20 @@ object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
 	method start() {
 		self.time(gameDuration)
-		game.onTick(1000, tickEventName, {=> time--})
+		game.onTick(1000, tickEventName, {=> self.remainingTime()})
 	}
 
 	method stop() {
 		game.removeTickEvent(tickEventName)
+	}
+
+	method remainingTime() {
+		if (self.isTimeout()) {
+			self.stop()
+			gameOver.endGame()
+		} else {
+			time--
+		}
 	}
 
 	method isTimeout() {

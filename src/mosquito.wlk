@@ -114,6 +114,10 @@ object mosquitosManager {
 	method createMosquitos() {
 		game.onTick(10000, "" + self.identity(), { mosquitos.anyOne().createMosquito()})
 	}
+	
+	method removeMosquitoes(){
+		game.removeTickEvent("" + self.identity())
+	}
 
 }
 
