@@ -1,4 +1,27 @@
-# Nombre del juego (Próximamente)
+# DENGUE
+![dengue-logo](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/45bca68b-6467-4cc0-a02c-2220b2b084e7)
+
+## Capturas
+
+![menu1](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/cbd627d3-c117-4f12-99eb-855a223cb2d0)
+![loading1](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/f092f07d-50f8-4109-94c9-985e44986ee2)
+![muestra](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/14bd187b-912a-4bb3-ae93-0eb8318314fc)
+
+## Reglas de Juego / Instrucciones
+
+DENGUE es un juego que desafía a los jugadores a sobrevivir y prevenir la propagación de esta enfermedad transmitida por mosquitos. El objetivo principal es recolectar basura y limpiar el agua estancada para evitar la proliferación de larvas.
+¡Cuidado! La clave para sobrevivir en DENGUE es mantenerse alerta, tomar las medidas de precaución necesarias y evitar las picaduras de mosquito. La prevención es tu mejor arma en esta batalla contra el DENGUE.
+
+## Objetos recolectables
+
+**Insecticida y espirales:** Estas herramientas pueden ser usadas para matar mosquitos.
+**Basura y contenedores de agua:** Son las fuentes de reproducción de los mosquitos. Deben ser limpiados para  evitar su proliferación.
+**Vacuna:** En caso de ser picado, la vacuna aparecerá de manera aleatoria para el tratamiento del jugador.
+
+## Fin de juego
+
+-   **Limite de tiempo:** El juego termina cuando el tiempo se acaba.
+-   **Picaduras:** Si un jugador es picado dos veces consecutivas sin recibir tratamiento, el juego también termina.
 
 ## Equipo de desarrollo
 
@@ -6,25 +29,6 @@
 - Ariel Levetti
 - Maximiliano Ruiz
 - Agustín Garrido
-
-## Capturas
-
-![demostracion](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/b04e5215-2db9-4065-a403-2100b4db5535)
-
-## Reglas de Juego / Instrucciones (Tentativo)
-
-- El objetivo del juego es sobrevivir a la epidemia de dengue. Para ello, el jugador deberá limpiar todos los focos infecciosos disponibles y matar mosquitos, mientras evita el contagio.
-- Si el personaje es picado por un mosquito, se enferma. Si durante ese período vuelve a ser picado, el juego finaliza. La única forma de combatir la enfermedad es encontrando el antídoto que estará disponible en el escenario.
-
-## Dificultad (Tentativo)
-
-- A medida que el juego transcurre, los espacios generadores de mosquito aumentan y la generación de mosquitos es cada vez más rápida.
-- Al ser picado, el movimiento del personaje se torna errático y difícil de llevar.
-
-## Final del juego
-
-- El juego finalizada al recolectar la máxima cantidad posible de focos infecciosos.
-- En caso de no alcanzar el objetivo, el juego finaliza cuando el tiempo se termina o el personaje es picado dos veces.
 
 ## Otros
 
