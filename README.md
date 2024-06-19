@@ -1,5 +1,4 @@
-# DENGUE
-![dengue-logo](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/45bca68b-6467-4cc0-a02c-2220b2b084e7)
+![dengue-logo](https://github.com/obj1unq/2024s1-tp-grupal-juego-equipo-3/assets/97321444/22167a2f-2569-4247-8d29-14f1097c87e1)
 
 ## Capturas
 
