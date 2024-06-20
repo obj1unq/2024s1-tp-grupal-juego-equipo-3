@@ -10,6 +10,7 @@ object mainCharacter inherits Character {
 	var property position = game.at(4, 4)
 	var property lifes = 2
 	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
+	var property sprayEquipado = 0
 
 	method image() = "ch" + direction + ".png"
 
@@ -38,7 +39,7 @@ object mainCharacter inherits Character {
 		self.goesTo(newDirection)
 	}
 
-	method collision() {
+	override method collision() {
 	}
 
 	method changeMoving() {
@@ -56,6 +57,7 @@ object mainCharacter inherits Character {
 			self.morir()
 		} else {
 			lifes -= 1
+			antidoteFactory.createIfICan()
 		}
 	}
 
@@ -84,10 +86,7 @@ object mainCharacter inherits Character {
 		self.validateEmptyPositionForPut()
 		self.validateSpirals()
 		bag.discountSpiral()
-		const spiral = new Spiral()
-		spiral.newPosition(self.position())
-		game.addVisual(spiral)
-		spiral.activate()
+		spiralFactory.createIfICan()
 	}
 
 	method validateEmptyPositionForPut() {
@@ -97,9 +96,18 @@ object mainCharacter inherits Character {
 	}
 
 	method validateSpirals() {
-		if (bag.spirals() < 1) {
+		if (bag.spiral() < 1) {
 			self.error("No tengo espirales")
 		}
+	}
+
+	method equipSpray() {
+		sprayEquipado = 1
+	}
+
+	method useSpray() {
+// mosquito.dead()    efecto de matar el mosquito al que apunta
+		sprayEquipado = 0
 	}
 
 }

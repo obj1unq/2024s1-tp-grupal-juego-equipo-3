@@ -5,7 +5,7 @@ import mosquito.*
 
 object elementManager {
 
-	const property factories = [ spiralBoxFactory, trashFactory ]
+	const property factories = [ spiralBoxFactory, sprayFactory, trashFactory ]
 
 	method createElement() {
 		factories.forEach({ factory => factory.createIfICan()})
@@ -29,6 +29,29 @@ class ElementFactory {
 
 }
 
+object spiralFactory inherits ElementFactory {
+
+	const property spirals = []
+
+	override method create() {
+		const spiral = new Spiral()
+		spirals.add(spiral)
+		game.addVisual(spiral)
+		game.onTick(500, "EFECTO ESPIRAL", { spiral.activate()})
+		game.schedule(30000, {=> self.remove(spiral)})
+	}
+
+	override method canCreate() {
+		return spirals.size() < 5
+	}
+
+	override method remove(elementSpiral) {
+		game.removeVisual(elementSpiral)
+		self.spirals().remove(elementSpiral)
+	}
+
+}
+
 object spiralBoxFactory inherits ElementFactory {
 
 	var element = null
@@ -39,7 +62,7 @@ object spiralBoxFactory inherits ElementFactory {
 	}
 
 	override method canCreate() {
-		return not element == spiralBox
+		return not (element == spiralBox)
 	}
 
 	override method remove(elementSpiralBox) {
@@ -70,22 +93,42 @@ object trashFactory inherits ElementFactory {
 
 }
 
-object antidoteFactory inherits ElementFactory {
+object sprayFactory inherits ElementFactory {
 
-	const property antidotes = []
+	var element = null
 
 	override method create() {
-		const antidote = new Antidote()
-		antidotes.add(antidote)
-		game.addVisual(antidote)
+		element = spray
+		game.addVisual(element)
 	}
 
 	override method canCreate() {
+		return not (element == spray)
+	}
+
+	override method remove(elementSpray) {
+		game.removeVisual(elementSpray)
+		element = null
+	}
+
+}
+
+object antidoteFactory inherits ElementFactory {
+
+	var element = null
+
+	override method create() {
+		element = antidote
+		game.addVisual(element)
+	}
+
+	override method canCreate() {
+		return true
 	}
 
 	override method remove(elementAntidote) {
 		game.removeVisual(elementAntidote)
-		self.antidotes().remove(elementAntidote)
+		element = null
 	}
 
 }
@@ -106,7 +149,7 @@ class Element {
 
 }
 
-class Antidote inherits Element {
+object antidote inherits Element {
 
 	method image() {
 		return "antidote" + ".png"
@@ -114,6 +157,7 @@ class Antidote inherits Element {
 
 	override method take() {
 		mainCharacter.recuperarVida()
+		antidoteFactory.remove(self)
 	}
 
 }
@@ -127,6 +171,19 @@ object spiralBox inherits Element {
 	override method take() {
 		bag.storeSpiral()
 		spiralBoxFactory.remove(self)
+	}
+
+}
+
+object spray inherits Element {
+
+	method image() {
+		return "insecticide01" + ".png"
+	}
+
+	override method take() {
+		mainCharacter.equipSpray()
+		sprayFactory.remove(self)
 	}
 
 }
@@ -170,6 +227,9 @@ class Spiral inherits Element {
 
 	override method isTakeable() {
 		return false
+	}
+
+	override method take() {
 	}
 
 }
