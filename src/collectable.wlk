@@ -238,8 +238,8 @@ object bag {
 
 	var property spiral = 0
 	var property trash = 0
-	var property mosquito = 0
 
+//	var property mosquito = 0
 	method storeSpiral() {
 		self.validateSpiral()
 		spiral = 5
