@@ -3,6 +3,93 @@ import randomizer.*
 import main_character.*
 import mosquito.*
 
+object elementManager {
+
+	const property factories = [ spiralBoxFactory, trashFactory ]
+
+	method createElement() {
+		factories.forEach({ factory => factory.createIfICan()})
+	}
+
+}
+
+class ElementFactory {
+
+	method createIfICan() {
+		if (self.canCreate()) {
+			self.create()
+		}
+	}
+
+	method create()
+
+	method canCreate()
+
+	method remove(elementX)
+
+}
+
+object spiralBoxFactory inherits ElementFactory {
+
+	var element = null
+
+	override method create() {
+		element = spiralBox
+		game.addVisual(element)
+	}
+
+	override method canCreate() {
+		return not element == spiralBox
+	}
+
+	override method remove(elementSpiralBox) {
+		game.removeVisual(elementSpiralBox)
+		element = null
+	}
+
+}
+
+object trashFactory inherits ElementFactory {
+
+	const property trashes = []
+
+	override method create() {
+		const trash = new Trash()
+		trashes.add(trash)
+		game.addVisual(trash)
+	}
+
+	override method canCreate() {
+		return trashes.size() < 3
+	}
+
+	override method remove(elementTrash) {
+		game.removeVisual(elementTrash)
+		self.trashes().remove(elementTrash)
+	}
+
+}
+
+object antidoteFactory inherits ElementFactory {
+
+	const property antidotes = []
+
+	override method create() {
+		const antidote = new Antidote()
+		antidotes.add(antidote)
+		game.addVisual(antidote)
+	}
+
+	override method canCreate() {
+	}
+
+	override method remove(elementAntidote) {
+		game.removeVisual(elementAntidote)
+		self.antidotes().remove(elementAntidote)
+	}
+
+}
+
 class Element {
 
 	const property position = randomizer.emptyPosition()
@@ -15,102 +102,52 @@ class Element {
 		return true
 	}
 
-	method createIfICan() {
-		if (self.canCreate()) {
-			self.create()
-		}
-	}
-
-	method create()
-
-	method canCreate()
-
 	method take()
 
 }
 
-//object initialElementManager {
-//
-//	const property factories = [ spiralBoxFactory ] // basuraFactory 
-//
-//	method createElement() {
-//		factories.forEach({ f => f.create()})
-//	}
-//
-//}
-//class ElementFactory {
-//
-//	method createSiPuedo() {
-//		if (self.puedeCrear()) {
-//			self.create()
-//		}
-//	}
-//
-//	method create() {
-//	}
-//
-//	method puedeCrear()
-//
-//}
-//object spiralBoxFactory inherits ElementFactory {
-//
-//	var spiralBoxActual = null
-//
-//	override method create() {
-//		const spiralBox = new SpiralBox()
-//		game.addVisual(spiralBox)
-//		spiralBoxActual = spiralBox
-//	}
-//
-//	override method puedeCrear() {
-//		return spiralActual == null
-//	}
-//
-//	method removeBoxSpiral() {
-//		game.removeVisual(spiralActual)
-//		spiralBoxActual = null
-//	}
-//
-//}
-object spiralBox inherits Element {
+class Antidote inherits Element {
 
-	var estado = null
+	method image() {
+		return "antidote" + ".png"
+	}
+
+	override method take() {
+		mainCharacter.recuperarVida()
+	}
+
+}
+
+object spiralBox inherits Element {
 
 	method image() {
 		return "spiralbox" + ".png"
 	}
 
-	override method create() {
-		game.addVisual(self)
-	}
-
-	override method canCreate() {
-		return estado == null
-	}
-
-	method removeBoxSpiral() {
-		game.removeVisual(self)
-		estado = null
-	}
-
 	override method take() {
-		bag.storeInBag()
-		self.removeBoxSpiral()
+		bag.storeSpiral()
+		spiralBoxFactory.remove(self)
 	}
 
 }
 
-//object spiralFactory inherits ElementFactory {
-//
-//	override method puedeCrear() {
-//		return game.getObjectsIn(position).isEmpty()
-//	}
-//
-//}
-/*object TrashFactory {
- * 	
- * }
- */
+class Trash inherits Element {
+
+	method image() {
+		return "trash0" + self.typeOf() + ".png"
+	}
+
+	method typeOf() {
+		return 1.randomUpTo(5).roundUp(0)
+	}
+
+	override method take() {
+		bag.storeTrash()
+		trashFactory.remove(self)
+	}
+
+}
+
 class Spiral inherits Element {
 
 	var property newPosition = null
@@ -139,21 +176,25 @@ class Spiral inherits Element {
 
 object bag {
 
-	var property spirals = 0
-	var property trashes = 0
-	var property mosquitoes = 0
+	var property spiral = 0
+	var property trash = 0
+	var property mosquito = 0
 
-	method storeInBag() {
-		self.validateBag()
-		spirals = 5
+	method storeSpiral() {
+		self.validateSpiral()
+		spiral = 5
 	}
 
 	method discountSpiral() {
-		spirals -= 1
+		spiral -= 1
 	}
 
-	method validateBag() {
-		if (self.spirals() > 0) {
+	method storeTrash() {
+		trash += 1
+	}
+
+	method validateSpiral() {
+		if (spiral > 0) {
 			self.error("todavía tengo espirales en la caja")
 		}
 	}
