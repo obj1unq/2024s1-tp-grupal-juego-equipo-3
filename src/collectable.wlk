@@ -25,7 +25,7 @@ class ElementFactory {
 
 	method canCreate()
 
-	method remove(elementX)
+	method removeThis(elementX)
 
 }
 
@@ -38,14 +38,14 @@ object spiralFactory inherits ElementFactory {
 		spirals.add(spiral)
 		game.addVisual(spiral)
 		game.onTick(500, "EFECTO ESPIRAL", { spiral.activate()})
-		game.schedule(30000, {=> self.remove(spiral)})
+		game.schedule(5000, {=> self.removeThis(spiral)})
 	}
 
 	override method canCreate() {
 		return spirals.size() < 5
 	}
 
-	override method remove(elementSpiral) {
+	override method removeThis(elementSpiral) {
 		game.removeVisual(elementSpiral)
 		self.spirals().remove(elementSpiral)
 	}
@@ -65,7 +65,7 @@ object spiralBoxFactory inherits ElementFactory {
 		return not (element == spiralBox)
 	}
 
-	override method remove(elementSpiralBox) {
+	override method removeThis(elementSpiralBox) {
 		game.removeVisual(elementSpiralBox)
 		element = null
 	}
@@ -86,7 +86,7 @@ object trashFactory inherits ElementFactory {
 		return trashes.size() < 3
 	}
 
-	override method remove(elementTrash) {
+	override method removeThis(elementTrash) {
 		game.removeVisual(elementTrash)
 		self.trashes().remove(elementTrash)
 	}
@@ -106,7 +106,7 @@ object sprayFactory inherits ElementFactory {
 		return not (element == spray)
 	}
 
-	override method remove(elementSpray) {
+	override method removeThis(elementSpray) {
 		game.removeVisual(elementSpray)
 		element = null
 	}
@@ -115,10 +115,9 @@ object sprayFactory inherits ElementFactory {
 
 object antidoteFactory inherits ElementFactory {
 
-	var element = null
+	const element = antidote
 
 	override method create() {
-		element = antidote
 		game.addVisual(element)
 	}
 
@@ -126,9 +125,8 @@ object antidoteFactory inherits ElementFactory {
 		return true
 	}
 
-	override method remove(elementAntidote) {
+	override method removeThis(elementAntidote) {
 		game.removeVisual(elementAntidote)
-		element = null
 	}
 
 }
@@ -157,7 +155,7 @@ object antidote inherits Element {
 
 	override method take() {
 		mainCharacter.recuperarVida()
-		antidoteFactory.remove(self)
+		antidoteFactory.removeThis(self)
 	}
 
 }
@@ -170,7 +168,7 @@ object spiralBox inherits Element {
 
 	override method take() {
 		bag.storeSpiral()
-		spiralBoxFactory.remove(self)
+		spiralBoxFactory.removeThis(self)
 	}
 
 }
@@ -183,7 +181,7 @@ object spray inherits Element {
 
 	override method take() {
 		mainCharacter.equipSpray()
-		sprayFactory.remove(self)
+		sprayFactory.removeThis(self)
 	}
 
 }
@@ -200,7 +198,7 @@ class Trash inherits Element {
 
 	override method take() {
 		bag.storeTrash()
-		trashFactory.remove(self)
+		trashFactory.removeThis(self)
 	}
 
 }

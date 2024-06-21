@@ -22,7 +22,7 @@ object gameConfiguration {
 		(0 .. 3).forEach({ n => mosquitoFactory.create()})
 		(0 .. 2).forEach({ n => mosquitoHardFactory.create()})
 		mosquitosManager.createMosquitos()
-		game.onTick(1000, "CREAR ELEMENTOS", { elementManager.createElement()})
+		game.onTick(5000, "CREAR ELEMENTOS", { elementManager.createElement()})
 		obstacleGeneration.configurate()
 		keyboardConfig.configurate()
 	}
