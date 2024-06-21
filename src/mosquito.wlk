@@ -41,14 +41,11 @@ class Mosquito inherits Character {
 		game.removeTickEvent(self.eventMosquito())
 	}
 
-	override method collision() {
+	method collision() {
 		self.dead()
 		character.restarVida()
 	}
 
-	override method isTakeable() {
-		return false
-	}
 
 }
 
@@ -97,7 +94,7 @@ object mosquitoHardFactory {
 
 object mosquitosManager {
 
-	const property mosquitos = #{} // cuando mato un mosquito se elimina de esta lista?
+	const property mosquitos = #{} 
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
@@ -122,10 +119,7 @@ object mosquitosManager {
 	method removeMosquito(mosquito){
 		mosquitos.remove(mosquito)
 	}
-	
-	method hayMosquitosEn(position){
-		return mosquitos.any({m=> m.position() == position})
-	}
+
 
 }
 

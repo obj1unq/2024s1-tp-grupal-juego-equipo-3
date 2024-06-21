@@ -39,9 +39,6 @@ object mainCharacter inherits Character {
 		self.goesTo(newDirection)
 	}
 
-	method collision() {
-	}
-
 	method changeMoving() {
 		estaInvertido = true
 	}
@@ -65,9 +62,7 @@ object mainCharacter inherits Character {
 	// CONFIGURAR FINAL 
 	}
 
-	override method isTakeable() {
-		return false
-	}
+
 
 	method disparar() {
 		mySpray.disparar()

@@ -24,10 +24,9 @@ class Character {
         return false
     }
 
-    method isTakeable()
+    method isTakeable(){
+    	return false
+    }
 
-    method collision()
-
-    //method spiralEffect()
 
 }
