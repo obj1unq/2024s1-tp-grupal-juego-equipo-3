@@ -32,4 +32,26 @@
 		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 		<nature>org.uqbar.project.wollok.wollokNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>assets/rafagadownDirection.png</name>
+			<type>1</type>
+			<location>D:/IMAGENES/rafagaDown.png</location>
+		</link>
+		<link>
+			<name>assets/rafagaleftDirection.png</name>
+			<type>1</type>
+			<location>D:/IMAGENES/rafagaLeft.png</location>
+		</link>
+		<link>
+			<name>assets/rafagarightDirection.png</name>
+			<type>1</type>
+			<location>D:/IMAGENES/rafagaRight.png</location>
+		</link>
+		<link>
+			<name>assets/rafagaupDirection.png</name>
+			<type>1</type>
+			<location>D:/IMAGENES/rafagaUp.png</location>
+		</link>
+	</linkedResources>
 </projectDescription>

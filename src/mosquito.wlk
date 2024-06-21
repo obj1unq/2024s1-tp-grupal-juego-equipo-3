@@ -3,7 +3,7 @@ import randomizer.*
 import posiciones.*
 import main_character.*
 import globalConfig.*
-
+import obstacles.*
 class Mosquito inherits Character {
 
 	var property position = randomizer.position()
@@ -12,7 +12,7 @@ class Mosquito inherits Character {
 	method image() = "mosquito01.png"
 
 	method moving() {
-		game.onTick(1500, self.eventMosquito(), { self.typeMove()})
+		game.onTick(3000, self.eventMosquito(), { self.typeMove()})
 	}
 
 	method typeMove() {
@@ -30,11 +30,13 @@ class Mosquito inherits Character {
 	method eventMosquito() {
 		return "mosquitoMoving" + self.identity()
 	}
+
 	method spiralEffect() {
 		self.dead()
 	}
 
 	method dead() {
+		mosquitosManager.removeMosquito(self)
 		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())
 	}
@@ -43,8 +45,8 @@ class Mosquito inherits Character {
 		self.dead()
 		character.restarVida()
 	}
-	
-	override method isTakeable(){
+
+	override method isTakeable() {
 		return false
 	}
 
@@ -69,14 +71,13 @@ class MosquitoHard inherits Mosquito {
 		}
 		return nextPosition
 	}
-	
+
 	override method collision() {
-        super()
-        character.changeMoving()
-    }
+		super()
+		character.changeMoving()
+	}
 
 }
-
 
 //Factory 
 object mosquitoFactory {
@@ -88,7 +89,6 @@ object mosquitoFactory {
 }
 
 object mosquitoHardFactory {
-
 	method create() {
 		return new MosquitoHard()
 	}
@@ -97,7 +97,7 @@ object mosquitoHardFactory {
 
 object mosquitosManager {
 
-	const property mosquitos = #{}
+	const property mosquitos = #{} // cuando mato un mosquito se elimina de esta lista?
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
@@ -115,6 +115,17 @@ object mosquitosManager {
 		return mosquitos.filter({ mosquito => mosquito.position().distance(visual.position()) < 2 })
 	}
 
-}
+	method mosquitosEn(position) {
+		return self.mosquitos().filter({ m => m.position() == position })
+	}
 
+	method removeMosquito(mosquito){
+		mosquitos.remove(mosquito)
+	}
+	
+	method hayMosquitosEn(position){
+		return mosquitos.any({m=> m.position() == position})
+	}
+
+}
 

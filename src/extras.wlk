@@ -6,7 +6,7 @@ import mosquito.*
 import posiciones.*
 import globalConfig.*
 import game_counter.*
-
+import collectable.*
 object initialMenu {
 
 	const gameWidth = 20
@@ -136,6 +136,7 @@ object keyboardConfig {
 		keyboard.enter().onPressDo{
 		}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
+		keyboard.q().onPressDo { mainCharacter.disparar()}
 	}
 
 }

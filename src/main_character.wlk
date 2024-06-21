@@ -2,13 +2,15 @@ import wollok.game.*
 import posiciones.*
 import globalConfig.*
 import mosquito.*
+import collectable.*
 
 object mainCharacter inherits Character {
 
 	var property direction = downDirection
 	var property position = game.at(4, 4)
 	var property lifes = 2
-	var estaInvertido = false //TODO: Ver cómo indicar que fue picado por un hard
+	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
+	var property mySpray = new Spray(tomado = true )
 
 	method image() = "ch" + direction + ".png"
 
@@ -65,6 +67,10 @@ object mainCharacter inherits Character {
 
 	override method isTakeable() {
 		return false
+	}
+
+	method disparar() {
+		mySpray.disparar()
 	}
 
 }

@@ -1,9 +1,19 @@
 import wollok.game.*
 
-object leftDirection {
+class Direction {
 
 	method nextMove(position) {
-		return position.left(1)
+		return self.nextMove(position, 1)
+	}
+
+	method nextMove(position, cant)
+
+}
+
+object leftDirection inherits Direction {
+
+	override method nextMove(position, cant) {
+		return position.left(cant)
 	}
 
 	method say() {
@@ -16,10 +26,10 @@ object leftDirection {
 
 }
 
-object downDirection {
+object downDirection inherits Direction {
 
-	method nextMove(position) {
-		return position.down(1)
+	override method nextMove(position, cant) {
+		return position.down(cant)
 	}
 
 	method say() {
@@ -32,10 +42,10 @@ object downDirection {
 
 }
 
-object rightDirection {
+object rightDirection inherits Direction {
 
-	method nextMove(position) {
-		return position.right(1)
+	override method nextMove(position, cant) {
+		return position.right(cant)
 	}
 
 	method opossite() {
@@ -48,10 +58,10 @@ object rightDirection {
 
 }
 
-object upDirection {
+object upDirection inherits Direction {
 
-	method nextMove(position) {
-		return position.up(1)
+	override method nextMove(position, cant) {
+		return position.up(cant)
 	}
 
 	method opossite() {

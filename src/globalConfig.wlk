@@ -7,17 +7,17 @@ object limit {
     const property minX = 1
     const property maxY = game.height() - 4
     const property minY = 1
+    method in(position) {
+        return position.x().between(minX, maxX) and position.y().between(minY, maxY)
+    }
 
 }
 
 class Character {
 
-    method in(position) {
-        return position.x().between(limit.minX(), limit.maxX()) and position.y().between(limit.minY(), limit.maxY())
-    }
 
     method canGo(position) {
-        return self.in(position) and not obstacleManager.isObstacleIn(position)
+        return limit.in(position) and not obstacleManager.isObstacleIn(position)
     }
 
     method isSolid() {
