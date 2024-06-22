@@ -16,6 +16,9 @@ object gameConfig {
 		interface.build()
 		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
+		(1 .. 3).forEach({ t => elementManager.createTrashRandom()})
+		elementManager.createTrashRandom()
+		game.onTick(5000, "CREAR ELEMENTOS", { elementManager.createElement()})
 		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
@@ -64,7 +67,7 @@ object lifeCounter inherits MenuElement {
 
 object repellantCounter inherits MenuElement {
 
-	override method image() = "repellant" + spray.shoots() + ".png"
+	override method image() = "repellant" +insecticide.shoots() + ".png"
 
 }
 

@@ -5,6 +5,22 @@ import mosquito.*
 import obstacles.*
 import globalConfig.*
 
+// Hacer vacuna (Cuando me quedo con una vida)
+object elementManager {
+
+	const property factories = [ refillFactory, trashFactory ]
+
+	method createElement() {
+		factories.forEach({ factory => factory.createSiPuedo()})
+	}
+
+	method createTrashRandom() {
+		const trash = trashFactory
+		game.addVisual(trash)
+	}
+
+}
+
 object bag {
 
 	var property spirals = 0
@@ -12,7 +28,7 @@ object bag {
 	var property mosquitoes = 0
 
 	method storeInBag() {
-		self.validateBag()
+		self.validateSpirals()
 		spirals = 5
 	}
 
@@ -20,7 +36,7 @@ object bag {
 		spirals -= 1
 	}
 
-	method validateBag() {
+	method validateSpirals() {
 		if (self.spirals() > 0) {
 			self.error("todavía tengo espirales en la caja")
 		}
@@ -30,8 +46,13 @@ object bag {
 		mosquitoes += 1
 	}
 
+	method storeTrash() {
+		trashes += 1
+	}
+
 }
 
+/* ELEMENTS */
 class Element {
 
 	var property position = randomizer.emptyPosition()
@@ -44,53 +65,64 @@ class Element {
 		return true
 	}
 
-	method collision()
+	method collision() {
+		self.take()
+	}
+
+	method take()
 
 	method image()
 
-}
-
-//object initialElementManager {
-//
-//	const property factories = [ spiralBoxFactory ] // basuraFactory 
-//
-//	method createElement() {
-//		factories.forEach({ f => f.create()})
-//	}
-//
-//}
-class ElementFactory {
-
-	method createSiPuedo() {
-		if (self.puedeCrear()) {
-			self.create()
-		}
-	}
-
-	method create()
-
-	method puedeCrear()
-
-}
-
-object recargaFactory inherits ElementFactory {
-
-	override method create() {
-		var recarga = new Recarga()
-		game.addVisual(recarga)
-	}
-
-	override method puedeCrear() {
-		return !mainCharacter.mySpray().tieneDisparos()
+	method removeThis() {
+		game.removeVisual(self)
 	}
 
 }
 
-object spray inherits Element {
+class Vaccine inherits Element {
 
-	var property shoots = 4
+	override method image() {
+		return "vaccine.png"
+	}
+
+	override method take() {
+		mainCharacter.curar()
+		self.removeThis()
+	}
+
+}
+
+/*class Refill inherits Element {
+
+ * 	override method image() {
+ * 		return "insecticide01.png"
+ * 	}
+
+ * 	override method take() {
+ * 		insecticide.recargar()
+ * 		self.removeThis()
+ * 	}
+
+ }*/
+object refill inherits Element {
 
 	method image() {
+		return "insecticide01" + ".png"
+	}
+
+	override method take() {
+		insecticide.recargar()
+		refillFactory.removeElement(self)
+	}
+
+}
+
+object insecticide inherits Element {
+
+	var property shoots = 4
+	var property shootDistance = 3
+
+	override method image() {
 		return "insecticide01.png"
 	}
 
@@ -99,17 +131,16 @@ object spray inherits Element {
 	}
 
 	method disparar() {
-//		self.validateMosquitos()
 		self.restarDisparo()
-		brumaFactory.createBrumas()
+		sprayFactory.createSprayBurst(shootDistance)
 		self.killMosquitos()
-		recargaFactory.createSiPuedo()
+		refillFactory.createSiPuedo()
 	}
 
 	// TODO: Resolver bonito u.u
 	method killMosquitos() {
-		if (!self.mosquitos().isEmpty()) {
-			self.mosquitos().forEach({ m => m.killed()})
+		if (self.hayMosquitos(shootDistance)) {
+			self.mosquitos(shootDistance).forEach({ m => m.killed()})
 		}
 	}
 
@@ -117,11 +148,6 @@ object spray inherits Element {
 		return mainCharacter.direction()
 	}
 
-//	method validateMosquitos() {
-//		if (!self.hayMosquitos()) {
-//			self.error("No hay mosquitos en el rango")
-//		}
-//	}
 	method validateDisparos() {
 		if (!self.tieneDisparos()) {
 			self.error("Recarga tu Spray")
@@ -136,42 +162,29 @@ object spray inherits Element {
 		return (1 .. alcance).map({ n => self.direction().nextMove(self.position(), n) })
 	}
 
-	method mosquitos() {
-		return self.posiciones(3).map({ d => mosquitosManager.mosquitosEn(d) }).flatten()
+	method mosquitos(alcance) {
+		return self.posiciones(alcance).map({ d => mosquitosManager.mosquitosEn(d) }).flatten()
 	}
 
 	method tieneDisparos() {
 		return shoots > 0
 	}
 
-	method hayMosquitos() {
-		return !self.mosquitos().isEmpty()
+	method hayMosquitos(alcance) {
+		return !self.mosquitos(alcance).isEmpty()
 	}
 
 	method recargar() {
 		shoots = 4
 	}
 
-	override method collision() {
-	}
-
-}
-
-class Recarga inherits Element {
-
-	override method image() {
-		return "insecticide01.png"
-	}
-
-	override method collision() {
-		spray.recargar()
-		game.removeVisual(self)
+	override method take() {
 	}
 
 }
 
 // TODO: Resolver conflicto de dirección con picadura de mosquito hard
-class Bruma inherits Element {
+class Spray inherits Element {
 
 	const cantidad
 
@@ -183,7 +196,7 @@ class Bruma inherits Element {
 		return "brick0" + cantidad + ".png"
 	}
 
-	override method collision() {
+	override method take() {
 	}
 
 	override method isTakeable() {
@@ -192,37 +205,133 @@ class Bruma inherits Element {
 
 }
 
-object brumaFactory inherits ElementFactory {
+class Trash inherits Element {
 
-	//TODO: Por polimorfismo, hay que cambiar todos los métodos (agregar parámetros)
-	//TODO: Ver disparos sobre obstáculos + Limitar disparos
-	method createBrumas() {
-		(1 .. 3).forEach({ i => self.createSiPuedoEn(i)})
+	override method image() {
+		return "trash01.png"
 	}
 
-	override method create() {
+	/*method typeOf() {
+	 * 	return 1.randomUpTo(5).roundUp(0)
+	 }*/
+	override method take() {
+		bag.storeTrash()
+		trashFactory.removeElement(self)
 	}
 
-	method createOn(i) {
-		var bruma = new Bruma(cantidad = i)
-		game.addVisual(bruma)
-		game.schedule(200, { game.removeVisual(bruma)})
-	}
+}
 
-	override method createSiPuedo() {
-	}
+/* FACTORIES */
+class ElementFactory {
 
-	method createSiPuedoEn(cantidad) {
-		if (self.puedeCrearEn(cantidad)) {
-			self.createOn(cantidad)
+	method createSiPuedo() {
+		if (self.puedeCrear()) {
+			self.create()
 		}
 	}
 
-	override method puedeCrear() {
+	method create()
+
+	method puedeCrear()
+
+	method removeElement(element)
+
+}
+
+object vaccineFactory inherits ElementFactory {
+
+	override method create() {
+		var vaccine = new Vaccine()
+		game.addVisual(vaccine)
 	}
 
-	method puedeCrearEn(cantidad) {
-		return limit.in(mainCharacter.direction().nextMove(mainCharacter.position(), cantidad))
+	override method puedeCrear() {
+		return mainCharacter.isSick()
+	}
+
+	override method removeElement(element) {
+	}
+
+}
+
+/*object refillFactory inherits ElementFactory {
+
+ * 	override method create() {
+ * 		var refill = new Refill()
+ * 		game.addVisual(refill)
+ * 	}
+
+ * 	override method puedeCrear() {
+ * 		return !mainCharacter.myInsecticide().tieneDisparos()
+ * 	}
+
+ * 	override method removeElement(element) {
+ * 	}
+
+ }*/
+object refillFactory inherits ElementFactory {
+
+	var element = null
+
+	override method create() {
+		element = refill
+		game.addVisual(element)
+	}
+
+	override method puedeCrear() {
+		return !mainCharacter.myInsecticide().tieneDisparos()
+	}
+
+	override method removeElement(elementSpray) {
+		game.removeVisual(elementSpray)
+	}
+
+}
+
+object sprayFactory {
+
+	// TODO: Consultar sobre polimorfismo. Ahora se aplica sin heredar de elementFactory
+	// TODO: Por polimorfismo, hay que cambiar todos los métodos (agregar parámetros)
+	// TODO: Ver disparos sobre obstáculos + Limitar disparos
+	method createSprayBurst(shootDistance) {
+		(1 .. shootDistance).forEach({ i => self.createSiPuedo(i)})
+	}
+
+	method create(size) {
+		var spray = new Spray(cantidad = size)
+		game.addVisual(spray)
+		game.schedule(200, { game.removeVisual(spray)})
+	}
+
+	method createSiPuedo(size) {
+		if (self.puedeCrear(size)) {
+			self.create(size)
+		}
+	}
+
+	method puedeCrear(size) {
+		return limit.in(mainCharacter.direction().nextMove(mainCharacter.position(), size))
+	}
+
+}
+
+object trashFactory inherits ElementFactory {
+
+	const property trashes = []
+
+	override method create() {
+		const trash = new Trash()
+		trashes.add(trash)
+		game.addVisual(trash)
+	}
+
+	override method puedeCrear() {
+		return trashes.size() < 3
+	}
+
+	override method removeElement(elementTrash) {
+		game.removeVisual(elementTrash)
+		self.trashes().remove(elementTrash)
 	}
 
 }

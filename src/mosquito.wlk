@@ -42,7 +42,7 @@ class Mosquito inherits Character {
 
 	method collision() {
 		self.dead()
-		character.restarVida()
+		character.bitten()
 	}
 
 	method killed() {
@@ -78,7 +78,7 @@ class MosquitoHard inherits Mosquito {
 
 	override method collision() {
 		super()
-		character.changeMoving()
+		character.invert()
 	}
 
 }

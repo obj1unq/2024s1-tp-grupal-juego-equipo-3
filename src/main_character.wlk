@@ -10,7 +10,7 @@ object mainCharacter inherits Character {
 	var property direction = downDirection
 	var property position = game.at(4, 4)
 	var property lifes = 2
-	var property mySpray = spray
+	var property myInsecticide = insecticide
 	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
 
 	method image() = "ch" + direction + ".png"
@@ -43,21 +43,35 @@ object mainCharacter inherits Character {
 	method collision() {
 	}
 
-	method changeMoving() {
-		estaInvertido = true
-	}
-
-	method recuperarVida() {
-		if (lifes < 2) {
-			lifes += 1
+	method invert() {
+		if (!estaInvertido && self.isSick()) {
+			estaInvertido = true
+		} else {
+			estaInvertido = false
 		}
 	}
 
-	method restarVida() {
-		lifes -= 1
-		if (lifes < 1) {
+//	method curar() {
+//		if (self.isSick()) {
+//			lifes += 1
+//			self.invert()
+//		}
+//	}
+	method curar() {
+		lifes += 1
+		self.invert()
+	}
+
+	method bitten() {
+		if (self.isSick()) {
 			self.morir()
 		}
+		lifes -= 1
+		vaccineFactory.createSiPuedo()
+	}
+
+	method isSick() {
+		return lifes == 1
 	}
 
 	method morir() {
@@ -71,15 +85,16 @@ object mainCharacter inherits Character {
 
 	method disparar() {
 		self.validateDisparos()
-		mySpray.disparar()
+		insecticide.disparar()
 	}
 
-	//TODO: No carga disfraz de bruma
-	//TODO: Modificar disfraces de bruma (ROJO)
+	// TODO: No carga disfraz de bruma
+	// TODO: Modificar disfraces de bruma (ROJO)
 	method validateDisparos() {
-		if (!mySpray.tieneDisparos()) {
+		if (!insecticide.tieneDisparos()) {
 			self.error("Recarga tu spray!")
 		}
 	}
+
 }
 
