@@ -22,6 +22,7 @@ class Character {
 		return limit.in(position) and not obstacleManager.isObstacleIn(position)
 	}
 
+
 	method isSolid() {
 		return false
 	}

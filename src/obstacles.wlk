@@ -36,7 +36,6 @@ object obstacleManager {
 	}
 
 }
-
 class Plant inherits Obstacle(imageFile = 'plants0', asset = (1 .. 3).anyOne()) {
 
 }
@@ -46,7 +45,6 @@ class Stone inherits Obstacle(imageFile = 'stone0', asset = (1 .. 2).anyOne()) {
 }
 
 class Brick inherits Obstacle(imageFile = 'brick0', asset = (1 .. 3).anyOne()) {
-
 }
 
 object plantFactory {
@@ -58,7 +56,6 @@ object plantFactory {
 }
 
 object brickFactory {
-
 	method create() {
 		return new Brick()
 	}

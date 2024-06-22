@@ -31,7 +31,7 @@ class Mosquito inherits Character {
 	method eventMosquito() {
 		return "mosquitoMoving" + self.identity()
 	}
-
+  
 //	override method spiralEffect() {
 //		self.dead()
 //	}
@@ -106,6 +106,7 @@ object mosquitosManager {
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
+
 		game.onTick(3000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
@@ -129,4 +130,5 @@ object mosquitosManager {
 	}
 
 }
+
 
