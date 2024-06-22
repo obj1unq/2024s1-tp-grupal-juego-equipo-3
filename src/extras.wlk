@@ -21,67 +21,6 @@ object gameConfig {
 		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
-
-	method previous(menu) {
-		menu.option(exit)
-	}
-
-	method next(menu) {
-		menu.option(help)
-	}
-
-}
-
-object help {
-
-	const property value = 2
-
-	method goMenu(menu) {
-		menu.option(helpMenu)
-	}
-
-	method previous(menu) {
-		menu.option(start)
-	}
-
-	method next(menu) {
-		menu.option(exit)
-	}
-
-}
-
-object exit {
-
-	const property value = 3
-
-	method goMenu(menu) {
-		game.stop()
-	}
-
-	method previous(menu) {
-		menu.option(help)
-	}
-
-	method next(menu) {
-		menu.option(start)
-	}
-
-}
-
-object helpMenu {
-
-	const property value = 4
-
-	method goMenu(menu) {
-		menu.option(help)
-	}
-
-	method previous(menu) {
-	}
-
-	method next(menu) {
-	}
-
 }
 
 object gameBackground {
