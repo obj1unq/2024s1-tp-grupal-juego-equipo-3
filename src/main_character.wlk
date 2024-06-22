@@ -4,6 +4,8 @@ import globalConfig.*
 import mosquito.*
 import collectable.*
 import obstacles.*
+import navigation.*
+import extras.*
 
 object mainCharacter inherits Character {
 
@@ -51,12 +53,6 @@ object mainCharacter inherits Character {
 		}
 	}
 
-//	method curar() {
-//		if (self.isSick()) {
-//			lifes += 1
-//			self.invert()
-//		}
-//	}
 	method curar() {
 		lifes += 1
 		self.invert()
@@ -67,7 +63,7 @@ object mainCharacter inherits Character {
 			self.morir()
 		}
 		lifes -= 1
-		vaccineFactory.createSiPuedo()
+	// vaccineFactory.createSiPuedo() <- No se usa, lo maneja el elementFactory
 	}
 
 	method isSick() {
@@ -76,6 +72,7 @@ object mainCharacter inherits Character {
 
 	method morir() {
 		game.removeVisual(self)
+		gameOver.endGame()
 	// CONFIGURAR FINAL 
 	}
 
@@ -95,6 +92,25 @@ object mainCharacter inherits Character {
 			self.error("Recarga tu spray!")
 		}
 	}
+
+	/*method putSpiral() {
+		//self.validateEmptyPositionForPut()
+		self.validateSpirals()
+		bag.discountSpiral()
+		spiralFactory.createSiPuedo()
+	}
+
+	method validateEmptyPositionForPut() {
+		if (not game.colliders(self).isEmpty()) {
+			self.error("No puedo dejar nada aquí")
+		}
+	}
+
+	method validateSpirals() {
+		if (!bag.hasSpirals()) {
+			self.error("No tengo espirales.")
+		}
+	}*/
 
 }
 

@@ -16,9 +16,8 @@ object gameConfig {
 		interface.build()
 		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
-		(1 .. 3).forEach({ t => elementManager.createTrashRandom()})
-		elementManager.createTrashRandom()
-		game.onTick(5000, "CREAR ELEMENTOS", { elementManager.createElement()})
+		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
+		game.onTick(2500, "CREAR ELEMENTOS", { elementManager.createElement()})
 		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
@@ -67,7 +66,7 @@ object lifeCounter inherits MenuElement {
 
 object repellantCounter inherits MenuElement {
 
-	override method image() = "repellant" +insecticide.shoots() + ".png"
+	override method image() = "repellant" + insecticide.shoots() + ".png"
 
 }
 
@@ -212,6 +211,7 @@ object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 
 }
 
+// TODO: Revisar condiciones de bonus
 object bonusCounter inherits FinalCounter(position = game.at(13, 8)) {
 
 	override method number() {
@@ -227,7 +227,7 @@ object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7
 	}
 
 }
-
+// TODO: No sumar el tiempo si el personaje muere o condicionarlo
 object timeBonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 	override method number() {
@@ -290,9 +290,7 @@ object keyboardConfig {
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
-			// keyboard.c().onPressDo{ mainCharacter.sayDirection()}
-			// keyboard.f().onPressDo{ mainCharacter.foundElement()}
-			// keyboard.p().onPressDo{ mainCharacter.putSpiral()}
+		//keyboard.s().onPressDo{ mainCharacter.putSpiral()}
 		keyboard.d().onPressDo{ mainCharacter.disparar()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
