@@ -3,10 +3,11 @@ import randomizer.*
 import posiciones.*
 import main_character.*
 import globalConfig.*
+import collectable.*
 
 class Mosquito inherits Character {
 
-	var property position = randomizer.position()
+	var property position = randomizer.emptyPosition()
 	const character = mainCharacter
 
 	method image() = "mosquito01.png"
@@ -30,21 +31,26 @@ class Mosquito inherits Character {
 	method eventMosquito() {
 		return "mosquitoMoving" + self.identity()
 	}
-	method spiralEffect() {
-		self.dead()
-	}
-
+  
+//	override method spiralEffect() {
+//		self.dead()
+//	}
 	method dead() {
 		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())
 	}
 
-	override method collision() {
+	method collision() {
 		self.dead()
-		character.restarVida()
+		character.bitten()
 	}
-	
-	override method isTakeable(){
+
+	method killed() {
+		self.dead()
+		bag.addMosquito()
+	}
+
+	override method isTakeable() {
 		return false
 	}
 
@@ -69,14 +75,13 @@ class MosquitoHard inherits Mosquito {
 		}
 		return nextPosition
 	}
-	
+
 	override method collision() {
-        super()
-        character.changeMoving()
-    }
+		super()
+		character.invert()
+	}
 
 }
-
 
 //Factory 
 object mosquitoFactory {
@@ -101,7 +106,8 @@ object mosquitosManager {
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
-		game.onTick(5000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
+
+		game.onTick(3000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
 	method createMosquitoRandom() {
@@ -113,6 +119,14 @@ object mosquitosManager {
 
 	method mosquitoesAround(visual) {
 		return mosquitos.filter({ mosquito => mosquito.position().distance(visual.position()) < 2 })
+	}
+
+	method mosquitosEn(position) {
+		return self.mosquitos().filter({ m => m.position() == position })
+	}
+
+	method removeMosquito(mosquito) {
+		mosquitos.remove(mosquito)
 	}
 
 }
