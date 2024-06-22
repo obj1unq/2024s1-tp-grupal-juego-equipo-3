@@ -83,8 +83,6 @@ object controls {
 
 object exit {
 
-	const property value = 3
-
 	method goMenu(menu) {
 		game.stop()
 	}
@@ -104,8 +102,6 @@ object exit {
 }
 
 object controlsMenu {
-
-	const property value = 4
 
 	method goMenu(menu) {
 		menu.option(controls)
@@ -127,7 +123,7 @@ object loadScreen {
 
 	method build() {
 		game.addVisual(self)
-		game.onTick(3000, "load", { self.load()})
+		game.onTick(100, "load", { self.load()})
 	}
 
 	method load() {

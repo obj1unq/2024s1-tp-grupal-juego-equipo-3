@@ -6,6 +6,7 @@ import mosquito.*
 import posiciones.*
 import globalConfig.*
 import navigation.*
+import collectable.*
 
 object gameConfig {
 
@@ -13,10 +14,9 @@ object gameConfig {
 		game.clear()
 		game.addVisual(mainCharacter)
 		interface.build()
-		(0 .. 3).forEach({ n => mosquitoFactory.createMosquito()})
-		(0 .. 2).forEach({ n => mosquitoHardFactory.createMosquito()})
+		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
 		mosquitosManager.createMosquitos()
-		obstacleGeneration.configurate()
+		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
 
@@ -24,7 +24,7 @@ object gameConfig {
 
 object interface {
 
-	const menuCounters = #{mosquitoesCounter, trashCounter, spiralsCounter, gameCounter}
+	const menuCounters = #{ mosquitoesCounter, trashCounter, spiralsCounter, gameCounter }
 
 	method build() {
 		game.addVisual(menu)
@@ -33,9 +33,9 @@ object interface {
 		self.addMenuCounters()
 		gameCounter.start()
 	}
-	
-	method addMenuCounters(){
-		menuCounters.forEach{menuElement => menuElement.addCounter()}
+
+	method addMenuCounters() {
+		menuCounters.forEach{ menuElement => menuElement.addCounter()}
 	}
 
 }
@@ -58,13 +58,13 @@ object menu inherits MenuElement {
 
 object lifeCounter inherits MenuElement {
 
-	override method image() = "repellant" + mainCharacter.lifes() + ".png"
+	override method image() = "lifes" + mainCharacter.lifes() + ".png"
 
 }
 
 object repellantCounter inherits MenuElement {
 
-	override method image() = "lifes" + mainCharacter.lifes() + ".png"
+	override method image() = "repellant" + spray.shoots() + ".png"
 
 }
 
@@ -180,7 +180,7 @@ class FinalCounter inherits MenuCounter {
 object mosquitoesCounter inherits MenuCounter(position = game.at(8, 14)) {
 
 	override method number() {
-		return 47
+		return bag.mosquitoes()
 	}
 
 }
@@ -188,7 +188,7 @@ object mosquitoesCounter inherits MenuCounter(position = game.at(8, 14)) {
 object trashCounter inherits MenuCounter(position = game.at(10, 14)) {
 
 	override method number() {
-		return 23
+		return bag.trashes()
 	}
 
 }
@@ -196,7 +196,7 @@ object trashCounter inherits MenuCounter(position = game.at(10, 14)) {
 object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 
 	override method number() {
-		return 5
+		return bag.spirals()
 	}
 
 }
@@ -204,46 +204,47 @@ object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 
 	override method number() {
-		return 9876
+		return bag.trashes() * 50
 	}
 
 }
 
-object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 8)) {
+object bonusCounter inherits FinalCounter(position = game.at(13, 8)) {
 
 	override method number() {
-		return 9876
+		return bag.trashes() * 50
 	}
 
 }
 
-object timeBonusCounter inherits FinalCounter(position = game.at(13, 7)) {
+object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7)) {
 
 	override method number() {
-		return 9876
+		return bag.mosquitoes() * 25
 	}
 
 }
 
-object bonusCounter inherits FinalCounter(position = game.at(13, 6)) {
+object timeBonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 	override method number() {
-		return 9876
+		return gameCounter.time() * 50
 	}
 
 }
 
 object totalCounter inherits FinalCounter(position = game.at(13, 5)) {
 
+//TODO: Resolver bonito u.u
 	override method number() {
-		return 9876
+		return bonusCounter.number() + timeBonusCounter.number() + collectedMosquitoesCounter.number() + collectedCounter.number()
 	}
 
 }
 
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 20
+	const gameDuration = 40
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
@@ -286,7 +287,10 @@ object keyboardConfig {
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
-		keyboard.c().onPressDo{ mainCharacter.sayDirection()}
+			// keyboard.c().onPressDo{ mainCharacter.sayDirection()}
+			// keyboard.f().onPressDo{ mainCharacter.foundElement()}
+			// keyboard.p().onPressDo{ mainCharacter.putSpiral()}
+		keyboard.d().onPressDo{ mainCharacter.disparar()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
 
