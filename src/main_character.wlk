@@ -13,7 +13,7 @@ object mainCharacter inherits Character {
 	var property position = game.at(4, 4)
 	var property lifes = 2
 	var property myInsecticide = insecticide
-	var estaInvertido = false // TODO: Ver cómo indicar que fue picado por un hard
+	var estaInvertido = false
 
 	method image() = "ch" + direction + ".png"
 
@@ -33,16 +33,8 @@ object mainCharacter inherits Character {
 		}
 	}
 
-	method sayDirection() {
-		game.say(self, direction.say())
-	}
-
-	method evadeCollide() {
-		const newDirection = self.direction().opossite()
-		self.goesTo(newDirection)
-	}
-
-	method collision() {
+	method nextPositionForward() {
+		return direction.nextMove(position)
 	}
 
 	method invert() {
@@ -63,7 +55,6 @@ object mainCharacter inherits Character {
 			self.morir()
 		}
 		lifes -= 1
-	// vaccineFactory.createSiPuedo() <- No se usa, lo maneja el elementFactory
 	}
 
 	method isSick() {
@@ -73,7 +64,6 @@ object mainCharacter inherits Character {
 	method morir() {
 		game.removeVisual(self)
 		gameOver.endGame()
-	// CONFIGURAR FINAL 
 	}
 
 	override method isTakeable() {
@@ -86,31 +76,23 @@ object mainCharacter inherits Character {
 	}
 
 	// TODO: No carga disfraz de bruma
-	// TODO: Modificar disfraces de bruma (ROJO)
 	method validateDisparos() {
 		if (!insecticide.tieneDisparos()) {
 			self.error("Recarga tu spray!")
 		}
 	}
 
-	/*method putSpiral() {
-		//self.validateEmptyPositionForPut()
+	method putSpiral() {
 		self.validateSpirals()
 		bag.discountSpiral()
 		spiralFactory.createSiPuedo()
 	}
 
-	method validateEmptyPositionForPut() {
-		if (not game.colliders(self).isEmpty()) {
-			self.error("No puedo dejar nada aquí")
-		}
-	}
-
 	method validateSpirals() {
 		if (!bag.hasSpirals()) {
-			self.error("No tengo espirales.")
+			self.error("No tenes espirales!")
 		}
-	}*/
+	}
 
 }
 

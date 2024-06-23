@@ -31,10 +31,7 @@ class Mosquito inherits Character {
 	method eventMosquito() {
 		return "mosquitoMoving" + self.identity()
 	}
-  
-//	override method spiralEffect() {
-//		self.dead()
-//	}
+
 	method dead() {
 		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())
@@ -48,6 +45,7 @@ class Mosquito inherits Character {
 	method killed() {
 		self.dead()
 		bag.addMosquito()
+		mosquitosManager.removeMosquito(self)
 	}
 
 	override method isTakeable() {
@@ -57,7 +55,6 @@ class Mosquito inherits Character {
 }
 
 //Tipo de mosquitos
-// TODO: Buscarles nombres más significativos a ambos
 class MosquitoHard inherits Mosquito {
 
 	override method image() = "mosquito02.png"
@@ -106,7 +103,6 @@ object mosquitosManager {
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
 	method createMosquitos() {
-
 		game.onTick(3000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
@@ -130,5 +126,4 @@ object mosquitosManager {
 	}
 
 }
-
 

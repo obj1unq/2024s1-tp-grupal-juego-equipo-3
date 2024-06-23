@@ -5,8 +5,8 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
-import navigation.*
 import collectable.*
+import navigation.*
 
 object gameConfig {
 
@@ -21,6 +21,7 @@ object gameConfig {
 		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
+
 }
 
 object gameBackground {
@@ -234,6 +235,7 @@ object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7
 	}
 
 }
+
 // TODO: No sumar el tiempo si el personaje muere o condicionarlo
 object timeBonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 
@@ -297,10 +299,9 @@ object keyboardConfig {
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
-		//keyboard.s().onPressDo{ mainCharacter.putSpiral()}
+		keyboard.s().onPressDo{ mainCharacter.putSpiral()}
 		keyboard.d().onPressDo{ mainCharacter.disparar()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
 
 }
-
