@@ -111,6 +111,12 @@ object controlsMenu {
 		return "controlsMenu"
 	}
 
+	method next(menu) {
+	}
+
+	method previous(menu) {
+	}
+
 }
 
 object loadScreen {
@@ -123,7 +129,7 @@ object loadScreen {
 
 	method build() {
 		game.addVisual(self)
-		game.onTick(100, "load", { self.load()})
+		game.onTick(2000, "load", { self.load()})
 	}
 
 	method load() {
@@ -167,6 +173,12 @@ object gameOver {
 	method goMenu(menu) {
 		self.removeFinalCounters()
 		menu.option(start)
+	}
+
+	method next(menu) {
+	}
+
+	method previous(menu) {
 	}
 
 	method menuName() {

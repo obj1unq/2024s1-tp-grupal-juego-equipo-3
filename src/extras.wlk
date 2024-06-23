@@ -7,19 +7,17 @@ import posiciones.*
 import globalConfig.*
 import collectable.*
 import navigation.*
+import backpack.*
 
 object gameConfig {
 
+	const property gameElements = #{mainCharacter, interface, mosquitoesManager, elementManager, obstacleManager, backpack}
+
 	method build() {
 		game.clear()
-		game.addVisual(mainCharacter)
-		interface.build()
-		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
-		mosquitosManager.createMosquitos()
-		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
-		game.onTick(2500, "CREAR ELEMENTOS", { elementManager.createElement()})
-		obstacleManager.configurate()
+		gameElements.forEach{element => element.build()}
 		keyboardConfig.configurate()
+		gameCounter.start()
 	}
 
 }
@@ -190,7 +188,7 @@ class FinalCounter inherits MenuCounter {
 object mosquitoesCounter inherits MenuCounter(position = game.at(8, 14)) {
 
 	override method number() {
-		return bag.mosquitoes()
+		return backpack.mosquitoes()
 	}
 
 }
@@ -198,7 +196,7 @@ object mosquitoesCounter inherits MenuCounter(position = game.at(8, 14)) {
 object trashCounter inherits MenuCounter(position = game.at(10, 14)) {
 
 	override method number() {
-		return bag.trashes()
+		return backpack.trashes()
 	}
 
 }
@@ -206,7 +204,7 @@ object trashCounter inherits MenuCounter(position = game.at(10, 14)) {
 object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 
 	override method number() {
-		return bag.spirals()
+		return backpack.spirals()
 	}
 
 }
@@ -214,7 +212,7 @@ object spiralsCounter inherits MenuCounter(position = game.at(12, 14)) {
 object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 
 	override method number() {
-		return bag.trashes() * 50
+		return backpack.trashes() * 50
 	}
 
 }
@@ -223,7 +221,7 @@ object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 object bonusCounter inherits FinalCounter(position = game.at(13, 8)) {
 
 	override method number() {
-		return bag.trashes() * 50
+		return backpack.trashes() * 50
 	}
 
 }
@@ -231,7 +229,7 @@ object bonusCounter inherits FinalCounter(position = game.at(13, 8)) {
 object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7)) {
 
 	override method number() {
-		return bag.mosquitoes() * 25
+		return backpack.mosquitoes() * 25
 	}
 
 }
@@ -256,7 +254,7 @@ object totalCounter inherits FinalCounter(position = game.at(13, 5)) {
 
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 40
+	const gameDuration = 90
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
