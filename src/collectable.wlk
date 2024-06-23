@@ -5,10 +5,9 @@ import mosquito.*
 import obstacles.*
 import globalConfig.*
 
-// Hacer vacuna (Cuando me quedo con una vida)
 object elementManager {
 
-	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ] // Faltan espirales. 
+	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ]
 
 	method createElement() {
 		factories.forEach({ factory => factory.createSiPuedo()})
@@ -21,20 +20,12 @@ object bag {
 	var property spirals = 0
 	var property trashes = 0
 	var property mosquitoes = 0
-
-	method storeInBag() {
-		self.validateSpirals()
+	
+	method reloadSpirals(){
 		spirals = 5
 	}
-
 	method discountSpiral() {
 		spirals -= 1
-	}
-
-	method validateSpirals() {
-		if (self.hasSpirals()) {
-			self.error("Todavía tengo espirales en la caja")
-		}
 	}
 
 	method hasSpirals() {
@@ -54,6 +45,7 @@ object bag {
 /* ELEMENTS */
 class Element {
 
+	var property character = mainCharacter
 	var property position = randomizer.emptyPosition()
 
 	method isSolid() {
@@ -81,7 +73,7 @@ object vaccine inherits Element {
 	}
 
 	override method take() {
-		mainCharacter.curar()
+		character.curar()
 		vaccineFactory.removeElement(self)
 	}
 
@@ -110,30 +102,23 @@ object insecticide inherits Element {
 	}
 
 	override method position() {
-		return mainCharacter.position()
+		return character.position()
+	}
+
+	method direction() {
+		return character.direction()
 	}
 
 	method disparar() {
 		self.restarDisparo()
 		sprayFactory.createSprayBurst(shootDistance)
-		self.killMosquitos()
-	// refillFactory.createSiPuedo() <- No se usa, lo maneja el elementFactory
+		self.killMosquitoes()
 	}
 
 	// TODO: Revisar, a veces sigue fallando.
-	method killMosquitos() {
+	method killMosquitoes() {
 		if (self.hayMosquitos(shootDistance)) {
-			self.mosquitos(shootDistance).forEach({ m => m.killed()})
-		}
-	}
-
-	method direction() {
-		return mainCharacter.direction()
-	}
-
-	method validateDisparos() {
-		if (!self.tieneDisparos()) {
-			self.error("Recarga tu Spray")
+			self.objetivos(shootDistance).forEach({ m => m.killed()})
 		}
 	}
 
@@ -141,24 +126,24 @@ object insecticide inherits Element {
 		shoots -= 1
 	}
 
+	method recargar() {
+		shoots = 4
+	}
+
 	method tieneDisparos() {
 		return shoots > 0
 	}
 
-	method posiciones(alcance) {
-		return (1 .. alcance).map({ n => self.direction().nextMove(self.position(), n) })
+	method hayMosquitos(alcance) {
+		return !self.objetivos(alcance).isEmpty()
 	}
 
-	method mosquitos(alcance) {
+	method objetivos(alcance) {
 		return self.posiciones(alcance).map({ d => mosquitosManager.mosquitosEn(d) }).flatten()
 	}
 
-	method hayMosquitos(alcance) {
-		return !self.mosquitos(alcance).isEmpty()
-	}
-
-	method recargar() {
-		shoots = 4
+	method posiciones(alcance) {
+		return (1 .. alcance).map({ n => self.direction().nextMove(self.position(), n) })
 	}
 
 	override method take() {
@@ -170,14 +155,14 @@ object insecticide inherits Element {
 class Spray inherits Element {
 
 	const cantidad
-
+	var direction = mainCharacter.direction()
+	var characterPosition = mainCharacter.position()
+	
 	override method position() {
-		return mainCharacter.direction().nextMove(mainCharacter.position(), cantidad)
+		return direction.nextMove(characterPosition, cantidad)
 	}
 
-	override method image() {
-		return "spray" + cantidad + ".png"
-	}
+	override method image() = "spray" + cantidad + ".png"
 
 	override method take() {
 	}
@@ -190,14 +175,10 @@ class Spray inherits Element {
 
 class Trash inherits Element {
 
-	override method image() {
-		return "trash01.png"
-	}
+	var costumeNumber = "0" + (1 .. 5).anyOne().toString()
 
-	// TODO: Revisar cambio de disfraz. No toma disfraz fijo.
-	/*method typeOf() {
-	 * 	return 1.randomUpTo(5).roundUp(0)
-	 }*/
+	override method image() = "trash" + costumeNumber + ".png"
+
 	override method take() {
 		bag.storeTrash()
 		trashFactory.removeElement(self)
@@ -212,7 +193,7 @@ object spiralBox inherits Element {
 	}
 
 	override method take() {
-		bag.storeInBag()
+		bag.reloadSpirals()
 		spiralBoxFactory.removeElement(self)
 	}
 
@@ -221,34 +202,39 @@ object spiralBox inherits Element {
 // TODO: Revisar acción sobre mosquitos, se rompe.
 /* El problema está en validar los mosquitos que si están presentes, 
  * sino envía mensajes a las celdas vacías */
-// TODO: Revisar posicionamiento de espirales.
-//class Spiral inherits Element {
-//
-//	var property newPosition
-//
-//	override method image() {
-//		return "spiral.png"
-//	}
-//
-//	method activate() {
-//		game.onTick(500, "EFECTO ESPIRAL", { self.killMosquitos()})
-//	}
-//
-//	method killMosquitos() {
-//		mosquitosManager.mosquitoesAround(self).forEach({ element => element.spiralEffect()})
-//	}
-//
-//	override method isTakeable() {
-//		return false
-//	}
-//
-//	override method take() {
-//	}
-//
-//}
+class Spiral inherits Element {
+
+	const characterPosition = character.position()
+
+	override method image() {
+		return "spiral.png"
+	}
+
+	override method position() {
+		return characterPosition
+	}
+
+	method activate() {
+		game.onTick(500, "EFECTO ESPIRAL", { self.killMosquitos()})
+	}
+
+	method killMosquitos() {
+		mosquitosManager.mosquitoesAround(self).forEach({ m => m.killed()})
+	}
+
+	override method isTakeable() {
+		return false
+	}
+
+	override method take() {
+	}
+
+}
+
 /* FACTORIES */
 class ElementFactory {
 
+	var character = mainCharacter
 	var property exist = false
 
 	method createSiPuedo() {
@@ -278,7 +264,7 @@ object vaccineFactory inherits ElementFactory {
 	}
 
 	override method puedeCrear() {
-		return mainCharacter.isSick() && super()
+		return character.isSick() && super()
 	}
 
 }
@@ -291,12 +277,14 @@ object refillFactory inherits ElementFactory {
 	}
 
 	override method puedeCrear() {
-		return !mainCharacter.myInsecticide().tieneDisparos() && super()
+		return !character.myInsecticide().tieneDisparos() && super()
 	}
 
 }
 
 object sprayFactory {
+
+	var character = mainCharacter
 
 	// TODO: Consultar sobre polimorfismo. Ahora se aplica sin heredar de elementFactory
 	// TODO: Por polimorfismo, hay que cambiar todos los métodos (agregar parámetros)
@@ -318,7 +306,7 @@ object sprayFactory {
 	}
 
 	method puedeCrear(size) {
-		return limit.in(mainCharacter.direction().nextMove(mainCharacter.position(), size))
+		return limit.in(character.direction().nextMove(character.position(), size))
 	}
 
 }
@@ -344,38 +332,37 @@ object trashFactory inherits ElementFactory {
 
 }
 
-// TODO: Revisar posiciones de espirales. No funciona.
-//object spiralFactory inherits ElementFactory {
-//
-//	const property spirals = []
-//
-//	override method create() {
-//		const spiral = new Spiral()
-//		spirals.add(spiral)
-//		game.addVisual(spiral)
-//		game.onTick(500, "EFECTO ESPIRAL", { spiral.activate()})
-//		game.schedule(5000, {=> self.removeElement(spiral)})
-//	}
-//
-//	override method puedeCrear() {
-//		return spirals.size() < 5 && bag.hasSpirals()
-//	}
-//
-//	override method removeElement(elementSpiral) {
-//		game.removeVisual(elementSpiral)
-//		self.spirals().remove(elementSpiral)
-//	}
-//
-//}
-//
+object spiralFactory inherits ElementFactory {
+
+	const property spirals = []
+
+	override method create() {
+		const spiral = new Spiral()
+		spirals.add(spiral)
+		game.addVisual(spiral)
+		game.onTick(500, "EFECTO ESPIRAL", { spiral.activate()})
+		game.schedule(5000, {=> self.removeElement(spiral)})
+	}
+
+	override method puedeCrear() {
+		return bag.hasSpirals()
+	}
+
+	override method removeElement(elementSpiral) {
+		game.removeVisual(elementSpiral)
+		self.spirals().remove(elementSpiral)
+	}
+
+}
+
 object spiralBoxFactory inherits ElementFactory {
 
 	override method create() {
 		game.addVisual(spiralBox)
 		exist = true
 	}
-	
-	override method puedeCrear(){
+
+	override method puedeCrear() {
 		return !bag.hasSpirals() && super()
 	}
 

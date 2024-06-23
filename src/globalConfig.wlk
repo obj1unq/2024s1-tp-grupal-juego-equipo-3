@@ -1,6 +1,5 @@
 import wollok.game.*
 import obstacles.*
-import extras.*
 import collectable.*
 
 object limit {

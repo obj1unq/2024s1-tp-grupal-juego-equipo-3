@@ -1,6 +1,6 @@
 
 import wollok.game.*
-import extras.*
+import counters.*
 import navigation.*
 
 program Game {

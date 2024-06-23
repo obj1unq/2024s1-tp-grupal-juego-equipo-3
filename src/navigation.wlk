@@ -5,7 +5,32 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
-import extras.*
+import counters.*
+import collectable.*
+
+object gameConfig {
+
+	method build() {
+		game.clear()
+		game.addVisual(mainCharacter)
+		interface.build()
+		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
+		mosquitosManager.createMosquitos()
+		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
+		game.onTick(2500, "CREAR ELEMENTOS", { elementManager.createElement()})
+		obstacleManager.configurate()
+		keyboardConfig.configurate()
+	}
+
+}
+
+object gameBackground {
+
+	const property position = game.at(0, 0)
+
+	method image() = "background.png"
+
+}
 
 object gameConfiguration {
 

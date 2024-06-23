@@ -7,29 +7,7 @@ import posiciones.*
 import globalConfig.*
 import navigation.*
 import collectable.*
-
-object gameConfig {
-
-	method build() {
-		game.clear()
-		game.addVisual(mainCharacter)
-		interface.build()
-		(1 .. 5).forEach({ m => mosquitosManager.createMosquitoRandom()})
-		mosquitosManager.createMosquitos()
-		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
-		game.onTick(2500, "CREAR ELEMENTOS", { elementManager.createElement()})
-		obstacleManager.configurate()
-		keyboardConfig.configurate()
-	}
-}
-
-object gameBackground {
-
-	const property position = game.at(0, 0)
-
-	method image() = "background.png"
-
-}
+//TODO: Ver nombre gameConfig, hay otro en navigation igual 
 
 object interface {
 
@@ -297,7 +275,7 @@ object keyboardConfig {
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
-		//keyboard.s().onPressDo{ mainCharacter.putSpiral()}
+		keyboard.s().onPressDo{ mainCharacter.putSpiral()}
 		keyboard.d().onPressDo{ mainCharacter.disparar()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
