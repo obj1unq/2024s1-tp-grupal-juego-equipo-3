@@ -16,10 +16,6 @@ object randomizer {
 		}
 	}
 
-	// NUEVA: Generación de número al azar entre un mínimo y un máximo para alternan sprites
-	method randomNumber(min, max) {
-		return min.randomUpTo(max).roundUp(0)
-	}
 
 }
 

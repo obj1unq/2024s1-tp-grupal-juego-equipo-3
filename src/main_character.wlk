@@ -5,7 +5,7 @@ import mosquito.*
 import collectable.*
 import obstacles.*
 import navigation.*
-import counters.*
+import extras.*
 
 object mainCharacter inherits Character {
 
@@ -78,7 +78,7 @@ object mainCharacter inherits Character {
 	}
 
 	// TODO: No carga disfraz de bruma
-	// TODO: Modificar disfraces de bruma (ROJO)
+
 	method validateDisparos() {
 		if (!insecticide.tieneDisparos()) {
 			self.error("Recarga tu spray!")
