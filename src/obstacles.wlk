@@ -3,11 +3,11 @@ import randomizer.*
 
 class Obstacle {
 
-	var property position = randomizer.emptyPosition() 
-	const asset = (1..8).anyOne().toString()
-	
+	var property position = randomizer.emptyPosition()
+	const asset = (1 .. 8).anyOne().toString()
+
 	method image() = "obstacle0" + asset + ".png"
-	
+
 	method isSolid() {
 		return true
 	}
@@ -33,7 +33,6 @@ object obstacleManager {
 	}
 
 }
-
 
 //class Obstacle {
 //
@@ -102,4 +101,4 @@ object obstacleManager {
 ////		return new Stone()
 ////	}
 ////
-////}
+////} 

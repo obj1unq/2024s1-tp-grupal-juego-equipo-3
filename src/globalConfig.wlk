@@ -31,4 +31,3 @@ class Character {
 		return false
 	}
 }
-

@@ -361,4 +361,3 @@ object spiralBoxFactory inherits ElementFactory {
 	}
 
 }
-

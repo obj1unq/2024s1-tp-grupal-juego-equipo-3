@@ -15,11 +15,11 @@ object leftDirection inherits Direction {
 	override method nextMove(position, cant) {
 		return position.left(cant)
 	}
+
 //TODO: Estos metodos sirven? 
 //	method say() {  
 //		return 'left'
 //	}
-
 	method opossite() {
 		return rightDirection
 	}
@@ -35,7 +35,6 @@ object downDirection inherits Direction {
 //	method say() {
 //		return 'down'
 //	}
-
 	method opossite() {
 		return upDirection
 	}
@@ -55,7 +54,6 @@ object rightDirection inherits Direction {
 //	method say() {
 //		return 'right'
 //	}
-
 }
 
 object upDirection inherits Direction {
@@ -71,7 +69,6 @@ object upDirection inherits Direction {
 //	method say() {
 //		return 'up'
 //	}
-
 }
 
 class Axis {

@@ -7,6 +7,7 @@ import posiciones.*
 import globalConfig.*
 import collectable.*
 import navigation.*
+
 object gameConfig {
 
 	method build() {
@@ -20,6 +21,7 @@ object gameConfig {
 		obstacleManager.configurate()
 		keyboardConfig.configurate()
 	}
+
 }
 
 object gameBackground {
@@ -233,6 +235,7 @@ object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7
 	}
 
 }
+
 // TODO: No sumar el tiempo si el personaje muere o condicionarlo
 object timeBonusCounter inherits FinalCounter(position = game.at(13, 6)) {
 

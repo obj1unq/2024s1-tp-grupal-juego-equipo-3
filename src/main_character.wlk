@@ -13,7 +13,7 @@ object mainCharacter inherits Character {
 	var property position = game.at(4, 4)
 	var property lifes = 2
 	var property myInsecticide = insecticide
-	var estaInvertido = false 
+	var estaInvertido = false
 
 	method image() = "ch" + direction + ".png"
 
@@ -32,12 +32,10 @@ object mainCharacter inherits Character {
 			newDirection.nextMove(position)
 		}
 	}
-	
-	method nextPositionForward(){
-		return direction.nextMove(position)
-		
-	}
 
+	method nextPositionForward() {
+		return direction.nextMove(position)
+	}
 
 	method invert() {
 		if (!estaInvertido && self.isSick()) {
@@ -78,7 +76,6 @@ object mainCharacter inherits Character {
 	}
 
 	// TODO: No carga disfraz de bruma
-
 	method validateDisparos() {
 		if (!insecticide.tieneDisparos()) {
 			self.error("Recarga tu spray!")
@@ -90,7 +87,6 @@ object mainCharacter inherits Character {
 		bag.discountSpiral()
 		spiralFactory.createSiPuedo()
 	}
-
 
 	method validateSpirals() {
 		if (!bag.hasSpirals()) {
