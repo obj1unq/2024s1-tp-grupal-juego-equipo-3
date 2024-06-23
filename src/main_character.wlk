@@ -6,16 +6,27 @@ import collectable.*
 import obstacles.*
 import navigation.*
 import extras.*
+import backpack.*
 
 object mainCharacter inherits Character {
 
-	var property direction = downDirection
-	var property position = game.at(4, 4)
-	var property lifes = 2
+	var property direction = null
+	var property position = null
+	var property lifes = null
 	var property myInsecticide = insecticide
-	var estaInvertido = false
+	var property estaInvertido = null
 
 	method image() = "ch" + direction + ".png"
+
+	method build() {
+		const default = game.at(4, 4)
+		game.addVisual(self)
+		self.direction(downDirection)
+		self.position(default)
+		self.lifes(2)
+		self.myInsecticide().shoots(4)
+		self.estaInvertido(false)
+	}
 
 	method goesTo(newDirection) {
 		const newPosition = self.nextMove(newDirection)
@@ -84,12 +95,12 @@ object mainCharacter inherits Character {
 
 	method putSpiral() {
 		self.validateSpirals()
-		bag.discountSpiral()
+		backpack.discountSpiral()
 		spiralFactory.createSiPuedo()
 	}
 
 	method validateSpirals() {
-		if (!bag.hasSpirals()) {
+		if (!backpack.hasSpirals()) {
 			self.error("No tenes espirales!")
 		}
 	}

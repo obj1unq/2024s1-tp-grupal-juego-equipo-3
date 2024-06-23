@@ -18,7 +18,7 @@ object obstacleManager {
 
 	const randomBlocks = 20
 
-	method configurate() {
+	method build() {
 		const obstacles = (0 .. randomBlocks).map({ o => self.create() })
 		obstacles.forEach({ o => game.addVisual(o)})
 	}

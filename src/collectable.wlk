@@ -4,41 +4,22 @@ import main_character.*
 import mosquito.*
 import obstacles.*
 import globalConfig.*
+import backpack.*
 
 object elementManager {
 
 	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ]
 
+	method build(){
+		trashFactory.trashes().clear()
+		spiralFactory.spirals().clear()
+		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
+		factories.forEach({factory => factory.exist(false)})
+		game.onTick(2500, "CREAR ELEMENTOS", { self.createElement()})
+	}
+
 	method createElement() {
 		factories.forEach({ factory => factory.createSiPuedo()})
-	}
-
-}
-
-object bag {
-
-	var property spirals = 0
-	var property trashes = 0
-	var property mosquitoes = 0
-
-	method reloadSpirals() {
-		spirals = 5
-	}
-
-	method discountSpiral() {
-		spirals -= 1
-	}
-
-	method hasSpirals() {
-		return spirals > 0
-	}
-
-	method addMosquito() {
-		mosquitoes += 1
-	}
-
-	method storeTrash() {
-		trashes += 1
 	}
 
 }
@@ -134,7 +115,7 @@ object insecticide inherits Element {
 	}
 
 	method objetivos(alcance) {
-		return self.posiciones(alcance).map({ d => mosquitosManager.mosquitosEn(d) }).flatten()
+		return self.posiciones(alcance).map({ d => mosquitoesManager.mosquitoesEn(d) }).flatten()
 	}
 
 	method posiciones(alcance) {
@@ -175,7 +156,7 @@ class Trash inherits Element {
 	override method image() = "trash0" + costumeNumber + ".png"
 
 	override method take() {
-		bag.storeTrash()
+		backpack.storeTrash()
 		trashFactory.removeElement(self)
 	}
 
@@ -186,7 +167,7 @@ object spiralBox inherits Element {
 	override method image() = "spiralbox.png"
 
 	override method take() {
-		bag.reloadSpirals()
+		backpack.reloadSpirals()
 		spiralBoxFactory.removeElement(self)
 	}
 
@@ -211,7 +192,7 @@ class Spiral inherits Element {
 	}
 
 	method killMosquitos() {
-		mosquitosManager.mosquitoesAround(self).forEach({ m => m.killed()})
+		mosquitoesManager.mosquitoesAround(self).forEach({ m => m.killed()})
 	}
 
 	override method isTakeable() {
@@ -335,11 +316,11 @@ object spiralFactory inherits ElementFactory {
 		spirals.add(spiral)
 		game.addVisual(spiral)
 		spiral.activate()
-		game.schedule(5000, {=> self.removeElement(spiral)})
+		game.schedule(6000, {=> self.removeElement(spiral)})
 	}
 
 	override method puedeCrear() {
-		return bag.hasSpirals()
+		return backpack.hasSpirals()
 	}
 
 	override method removeElement(elementSpiral) {
@@ -357,7 +338,7 @@ object spiralBoxFactory inherits ElementFactory {
 	}
 
 	override method puedeCrear() {
-		return !bag.hasSpirals() && super()
+		return !backpack.hasSpirals() && super()
 	}
 
 }

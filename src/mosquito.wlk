@@ -4,6 +4,7 @@ import posiciones.*
 import main_character.*
 import globalConfig.*
 import collectable.*
+import backpack.*
 
 class Mosquito inherits Character {
 
@@ -44,8 +45,8 @@ class Mosquito inherits Character {
 
 	method killed() {
 		self.dead()
-		bag.addMosquito()
-		mosquitosManager.removeMosquito(self)
+		backpack.addMosquito()
+		mosquitoesManager.removeMosquito(self)
 	}
 
 	override method isTakeable() {
@@ -54,7 +55,7 @@ class Mosquito inherits Character {
 
 }
 
-//Tipo de mosquitos
+//Tipo de mosquitoes
 class MosquitoHard inherits Mosquito {
 
 	override method image() = "mosquito02.png"
@@ -97,12 +98,18 @@ object mosquitoHardFactory {
 
 }
 
-object mosquitosManager {
+object mosquitoesManager {
 
-	const property mosquitos = #{}
+	const property mosquitoes = #{}
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
-	method createMosquitos() {
+	method build(){
+		mosquitoes.clear()
+		(1 .. 5).forEach({ m => self.createMosquitoRandom()})
+		self.createMosquitoes()
+	}
+	
+	method createMosquitoes() {
 		game.onTick(3000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
@@ -110,19 +117,21 @@ object mosquitosManager {
 		const mosquito = factories.anyOne().create()
 		game.addVisual(mosquito)
 		mosquito.moving()
-		mosquitos.add(mosquito)
+		mosquitoes.add(mosquito)
 	}
 
 	method mosquitoesAround(visual) {
-		return mosquitos.filter({ mosquito => mosquito.position().distance(visual.position()) < 2 })
+		return mosquitoes.filter({ mosquito => mosquito.position().distance(visual.position()) < 2 })
 	}
 
-	method mosquitosEn(position) {
-		return self.mosquitos().filter({ m => m.position() == position })
+	method mosquitoesEn(position) {
+		return self.mosquitoes().filter({ m => m.position() == position })
 	}
 
 	method removeMosquito(mosquito) {
-		mosquitos.remove(mosquito)
+		if(mosquitoes.contains(mosquito)){
+			mosquitoes.remove(mosquito)
+		}
 	}
 
 }
