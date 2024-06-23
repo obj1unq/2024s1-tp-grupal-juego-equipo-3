@@ -94,7 +94,7 @@ object mainCharacter inherits Character {
 
 	method validateSpirals() {
 		if (!bag.hasSpirals()) {
-			self.error("No tengo espirales.")
+			self.error("No tenes espirales!")
 		}
 	}
 

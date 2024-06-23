@@ -170,9 +170,9 @@ class Spray inherits Element {
 
 class Trash inherits Element {
 
-	var costumeNumber = "0" + (1 .. 5).anyOne().toString()
+	var costumeNumber = (1 .. 5).anyOne().toString()
 
-	override method image() = "trash" + costumeNumber + ".png"
+	override method image() = "trash0" + costumeNumber + ".png"
 
 	override method take() {
 		bag.storeTrash()

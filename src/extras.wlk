@@ -5,9 +5,8 @@ import obstacles.*
 import mosquito.*
 import posiciones.*
 import globalConfig.*
-import navigation.*
 import collectable.*
-
+import navigation.*
 object gameConfig {
 
 	method build() {
