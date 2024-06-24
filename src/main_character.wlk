@@ -19,7 +19,7 @@ object mainCharacter inherits Character {
 	method image() = "ch" + direction + ".png"
 
 	method build() {
-		const default = game.at(4, 4)
+		const default = game.at(2, 2)
 		game.addVisual(self)
 		self.direction(downDirection)
 		self.position(default)
@@ -95,8 +95,8 @@ object mainCharacter inherits Character {
 
 	method putSpiral() {
 		self.validateSpirals()
-		backpack.discountSpiral()
 		spiralFactory.createSiPuedo()
+		backpack.discountSpiral()
 	}
 
 	method validateSpirals() {

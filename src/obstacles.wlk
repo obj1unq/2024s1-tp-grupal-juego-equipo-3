@@ -16,7 +16,7 @@ class Obstacle {
 
 object obstacleManager {
 
-	const randomBlocks = 20
+	const randomBlocks = 24
 
 	method build() {
 		const obstacles = (0 .. randomBlocks).map({ o => self.create() })

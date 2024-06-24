@@ -36,6 +36,7 @@ class Mosquito inherits Character {
 	method dead() {
 		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())
+		mosquitoesManager.removeMosquito(self)
 	}
 
 	method collision() {
@@ -44,9 +45,8 @@ class Mosquito inherits Character {
 	}
 
 	method killed() {
-		self.dead()
 		backpack.addMosquito()
-		mosquitoesManager.removeMosquito(self)
+		self.dead()
 	}
 
 	override method isTakeable() {

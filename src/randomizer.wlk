@@ -4,7 +4,7 @@ import globalConfig.*
 object randomizer {
 
 	method position() {
-		return game.at((1 .. limit.maxX()).anyOne(), (1 .. limit.maxY()).anyOne())
+		return game.at((3.. limit.maxX()).anyOne(), (3 .. limit.maxY()).anyOne())
 	}
 
 	method emptyPosition() {
