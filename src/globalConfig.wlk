@@ -45,6 +45,7 @@ object gameConfig {
 	method build() {
 		game.clear()
 		gameElements.forEach{ element => element.build()}
+		game.onCollideDo(mainCharacter, { o => o.collision()})
 		keyboardConfig.configurate()
 		gameCounter.start()
 	}
@@ -60,7 +61,6 @@ object keyboardConfig {
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.e().onPressDo{ mainCharacter.putSpiral()}
 		keyboard.d().onPressDo{ mainCharacter.disparar()}
-		game.onCollideDo(mainCharacter, { o => o.collision()})
 	}
 
 }

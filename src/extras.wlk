@@ -204,11 +204,10 @@ object collectedCounter inherits FinalCounter(position = game.at(13, 9)) {
 
 }
 
-// TODO: Revisar condiciones de bonus
 object bonusCounter inherits FinalCounter(position = game.at(13, 8)) {
 
 	override method number() {
-		return backpack.trashes() * 50
+		return (1000 - mainCharacter.bitesBonus()).max(0)
 	}
 
 }
@@ -221,20 +220,10 @@ object collectedMosquitoesCounter inherits FinalCounter(position = game.at(13, 7
 
 }
 
-// TODO: No sumar el tiempo si el personaje muere o condicionarlo
-object timeBonusCounter inherits FinalCounter(position = game.at(13, 6)) {
+object totalCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 	override method number() {
-		return gameCounter.time() * 50
-	}
-
-}
-
-object totalCounter inherits FinalCounter(position = game.at(13, 5)) {
-
-//TODO: Resolver bonito u.u
-	override method number() {
-		return bonusCounter.number() + timeBonusCounter.number() + collectedMosquitoesCounter.number() + collectedCounter.number()
+		return bonusCounter.number() + collectedMosquitoesCounter.number() + collectedCounter.number()
 	}
 
 }

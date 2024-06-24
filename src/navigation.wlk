@@ -153,7 +153,7 @@ object loadScreen {
 
 object gameOver {
 
-	const finalCounters = #{ collectedCounter, bonusCounter, timeBonusCounter, collectedMosquitoesCounter, totalCounter }
+	const finalCounters = #{ collectedCounter, bonusCounter, collectedMosquitoesCounter, totalCounter }
 
 	method endGame() {
 		game.clear()
