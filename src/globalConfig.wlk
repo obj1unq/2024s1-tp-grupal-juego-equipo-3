@@ -7,6 +7,7 @@ import posiciones.*
 import collectable.*
 import navigation.*
 import backpack.*
+import extras.*
 
 object limit {
 
@@ -27,14 +28,27 @@ class Character {
 		return limit.in(position) and not obstacleManager.isObstacleIn(position)
 	}
 
-
 	method isSolid() {
 		return false
 	}
 
-	method isTakeable(){
+	method isTakeable() {
 		return false
 	}
+
+}
+
+object gameConfig {
+
+	const property gameElements = #{ mainCharacter, interface, mosquitoesManager, elementManager, obstacleManager, backpack }
+
+	method build() {
+		game.clear()
+		gameElements.forEach{ element => element.build()}
+		keyboardConfig.configurate()
+		gameCounter.start()
+	}
+
 }
 
 object keyboardConfig {
@@ -50,3 +64,4 @@ object keyboardConfig {
 	}
 
 }
+

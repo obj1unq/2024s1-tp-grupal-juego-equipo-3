@@ -10,11 +10,11 @@ object elementManager {
 
 	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ]
 
-	method build(){
+	method build() {
 		trashFactory.trashes().clear()
 		spiralFactory.spirals().clear()
 		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
-		factories.forEach({factory => factory.exist(false)})
+		factories.forEach({ factory => factory.exist(false)})
 		game.onTick(2500, "CREAR ELEMENTOS", { self.createElement()})
 	}
 
@@ -91,7 +91,6 @@ object insecticide inherits Element {
 		self.killMosquitoes()
 	}
 
-	// TODO: Revisar, a veces sigue fallando.
 	method killMosquitoes() {
 		if (self.hayMosquitos(shootDistance)) {
 			self.objetivos(shootDistance).forEach({ m => m.killed()})
@@ -138,7 +137,7 @@ class Spray inherits Element {
 		return direction.nextMove(characterPosition, cantidad)
 	}
 
-	override method image() = "spray" + cantidad + ".png"
+	override method image() = "spray.png"
 
 	override method take() {
 	}
@@ -263,11 +262,15 @@ object refillFactory inherits ElementFactory {
 
 object sprayFactory {
 
-	// TODO: Consultar sobre polimorfismo. Ahora se aplica sin heredar de elementFactory
-	// TODO: Por polimorfismo, hay que cambiar todos los métodos (agregar parámetros)
-	// TODO: Ver disparos sobre obstáculos + Limitar disparos
 	method createSprayBurst(shootDistance) {
-		(1 .. shootDistance).forEach({ i => self.createSiPuedo(i)})
+		self.createSprayBurstRecursivo(shootDistance, 1)
+	}
+
+	method createSprayBurstRecursivo(shootDistance, current) {
+		if (current <= shootDistance && self.puedeCrear(current)) {
+			self.create(current)
+			self.createSprayBurstRecursivo(shootDistance, current + 1)
+		}
 	}
 
 	method create(size) {
@@ -283,7 +286,8 @@ object sprayFactory {
 	}
 
 	method puedeCrear(size) {
-		return limit.in(mainCharacter.direction().nextMove(mainCharacter.position(), size))
+		var pos = mainCharacter.direction().nextMove(mainCharacter.position(), size)
+		return limit.in(pos) && !obstacleManager.isObstacleIn(pos)
 	}
 
 }
@@ -345,3 +349,4 @@ object spiralBoxFactory inherits ElementFactory {
 	}
 
 }
+

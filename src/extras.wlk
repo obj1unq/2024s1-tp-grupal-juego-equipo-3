@@ -9,19 +9,6 @@ import collectable.*
 import navigation.*
 import backpack.*
 
-object gameConfig {
-
-	const property gameElements = #{mainCharacter, interface, mosquitoesManager, elementManager, obstacleManager, backpack}
-
-	method build() {
-		game.clear()
-		gameElements.forEach{element => element.build()}
-		keyboardConfig.configurate()
-		gameCounter.start()
-	}
-
-}
-
 object gameBackground {
 
 	const property position = game.at(0, 0)
@@ -107,7 +94,7 @@ class Numero {
 	method image() {
 		return prefix + self.number() + ".png"
 	}
-
+	
 	method number()
 
 }
