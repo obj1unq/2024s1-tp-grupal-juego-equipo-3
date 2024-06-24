@@ -289,17 +289,3 @@ object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 	}
 
 }
-
-object keyboardConfig {
-
-	method configurate() {
-		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
-		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
-		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
-		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
-		keyboard.s().onPressDo{ mainCharacter.putSpiral()}
-		keyboard.d().onPressDo{ mainCharacter.disparar()}
-		game.onCollideDo(mainCharacter, { o => o.collision()})
-	}
-
-}

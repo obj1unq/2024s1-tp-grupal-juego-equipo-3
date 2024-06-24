@@ -47,7 +47,7 @@ class Element {
 
 }
 
-object vaccine inherits Element {
+class Vaccine inherits Element {
 
 	override method image() = "vaccine.png"
 
@@ -58,7 +58,7 @@ object vaccine inherits Element {
 
 }
 
-object refill inherits Element {
+class Refill inherits Element {
 
 	override method image() = "insecticide01.png"
 
@@ -162,7 +162,7 @@ class Trash inherits Element {
 
 }
 
-object spiralBox inherits Element {
+class SpiralBox inherits Element {
 
 	override method image() = "spiralbox.png"
 
@@ -236,6 +236,7 @@ class ElementFactory {
 object vaccineFactory inherits ElementFactory {
 
 	override method create() {
+		var vaccine = new Vaccine()
 		game.addVisual(vaccine)
 		exist = true
 	}
@@ -249,6 +250,7 @@ object vaccineFactory inherits ElementFactory {
 object refillFactory inherits ElementFactory {
 
 	override method create() {
+		var refill = new Refill()
 		game.addVisual(refill)
 		exist = true
 	}
@@ -333,6 +335,7 @@ object spiralFactory inherits ElementFactory {
 object spiralBoxFactory inherits ElementFactory {
 
 	override method create() {
+		var spiralBox = new SpiralBox()
 		game.addVisual(spiralBox)
 		exist = true
 	}

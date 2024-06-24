@@ -1,7 +1,12 @@
 import wollok.game.*
+import main_character.*
+import randomizer.*
 import obstacles.*
-import extras.*
+import mosquito.*
+import posiciones.*
 import collectable.*
+import navigation.*
+import backpack.*
 
 object limit {
 
@@ -30,4 +35,18 @@ class Character {
 	method isTakeable(){
 		return false
 	}
+}
+
+object keyboardConfig {
+
+	method configurate() {
+		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
+		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
+		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
+		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
+		keyboard.e().onPressDo{ mainCharacter.putSpiral()}
+		keyboard.d().onPressDo{ mainCharacter.disparar()}
+		game.onCollideDo(mainCharacter, { o => o.collision()})
+	}
+
 }

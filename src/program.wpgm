@@ -4,9 +4,6 @@ import extras.*
 import navigation.*
 
 program Game {
-	// TODO: Crear ventana entre aparición de personaje y mosquitos
-	// Pueden aparecer encima del PJ
-	// TODO: Refactorizar menú para dar más polimorfismo
 	// TODO: Reestructurar archivos - Dividir mejor el código
 	gameConfiguration.start()
 	game.start()

@@ -105,12 +105,12 @@ object mosquitoesManager {
 
 	method build(){
 		mosquitoes.clear()
-		(1 .. 5).forEach({ m => self.createMosquitoRandom()})
+		(1 .. 7).forEach({ m => self.createMosquitoRandom()})
 		self.createMosquitoes()
 	}
 	
 	method createMosquitoes() {
-		game.onTick(3000, "CREACION" + self.identity(), { self.createMosquitoRandom()})
+		game.onTick(2500, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
 	method createMosquitoRandom() {
