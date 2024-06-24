@@ -15,6 +15,7 @@ object mainCharacter inherits Character {
 	var property lifes = null
 	var property myInsecticide = insecticide
 	var property estaInvertido = null
+	var property bites = 0
 
 	method image() = "ch" + direction + ".png"
 
@@ -26,6 +27,7 @@ object mainCharacter inherits Character {
 		self.lifes(2)
 		self.myInsecticide().shoots(4)
 		self.estaInvertido(false)
+		self.bites(0)
 	}
 
 	method goesTo(newDirection) {
@@ -66,6 +68,11 @@ object mainCharacter inherits Character {
 			self.morir()
 		}
 		lifes -= 1
+		bites += 1
+	}
+	
+	method bitesBonus(){
+		return bites * 250
 	}
 
 	method isSick() {
