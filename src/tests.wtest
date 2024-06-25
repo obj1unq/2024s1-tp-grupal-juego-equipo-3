@@ -1,6 +1,43 @@
+import collectable.*
+import main_character.*
+import backpack.*
+import extras.*
+import mosquito.*
+import navigation.*
+import randomizer.*
+import posiciones.*
+import obstacles.*
+import wollok.game.*
 
-test "testX" {
+describe "uso de collectables" {
 
-	assert.that(true)
+	method initialize() {
+		game.clear()
+		game.addVisual(mainCharacter)
+	}
 
+	test "usar el spray, equipar el spray, matar mosquitos" {
+		insecticide.recargar()
+		assert.equals(4, insecticide.shoots())
+		const mH1 = new MosquitoHard(position = game.at(2, 3))
+		game.addVisual(mH1)
+		mH1.moving()
+		mosquitoesManager.mosquitoes().add(mH1)
+		mainCharacter.position(game.at(1, 3))
+		mainCharacter.direction(rightDirection)
+		backpack.mosquitoes(0)
+		mainCharacter.disparar()
+		assert.equals(3, insecticide.shoots())
+		assert.equals(#{}, mosquitoesManager.mosquitoes())
+	}
+
+//	test "perder una vida y recuperar con el uso de vacuna" {
+//	}
+//
+//	test "usar los espirales y matar mosquitos" {
+//	}
+//
+//	test "recolectar mosquitos, basura, cajas de spirales" {
+//	}
 }
+
