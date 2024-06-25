@@ -25,15 +25,15 @@ object soundProducer {
 	}
 
 	method subirVolumenMusica() {
+		volumenGeneral = (volumenGeneral + 0.1).min(1)
 		if (cancion != null) {
-			volumenGeneral = (volumenGeneral + 0.1).min(1)
 			cancion.volume(volumenGeneral)
 		}
 	}
 
 	method bajarVolumenMusica() {
+		volumenGeneral= (volumenGeneral - 0.1).max(0)
 		if (cancion != null) {
-			volumenGeneral= (volumenGeneral - 0.1).max(0)
 			cancion.volume(volumenGeneral)
 		}
 	}
