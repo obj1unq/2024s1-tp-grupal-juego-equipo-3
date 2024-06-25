@@ -32,7 +32,7 @@ object soundProducer {
 	}
 
 	method bajarVolumenMusica() {
-		volumenGeneral= (volumenGeneral - 0.1).max(0)
+		volumenGeneral = (volumenGeneral - 0.1).max(0)
 		if (cancion != null) {
 			cancion.volume(volumenGeneral)
 		}
@@ -45,9 +45,11 @@ object soundProducer {
 	method playEffect(audioFile) {
 		self.soundEffect(audioFile).play()
 	}
- 
+
 	method sacarCancion() {
-		cancion.stop()
+		if (cancion != null){
+			cancion.stop()	
+		}
 		cancion = null
 	}
 
@@ -86,7 +88,7 @@ object soundMock {
 
 	method stop() {
 	}
-
+	
 	method volume(newVolume) {
 	}
 

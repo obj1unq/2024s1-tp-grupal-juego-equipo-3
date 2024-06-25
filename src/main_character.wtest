@@ -1,0 +1,222 @@
+import wollok.game.*
+import main_character.*
+import posiciones.*
+import obstacles.*
+import collectable.*
+import sounds.*
+import backpack.*
+
+describe "Main character moving without obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right" {
+		mainCharacter.build()
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(3, 2))
+	}
+
+	test "main character move left" {
+		mainCharacter.build()
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(1, 2))
+	}
+
+	test "main character move top" {
+		mainCharacter.build()
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 3))
+	}
+
+	test "main character move down" {
+		mainCharacter.build()
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 1))
+	}
+
+}
+
+describe "Main character moving with obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(3, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move left with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(1, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move up with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 3))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move down with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 1))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+}
+
+describe "Main character bitten" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+		soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character bites one time" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		assert.equals(1, mainCharacter.lifes())
+		assert.equals(true, mainCharacter.isSick())
+		assert.equals(ganador, mainCharacter.estado())
+	}
+
+	test "main character bites two time" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		mainCharacter.bitten()
+		assert.equals(0, mainCharacter.lifes())
+		assert.equals(perdedor, mainCharacter.estado())
+	}
+
+	test "main character one bite and healed" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		mainCharacter.curar()
+		assert.equals(2, mainCharacter.lifes())
+		assert.equals(false, mainCharacter.isSick())
+		assert.equals(ganador, mainCharacter.estado())
+	}
+
+}
+
+describe "Main character spirals" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+		soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character put one spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		assert.equals(4, backpack.spirals())
+	}
+
+	test "main character put two spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		assert.equals(3, backpack.spirals())
+	}
+
+	test "main character put three spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		assert.equals(2, backpack.spirals())
+	}
+	
+	test "main character put four spiral and reload" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		backpack.reloadSpirals()
+		assert.equals(5, backpack.spirals())
+	}
+
+}
+
+
+describe "Main character shoot"{
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+		soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character shoot one time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.equals(3,insecticide.shoots())
+	}
+	
+	test "main character shoot two time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.equals(2,insecticide.shoots())
+	}
+	
+	test "main character shoot three time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.equals(1,insecticide.shoots())
+	}
+	
+	test "main character shoot four time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.equals(0,insecticide.shoots())
+	}
+	
+	test "main character shoot five time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.doesNotThrowException{mainCharacter.disparar()}
+		assert.throwsException{mainCharacter.disparar()}
+	}
+}
