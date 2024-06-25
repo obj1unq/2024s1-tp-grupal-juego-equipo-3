@@ -62,8 +62,8 @@ object mainCharacter inherits Character {
 	}
 
 	method curar() {
-		soundProducer.playEffect("recarga.mp3")
 		lifes += 1
+		soundProducer.playEffect("recarga.mp3")
 		self.invert()
 	}
 
