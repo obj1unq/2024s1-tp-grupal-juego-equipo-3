@@ -34,6 +34,7 @@ object menus {
 
 	method configurate() {
 		game.addVisual(self)
+		soundProducer.configurateSettings()
 		keyboard.right().onPressDo{ option.next(self)}
 		keyboard.left().onPressDo{ option.previous(self)}
 		keyboard.enter().onPressDo{ option.goMenu(self)}
@@ -45,6 +46,7 @@ object start {
 
 	method goMenu(menu) {
 		game.clear()
+		soundProducer.configurateSettings()
 		loadScreen.build()
 		menu.option(loadScreen)
 	}
@@ -162,6 +164,7 @@ object gameOver {
 		mainCharacter.deadSound()
 		game.clear()
 		soundProducer.playCancion("menuMusic.mp3")
+		soundProducer.configurateSettings()
 		menus.option(self)
 		menus.configurate()
 		self.addFinalCounters()

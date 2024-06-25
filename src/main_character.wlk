@@ -62,12 +62,13 @@ object mainCharacter inherits Character {
 	}
 
 	method curar() {
+		soundProducer.playEffect("recarga.mp3")
 		lifes += 1
 		self.invert()
 	}
 
 	method bitten() {
-		soundProducer.sound("picado.mp3").play()
+		soundProducer.playEffect("picado.mp3")
 		if (self.isSick()) {
 			estado = perdedor
 			self.morir()
@@ -94,7 +95,7 @@ object mainCharacter inherits Character {
 	}
 
 	method disparar() {
-		soundProducer.sound("shooting.mp3").play()
+		soundProducer.playEffect("shooting.mp3")
 		self.validateDisparos()
 		insecticide.disparar()
 	}
@@ -109,7 +110,7 @@ object mainCharacter inherits Character {
 	method putSpiral() {
 		self.validateSpirals()
 		spiralFactory.createSiPuedo()
-		soundProducer.sound("put.mp3").play()
+		soundProducer.playEffect("put.mp3")
 		backpack.discountSpiral()
 	}
 
@@ -128,7 +129,7 @@ object mainCharacter inherits Character {
 object ganador {
 
 	method sound() {
-		return soundProducer.sound("win.mp3").play()
+		soundProducer.playEffect("win.mp3")
 	}
 
 }
@@ -136,7 +137,7 @@ object ganador {
 object perdedor {
 
 	method sound() {
-		return soundProducer.sound("loose.mp3").play()
+		soundProducer.playEffect("loose.mp3")
 	}
 
 }

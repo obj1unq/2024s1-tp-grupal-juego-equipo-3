@@ -10,7 +10,7 @@ object soundProducer {
 		provider = _provider
 	}
 
-	method sound(audioFile) {
+	method soundEffect(audioFile) {
 		const audio = provider.sound(audioFile)
 		audio.volume(volumenGeneral)
 		return audio
@@ -19,6 +19,7 @@ object soundProducer {
 	method soundMusic(audioFile) {
 		const audio = provider.sound(audioFile)
 		cancion = audio
+		audio.volume(volumenGeneral)
 		audio.shouldLoop(true)
 		return audio
 	}
@@ -32,7 +33,7 @@ object soundProducer {
 
 	method bajarVolumenMusica() {
 		if (cancion != null) {
-			volumenGeneral = (volumenGeneral - 0.1).max(0)
+			volumenGeneral= (volumenGeneral - 0.1).max(0)
 			cancion.volume(volumenGeneral)
 		}
 	}
@@ -41,6 +42,10 @@ object soundProducer {
 		self.soundMusic(audioFile).play()
 	}
 
+	method playEffect(audioFile) {
+		self.soundEffect(audioFile).play()
+	}
+ 
 	method sacarCancion() {
 		cancion.stop()
 		cancion = null
@@ -88,3 +93,4 @@ object soundMock {
 	method volume() = 0
 
 }
+

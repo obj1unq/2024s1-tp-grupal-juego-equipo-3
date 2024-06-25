@@ -35,8 +35,8 @@ class Mosquito inherits Character {
 	}
 
 	method dead() {
-		game.removeTickEvent(self.eventMosquito())
 		game.removeVisual(self)
+		game.removeTickEvent(self.eventMosquito())
 		mosquitoesManager.removeMosquito(self)
 	}
 
@@ -46,7 +46,7 @@ class Mosquito inherits Character {
 	}
 
 	method killed() {
-		soundProducer.sound("killedMosquitoe.mp3").play()
+		soundProducer.playEffect("killedMosquitoe.mp3")
 		backpack.addMosquito()
 		self.dead()
 	}

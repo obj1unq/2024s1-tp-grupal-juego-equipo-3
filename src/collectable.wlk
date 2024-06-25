@@ -43,7 +43,7 @@ class Element {
 	}
 
 	method take() {
-		soundProducer.sound("picking.mp3").play()
+		soundProducer.playEffect("picking.mp3")
 	}
 
 	method image()
@@ -55,7 +55,6 @@ class Vaccine inherits Element {
 	override method image() = "vaccine.png"
 
 	override method take() {
-		soundProducer.sound("recarga.mp3").play()
 		mainCharacter.curar()
 		vaccineFactory.removeElement(self)
 	}

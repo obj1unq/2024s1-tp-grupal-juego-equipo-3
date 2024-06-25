@@ -50,6 +50,7 @@ object gameConfig {
 		soundProducer.sacarCancion()
 		keyboardConfig.configurate()
 		soundProducer.playCancion("nivelMusic.mp3")
+		soundProducer.configurateSettings()
 		gameCounter.start()
 	}
 
