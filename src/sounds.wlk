@@ -4,7 +4,7 @@ object soundProducer {
 
 	var cancion = null
 	var provider = game
-	var volumenGeneral = 0.3
+	var volumenGeneral = 0.4
 
 	method provider(_provider) {
 		provider = _provider
