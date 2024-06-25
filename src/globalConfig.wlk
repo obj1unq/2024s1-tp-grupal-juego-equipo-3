@@ -8,6 +8,7 @@ import collectable.*
 import navigation.*
 import backpack.*
 import extras.*
+import sounds.*
 
 object limit {
 
@@ -46,7 +47,10 @@ object gameConfig {
 		game.clear()
 		gameElements.forEach{ element => element.build()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
+		soundProducer.sacarCancion()
 		keyboardConfig.configurate()
+		soundProducer.playCancion("nivelMusic.mp3")
+		soundProducer.configurateSettings()
 		gameCounter.start()
 	}
 

@@ -5,6 +5,7 @@ import mosquito.*
 import obstacles.*
 import globalConfig.*
 import backpack.*
+import sounds.*
 
 object elementManager {
 
@@ -41,7 +42,9 @@ class Element {
 		self.take()
 	}
 
-	method take()
+	method take() {
+		soundProducer.playEffect("picking.mp3")
+	}
 
 	method image()
 
@@ -63,6 +66,7 @@ class Refill inherits Element {
 	override method image() = "insecticide01.png"
 
 	override method take() {
+		super()
 		insecticide.recargar()
 		refillFactory.removeElement(self)
 	}
@@ -155,6 +159,7 @@ class Trash inherits Element {
 	override method image() = "trash0" + costumeNumber + ".png"
 
 	override method take() {
+		super()
 		backpack.storeTrash()
 		trashFactory.removeElement(self)
 	}
@@ -166,6 +171,7 @@ class SpiralBox inherits Element {
 	override method image() = "spiralbox.png"
 
 	override method take() {
+		super()
 		backpack.reloadSpirals()
 		spiralBoxFactory.removeElement(self)
 	}

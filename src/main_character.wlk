@@ -7,6 +7,7 @@ import obstacles.*
 import navigation.*
 import extras.*
 import backpack.*
+import sounds.*
 
 object mainCharacter inherits Character {
 
@@ -16,6 +17,7 @@ object mainCharacter inherits Character {
 	var property myInsecticide = insecticide
 	var property estaInvertido = null
 	var property bites = 0
+	var property estado = ganador
 
 	method image() = "ch" + direction + ".png"
 
@@ -28,6 +30,7 @@ object mainCharacter inherits Character {
 		self.myInsecticide().shoots(4)
 		self.estaInvertido(false)
 		self.bites(0)
+		self.estado(ganador)
 	}
 
 	method goesTo(newDirection) {
@@ -60,18 +63,21 @@ object mainCharacter inherits Character {
 
 	method curar() {
 		lifes += 1
+		soundProducer.playEffect("recarga.mp3")
 		self.invert()
 	}
 
 	method bitten() {
+		soundProducer.playEffect("picado.mp3")
 		if (self.isSick()) {
+			estado = perdedor
 			self.morir()
 		}
 		lifes -= 1
 		bites += 1
 	}
-	
-	method bitesBonus(){
+
+	method bitesBonus() {
 		return bites * 250
 	}
 
@@ -89,6 +95,7 @@ object mainCharacter inherits Character {
 	}
 
 	method disparar() {
+		soundProducer.playEffect("shooting.mp3")
 		self.validateDisparos()
 		insecticide.disparar()
 	}
@@ -103,6 +110,7 @@ object mainCharacter inherits Character {
 	method putSpiral() {
 		self.validateSpirals()
 		spiralFactory.createSiPuedo()
+		soundProducer.playEffect("put.mp3")
 		backpack.discountSpiral()
 	}
 
@@ -110,6 +118,26 @@ object mainCharacter inherits Character {
 		if (!backpack.hasSpirals()) {
 			self.error("No tenes espirales!")
 		}
+	}
+
+	method deadSound() {
+		return estado.sound()
+	}
+
+}
+
+object ganador {
+
+	method sound() {
+		soundProducer.playEffect("win.mp3")
+	}
+
+}
+
+object perdedor {
+
+	method sound() {
+		soundProducer.playEffect("loose.mp3")
 	}
 
 }

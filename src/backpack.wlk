@@ -10,8 +10,8 @@ object backpack {
 	var property spirals
 	var property trashes
 	var property mosquitoes
-	
-	method build(){
+
+	method build() {
 		self.spirals(0)
 		self.trashes(0)
 		self.mosquitoes(0)
@@ -38,3 +38,4 @@ object backpack {
 	}
 
 }
+

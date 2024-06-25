@@ -22,7 +22,7 @@ object interface {
 	const menuCounters = #{ mosquitoesCounter, trashCounter, spiralsCounter, gameCounter }
 
 	method build() {
-		game.addVisual(menu)
+		game.addVisual(menuBarra)
 		game.addVisual(lifeCounter)
 		game.addVisual(repellantCounter)
 		self.addMenuCounters()
@@ -45,7 +45,7 @@ class MenuElement {
 
 }
 
-object menu inherits MenuElement {
+object menuBarra inherits MenuElement {
 
 	override method image() = "menu.png"
 
@@ -94,7 +94,7 @@ class Numero {
 	method image() {
 		return prefix + self.number() + ".png"
 	}
-	
+
 	method number()
 
 }
