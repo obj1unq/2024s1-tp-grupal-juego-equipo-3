@@ -6,6 +6,7 @@ import globalConfig.*
 import collectable.*
 import backpack.*
 import sounds.*
+
 class Mosquito inherits Character {
 
 	var property position = randomizer.emptyPosition()
@@ -104,12 +105,12 @@ object mosquitoesManager {
 	const property mosquitoes = #{}
 	const factories = [ mosquitoHardFactory, mosquitoFactory ]
 
-	method build(){
+	method build() {
 		mosquitoes.clear()
 		(1 .. 7).forEach({ m => self.createMosquitoRandom()})
 		self.createMosquitoes()
 	}
-	
+
 	method createMosquitoes() {
 		game.onTick(2500, "CREACION" + self.identity(), { self.createMosquitoRandom()})
 	}
@@ -130,7 +131,7 @@ object mosquitoesManager {
 	}
 
 	method removeMosquito(mosquito) {
-		if(mosquitoes.contains(mosquito)){
+		if (mosquitoes.contains(mosquito)) {
 			mosquitoes.remove(mosquito)
 		}
 	}

@@ -8,6 +8,7 @@ import navigation.*
 import extras.*
 import backpack.*
 import sounds.*
+
 object mainCharacter inherits Character {
 
 	var property direction = null
@@ -73,10 +74,9 @@ object mainCharacter inherits Character {
 		}
 		lifes -= 1
 		bites += 1
-		
 	}
-	
-	method bitesBonus(){
+
+	method bitesBonus() {
 		return bites * 250
 	}
 
@@ -88,7 +88,7 @@ object mainCharacter inherits Character {
 		game.removeVisual(self)
 		gameOver.endGame()
 	}
-	
+
 	override method isTakeable() {
 		return false
 	}
@@ -118,22 +118,26 @@ object mainCharacter inherits Character {
 			self.error("No tenes espirales!")
 		}
 	}
-	
-	method deadSound(){
+
+	method deadSound() {
 		return estado.sound()
 	}
 
 }
 
 object ganador {
-	method sound(){
+
+	method sound() {
 		return soundProducer.sound("win.mp3").play()
 	}
+
 }
 
 object perdedor {
-	method sound (){
+
+	method sound() {
 		return soundProducer.sound("loose.mp3").play()
 	}
+
 }
 

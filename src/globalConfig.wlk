@@ -9,6 +9,7 @@ import navigation.*
 import backpack.*
 import extras.*
 import sounds.*
+
 object limit {
 
 	const property maxX = game.width() - 2

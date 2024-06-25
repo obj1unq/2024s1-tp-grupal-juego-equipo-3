@@ -6,6 +6,7 @@ import obstacles.*
 import globalConfig.*
 import backpack.*
 import sounds.*
+
 object elementManager {
 
 	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ]
@@ -41,7 +42,7 @@ class Element {
 		self.take()
 	}
 
-	method take(){
+	method take() {
 		soundProducer.sound("picking.mp3").play()
 	}
 

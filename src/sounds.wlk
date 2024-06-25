@@ -88,4 +88,3 @@ object soundMock {
 	method volume() = 0
 
 }
-

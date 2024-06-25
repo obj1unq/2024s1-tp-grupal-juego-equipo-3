@@ -7,6 +7,7 @@ import posiciones.*
 import globalConfig.*
 import extras.*
 import sounds.*
+
 object gameConfiguration {
 
 	const gameWidth = 20
@@ -18,7 +19,7 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.boardGround("background.png")
 		game.cellSize(64)
-		game.schedule(0, {soundProducer.playCancion("menuMusic.mp3")})
+		game.schedule(0, { soundProducer.playCancion("menuMusic.mp3")})
 		menus.configurate()
 	}
 

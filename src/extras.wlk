@@ -94,7 +94,7 @@ class Numero {
 	method image() {
 		return prefix + self.number() + ".png"
 	}
-	
+
 	method number()
 
 }
