@@ -5,7 +5,7 @@ import mosquito.*
 import obstacles.*
 import globalConfig.*
 import backpack.*
-
+import sounds.*
 object elementManager {
 
 	const property factories = [ trashFactory, vaccineFactory, refillFactory, spiralBoxFactory ]
@@ -41,7 +41,9 @@ class Element {
 		self.take()
 	}
 
-	method take()
+	method take(){
+		soundProducer.sound("picking.mp3").play()
+	}
 
 	method image()
 
@@ -52,6 +54,7 @@ class Vaccine inherits Element {
 	override method image() = "vaccine.png"
 
 	override method take() {
+		soundProducer.sound("recarga.mp3").play()
 		mainCharacter.curar()
 		vaccineFactory.removeElement(self)
 	}
@@ -63,6 +66,7 @@ class Refill inherits Element {
 	override method image() = "insecticide01.png"
 
 	override method take() {
+		super()
 		insecticide.recargar()
 		refillFactory.removeElement(self)
 	}
@@ -155,6 +159,7 @@ class Trash inherits Element {
 	override method image() = "trash0" + costumeNumber + ".png"
 
 	override method take() {
+		super()
 		backpack.storeTrash()
 		trashFactory.removeElement(self)
 	}
@@ -166,6 +171,7 @@ class SpiralBox inherits Element {
 	override method image() = "spiralbox.png"
 
 	override method take() {
+		super()
 		backpack.reloadSpirals()
 		spiralBoxFactory.removeElement(self)
 	}

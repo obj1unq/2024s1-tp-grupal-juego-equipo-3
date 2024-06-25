@@ -7,7 +7,7 @@ import obstacles.*
 import navigation.*
 import extras.*
 import backpack.*
-
+import sounds.*
 object mainCharacter inherits Character {
 
 	var property direction = null
@@ -16,6 +16,7 @@ object mainCharacter inherits Character {
 	var property myInsecticide = insecticide
 	var property estaInvertido = null
 	var property bites = 0
+	var property estado = ganador
 
 	method image() = "ch" + direction + ".png"
 
@@ -28,6 +29,7 @@ object mainCharacter inherits Character {
 		self.myInsecticide().shoots(4)
 		self.estaInvertido(false)
 		self.bites(0)
+		self.estado(ganador)
 	}
 
 	method goesTo(newDirection) {
@@ -64,11 +66,14 @@ object mainCharacter inherits Character {
 	}
 
 	method bitten() {
+		soundProducer.sound("picado.mp3").play()
 		if (self.isSick()) {
+			estado = perdedor
 			self.morir()
 		}
 		lifes -= 1
 		bites += 1
+		
 	}
 	
 	method bitesBonus(){
@@ -83,12 +88,13 @@ object mainCharacter inherits Character {
 		game.removeVisual(self)
 		gameOver.endGame()
 	}
-
+	
 	override method isTakeable() {
 		return false
 	}
 
 	method disparar() {
+		soundProducer.sound("shooting.mp3").play()
 		self.validateDisparos()
 		insecticide.disparar()
 	}
@@ -103,6 +109,7 @@ object mainCharacter inherits Character {
 	method putSpiral() {
 		self.validateSpirals()
 		spiralFactory.createSiPuedo()
+		soundProducer.sound("put.mp3").play()
 		backpack.discountSpiral()
 	}
 
@@ -111,6 +118,22 @@ object mainCharacter inherits Character {
 			self.error("No tenes espirales!")
 		}
 	}
+	
+	method deadSound(){
+		return estado.sound()
+	}
 
+}
+
+object ganador {
+	method sound(){
+		return soundProducer.sound("win.mp3").play()
+	}
+}
+
+object perdedor {
+	method sound (){
+		return soundProducer.sound("loose.mp3").play()
+	}
 }
 

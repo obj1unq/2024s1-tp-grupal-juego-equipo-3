@@ -5,7 +5,7 @@ import main_character.*
 import globalConfig.*
 import collectable.*
 import backpack.*
-
+import sounds.*
 class Mosquito inherits Character {
 
 	var property position = randomizer.emptyPosition()
@@ -34,8 +34,8 @@ class Mosquito inherits Character {
 	}
 
 	method dead() {
-		game.removeVisual(self)
 		game.removeTickEvent(self.eventMosquito())
+		game.removeVisual(self)
 		mosquitoesManager.removeMosquito(self)
 	}
 
@@ -45,6 +45,7 @@ class Mosquito inherits Character {
 	}
 
 	method killed() {
+		soundProducer.sound("killedMosquitoe.mp3").play()
 		backpack.addMosquito()
 		self.dead()
 	}

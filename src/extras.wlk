@@ -230,7 +230,7 @@ object totalCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 90
+	const gameDuration = 30
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
