@@ -26,8 +26,7 @@ describe "uso de collectables" {
 		insecticide.direction()
 		mainCharacter.disparar()
 		assert.equals(3, insecticide.shoots())
-		assert.equals({
-		}, mosquitoesManager.mosquitoes())
+		assert.equals(#{}, mosquitoesManager.mosquitoes())
 	}
 
 //	test "perder una vida y recuperar con el uso de vacuna" {
