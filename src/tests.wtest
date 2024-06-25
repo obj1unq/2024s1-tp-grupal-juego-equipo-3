@@ -35,7 +35,18 @@ describe "uso de collectables" {
 	}
 
 	test "perder una vida y recuperar con el uso de vacuna" {
-		mosquitoesManager.build()
+		const mS1 = mosquitoFactory.create()
+		const mH1 = mosquitoHardFactory.create()
+		mS1.position(game.at(3, 2)) // se ubica un mosquito soft a un casillero a la derecha del main character
+		game.addVisual(mS1)
+		mS1.moving()
+		mosquitoesManager.mosquitoes().add(mS1)
+		mH1.position(game.at(2, 3)) // se ubica un mosquito hard un casillero arriba del main character
+		game.addVisual(mH1)
+		mH1.moving()
+		mosquitoesManager.mosquitoes().add(mH1)
+		mainCharacter.goesTo(rightDirection)
+		assert.equals([ mainCharacter, mS1 ], game.getObjectsIn(game.at(3, 2)).asList())
 	}
 
 //
