@@ -13,7 +13,7 @@ describe "uso de collectables" {
 
 	method initialize() {
 		game.clear()
-		game.addVisual(mainCharacter)
+		mainCharacter.build()
 	}
 
 	test "usar el spray, equipar el spray, matar mosquitos" {
@@ -24,18 +24,20 @@ describe "uso de collectables" {
 		insecticide.recargar() // se recarga spray
 		assert.equals(4, insecticide.shoots()) // vuelve a tener 4 disparos
 		const mH1 = new MosquitoHard(position = game.at(2, 3)) // se crea un Mosquito
-		game.addVisual(mH1) 
+		game.addVisual(mH1)
 		mH1.moving()
 		mosquitoesManager.mosquitoes().add(mH1)
 		backpack.mosquitoes(0) // inicialmente la mochila tiene cero mosquitos muertos para analizar.
 		mainCharacter.disparar() // main character dispara en la direccion al mosquito creado que lo tiene al alcance.
 		assert.equals(3, insecticide.shoots()) // se descuenta un disparo de su spray
 		assert.equals(#{}, mosquitoesManager.mosquitoes()) // el mosquito fue eliminado
-		assert.equals(1,backpack.mosquitoes()) // la mochila tiene un mosquito para analizar guardado.
+		assert.equals(1, backpack.mosquitoes()) // la mochila tiene un mosquito para analizar guardado.
 	}
 
-//	test "perder una vida y recuperar con el uso de vacuna" {
-//	}
+	test "perder una vida y recuperar con el uso de vacuna" {
+		mosquitoesManager.build()
+	}
+
 //
 //	test "usar los espirales y matar mosquitos" {
 //	}
