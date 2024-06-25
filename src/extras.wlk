@@ -22,7 +22,7 @@ object interface {
 	const menuCounters = #{ mosquitoesCounter, trashCounter, spiralsCounter, gameCounter }
 
 	method build() {
-		game.addVisual(menu)
+		game.addVisual(menuBarra)
 		game.addVisual(lifeCounter)
 		game.addVisual(repellantCounter)
 		self.addMenuCounters()
@@ -45,7 +45,7 @@ class MenuElement {
 
 }
 
-object menu inherits MenuElement {
+object menuBarra inherits MenuElement {
 
 	override method image() = "menu.png"
 
@@ -230,7 +230,7 @@ object totalCounter inherits FinalCounter(position = game.at(13, 6)) {
 
 object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 
-	const gameDuration = 30
+	const gameDuration = 90
 	const tickEventName = 'gameCounterTick'
 	var property time = 0
 
