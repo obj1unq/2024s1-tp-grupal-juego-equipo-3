@@ -4,7 +4,6 @@ import extras.*
 import navigation.*
 
 program Game {
-	// TODO: Reestructurar archivos - Dividir mejor el código
 	gameConfiguration.start()
 	game.start()
 }
