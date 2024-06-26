@@ -1,9 +1,9 @@
 import wollok.game.*
-import main_character.*
+import mainCharacter.*
 import randomizer.*
 import obstacles.*
-import mosquito.*
-import posiciones.*
+import mosquitoes.*
+import positions.*
 import collectable.*
 import navigation.*
 import backpack.*
@@ -47,10 +47,9 @@ object gameConfig {
 		game.clear()
 		gameElements.forEach{ element => element.build()}
 		game.onCollideDo(mainCharacter, { o => o.collision()})
-		soundProducer.sacarCancion()
-		keyboardConfig.configurate()
-		soundProducer.playCancion("nivelMusic.mp3")
-		soundProducer.configurateSettings()
+		soundProducer.stopSong()
+		keyboardConfig.configure()
+		soundProducer.playSong("levelMusic.mp3")
 		gameCounter.start()
 	}
 
@@ -58,13 +57,14 @@ object gameConfig {
 
 object keyboardConfig {
 
-	method configurate() {
+	method configure() {
 		keyboard.left().onPressDo{ mainCharacter.goesTo(leftDirection)}
 		keyboard.right().onPressDo{ mainCharacter.goesTo(rightDirection)}
 		keyboard.up().onPressDo{ mainCharacter.goesTo(upDirection)}
 		keyboard.down().onPressDo{ mainCharacter.goesTo(downDirection)}
 		keyboard.e().onPressDo{ mainCharacter.putSpiral()}
-		keyboard.d().onPressDo{ mainCharacter.disparar()}
+		keyboard.d().onPressDo{ mainCharacter.shoot()}
+		soundProducer.configureSettings()
 	}
 
 }

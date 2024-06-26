@@ -1,9 +1,9 @@
 import wollok.game.*
-import main_character.*
+import mainCharacter.*
 import randomizer.*
 import obstacles.*
-import mosquito.*
-import posiciones.*
+import mosquitoes.*
+import positions.*
 import globalConfig.*
 import collectable.*
 import navigation.*
@@ -265,3 +265,4 @@ object gameCounter inherits MenuCounter(position = game.at(14, 14)) {
 	}
 
 }
+

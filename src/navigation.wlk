@@ -1,9 +1,9 @@
 import wollok.game.*
-import main_character.*
+import mainCharacter.*
 import randomizer.*
 import obstacles.*
-import mosquito.*
-import posiciones.*
+import mosquitoes.*
+import positions.*
 import globalConfig.*
 import extras.*
 import sounds.*
@@ -19,7 +19,7 @@ object gameConfiguration {
 		game.width(gameWidth)
 		game.boardGround("background.png")
 		game.cellSize(64)
-		game.schedule(0, { soundProducer.playCancion("menuMusic.mp3")})
+		game.schedule(0, { soundProducer.playSong("menuMusic.mp3")})
 		menus.configurate()
 	}
 
@@ -34,7 +34,7 @@ object menus {
 
 	method configurate() {
 		game.addVisual(self)
-		soundProducer.configurateSettings()
+		soundProducer.configureSettings()
 		keyboard.right().onPressDo{ option.next(self)}
 		keyboard.left().onPressDo{ option.previous(self)}
 		keyboard.enter().onPressDo{ option.goMenu(self)}
@@ -46,7 +46,7 @@ object start {
 
 	method goMenu(menu) {
 		game.clear()
-		soundProducer.configurateSettings()
+		soundProducer.configureSettings()
 		loadScreen.build()
 		menu.option(loadScreen)
 	}
@@ -160,11 +160,11 @@ object gameOver {
 	const finalCounters = #{ collectedCounter, bonusCounter, collectedMosquitoesCounter, totalCounter }
 
 	method endGame() {
-		soundProducer.sacarCancion()
-		mainCharacter.deadSound()
+		soundProducer.stopSong()
+		mainCharacter.deathSound()
 		game.clear()
-		soundProducer.playCancion("menuMusic.mp3")
-		soundProducer.configurateSettings()
+		soundProducer.playSong("menuMusic.mp3")
+		soundProducer.configureSettings()
 		menus.option(self)
 		menus.configurate()
 		self.addFinalCounters()

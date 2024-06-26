@@ -1,21 +1,22 @@
 import wollok.game.*
 import randomizer.*
-import posiciones.*
-import main_character.*
+import positions.*
+import mainCharacter.*
 import globalConfig.*
 import collectable.*
 import backpack.*
 import sounds.*
 
+// Type of mosquitoes
 class Mosquito inherits Character {
 
 	var property position = randomizer.emptyPosition()
 	const character = mainCharacter
 
-	method image() = "mosquito01.png"
+	method image() = "mosquitoe01.png"
 
 	method moving() {
-		game.onTick(1500, self.eventMosquito(), { self.typeMove()})
+		game.onTick(1500, self.tickEvent(), { self.typeMove()})
 	}
 
 	method typeMove() {
@@ -30,13 +31,13 @@ class Mosquito inherits Character {
 		return (directions.anyOne()).nextMove(self.position())
 	}
 
-	method eventMosquito() {
-		return "mosquitoMoving" + self.identity()
+	method tickEvent() {
+		return "mosquitoeMoving" + self.identity()
 	}
 
 	method dead() {
 		game.removeVisual(self)
-		game.removeTickEvent(self.eventMosquito())
+		game.removeTickEvent(self.tickEvent())
 		mosquitoesManager.removeMosquito(self)
 	}
 
@@ -57,10 +58,9 @@ class Mosquito inherits Character {
 
 }
 
-//Tipo de mosquitoes
 class MosquitoHard inherits Mosquito {
 
-	override method image() = "mosquito02.png"
+	override method image() = "mosquitoe02.png"
 
 	override method nextPosition() {
 		const distanceX = axisX.distance(character, self)
@@ -83,7 +83,7 @@ class MosquitoHard inherits Mosquito {
 
 }
 
-//Factory 
+// Factories - Manager
 object mosquitoFactory {
 
 	method create() {
@@ -112,7 +112,7 @@ object mosquitoesManager {
 	}
 
 	method createMosquitoes() {
-		game.onTick(2500, "CREACION" + self.identity(), { self.createMosquitoRandom()})
+		game.onTick(2500, "CREATION" + self.identity(), { self.createMosquitoRandom()})
 	}
 
 	method createMosquitoRandom() {
@@ -126,7 +126,7 @@ object mosquitoesManager {
 		return mosquitoes.filter({ mosquito => mosquito.position().distance(visual.position()) < 2 })
 	}
 
-	method mosquitoesEn(position) {
+	method mosquitoesAt(position) {
 		return self.mosquitoes().filter({ m => m.position() == position })
 	}
 

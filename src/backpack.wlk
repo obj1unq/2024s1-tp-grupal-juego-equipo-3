@@ -1,7 +1,7 @@
 import wollok.game.*
 import randomizer.*
-import main_character.*
-import mosquito.*
+import mainCharacter.*
+import mosquitoes.*
 import obstacles.*
 import globalConfig.*
 

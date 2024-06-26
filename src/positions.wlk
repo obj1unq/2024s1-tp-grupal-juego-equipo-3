@@ -6,14 +6,14 @@ class Direction {
 		return self.nextMove(position, 1)
 	}
 
-	method nextMove(position, cant)
+	method nextMove(position, transfer)
 
 }
 
 object leftDirection inherits Direction {
 
-	override method nextMove(position, cant) {
-		return position.left(cant)
+	override method nextMove(position, transfer) {
+		return position.left(transfer)
 	}
 
 	method opossite() {
@@ -24,8 +24,8 @@ object leftDirection inherits Direction {
 
 object downDirection inherits Direction {
 
-	override method nextMove(position, cant) {
-		return position.down(cant)
+	override method nextMove(position, transfer) {
+		return position.down(transfer)
 	}
 
 	method opossite() {
@@ -36,8 +36,8 @@ object downDirection inherits Direction {
 
 object rightDirection inherits Direction {
 
-	override method nextMove(position, cant) {
-		return position.right(cant)
+	override method nextMove(position, transfer) {
+		return position.right(transfer)
 	}
 
 	method opossite() {
@@ -48,8 +48,8 @@ object rightDirection inherits Direction {
 
 object upDirection inherits Direction {
 
-	override method nextMove(position, cant) {
-		return position.up(cant)
+	override method nextMove(position, transfer) {
+		return position.up(transfer)
 	}
 
 	method opossite() {
