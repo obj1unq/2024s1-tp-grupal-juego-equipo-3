@@ -1,6 +1,193 @@
+import collectable.*
+import mainCharacter.*
+import backpack.*
+import extras.*
+import mosquitoes.*
+import navigation.*
+import randomizer.*
+import positions.*
+import obstacles.*
+import sounds.*
+import wollok.game.*
 
-test "testX" {
+describe "Contextual tests" {
 
-	assert.that(true)
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+		soundProducer.provider(soundProviderMock)
+		mainCharacter.build()
+	}
+
+	test "El main character se encuentra en su recorrido con un mosquito que lo tiene dentro de su alcance. Como inicialmente
+			está equipada su mochila con el incecticida (con 4 disparos), lo usa para matar dicho mosquito y llevárselo para 
+			analizarlo en su laboratorio luego. Por desesperación, gasta sus otros tres disparos disponibles. 
+			Al quedarse sin disparos, el juego crea una recarga de insecticida. Al toparse con esta recarga se equipa nuevamente
+			con 4 disparos. El main character, en su dirección y a su alcance, se encuentra con un mosquito al que le dispara y 
+			lo mata. En última instancia, guarda ese mosquito para analizar en su mochila" {
+		mainCharacter.position(game.at(1, 3))
+		mainCharacter.direction(rightDirection)
+		mainCharacter.shoot()  // main character dispara su spray que ya tiene una carga equipada de 4 disparos
+		assert.equals(3, insecticide.shoots()) // deben quedar 3 disparos
+		mainCharacter.shoot()
+		mainCharacter.shoot()
+		mainCharacter.shoot() // main character gasta sus disparos
+		assert.that(refillFactory.canCreate()) // main character gasta sus disparos
+		const r1 = new Refill()
+		game.addVisual(r1)
+		var exists = true
+		r1.collision() // insecticide refilled
+		assert.equals(4, insecticide.shoots()) // now has 4 shots again
+		const mH1 = new MosquitoHard(position = game.at(2, 3)) // create a Mosquito
+		game.addVisual(mH1)
+		mH1.moving()
+		mosquitoesManager.mosquitoes().add(mH1)
+		backpack.mosquitoes(0)  // inicialmente la mochila tiene cero mosquitos muertos para analizar.
+		mainCharacter.shoot() // main character dispara en la direccion al mosquito creado que lo tiene al alcance.
+		assert.equals(3, insecticide.shoots()) // se descuenta un disparo de su spray
+		assert.equals(#{}, mosquitoesManager.mosquitoes()) // el mosquito fue eliminado
+		assert.equals(1, backpack.mosquitoes()) // la mochila tiene un mosquito para analizar guardado.
+	}
+
+	test "El main character pierde una vida al ser picado por un mosquito soft y luego la recupera con el uso de la vacuna. 
+			Luego es picado por un mosquito hard que lo deja nuevamente con una sola vida y camina de manera invertida.
+			El main character es picado en última instancia por un mosquito soft que le quita la última vida y lo mata (se quita del tablero)." {
+		const mS1 = mosquitoFactory.create()// se crea un mosquito soft
+		const mH1 = mosquitoHardFactory.create() // se crea un mosquito hard
+		mS1.position(game.at(3, 2)) // se ubica el mosquito soft a un casillero a la derecha del main character
+		game.addVisual(mS1)
+		mS1.moving()
+		mosquitoesManager.mosquitoes().add(mS1)
+		mH1.position(game.at(2, 3)) // se ubica el mosquito hard un casillero arriba del main character
+		game.addVisual(mH1)
+		mH1.moving()
+		mosquitoesManager.mosquitoes().add(mH1)
+		assert.equals(#{ mS1, mH1 }, mosquitoesManager.mosquitoes()) // verifico que ambos mosquitos estén en la colección
+		mainCharacter.position(game.at(3, 2)) // main character se mueve a la posición del mosquito soft
+		assert.equals([ mainCharacter, mS1 ], game.getObjectsIn(game.at(3, 2)).asList()) // verifico que estén en el mismo casillero el mosquito soft y el main character
+		mS1.collision() // el mosquito soft colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ mH1 }, mosquitoesManager.mosquitoes()) // verifico que en la colección de mosquitos del game sólo esté el mosquito hard.
+		assert.equals(1, mainCharacter.lifes()) // verifico que el main character ahora tiene una vida menos (1).
+		const v1 = new Vaccine() // se crea una vacuna
+		game.addVisual(v1)
+		v1.collision() // cuando colisiona con el main character, éste recupera una vida.
+		assert.equals(2, mainCharacter.lifes()) // verifico que el main character tiene 2 vidas nuevamente.
+		const mS2 = mosquitoFactory.create() // se crea otro mosquito soft 
+		game.addVisual(mS2)
+		mS2.moving()
+		mosquitoesManager.mosquitoes().add(mS2)
+		assert.equals(#{ mH1, mS2 }, mosquitoesManager.mosquitoes())// verifico que ambos mosquitos están en la lista de mosquitos del game
+		mH1.collision() // el mosquito hard colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ mS2 }, mosquitoesManager.mosquitoes()) // verify only the last created soft mosquito remains in the game's mosquito collection
+		assert.equals(1, mainCharacter.lifes())// verifico que el main character ahora tiene una vida menos (1).
+		assert.that(mainCharacter.inverted())  // verifico que el main character ahora tiene la movilidad invertida
+		mS2.collision() // el mosquito soft colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ }, mosquitoesManager.mosquitoes()) // verifico que ya no hay mosquitos en la colección del game
+		assert.equals(0, mainCharacter.lifes())  // verifico que el main character tiene 0 vidas.
+		assert.equals(3, mainCharacter.bites())  // verifico que el main character acumula 3 picaduras.
+		assert.that(!game.hasVisual(mainCharacter))  // main character ha muerto, por lo tanto no debe estar en el tablero
+	}
+
+	test "Se crea una caja de espirales. Al encontrarse con esta caja, el main character se equipa con 5 espirales." {
+		const sB1 = new SpiralBox()
+		game.addVisual(sB1)
+		sB1.collision() // el main character se topa con la caja de espirales.
+		assert.equals(5, backpack.spirals())// la mochila se equipa con 5 espirales.
+	}
+
+	test "Use spirals to kill mosquitoes." {
+		const m1 = mosquitoFactory.create()// se crea un mosquito.
+		game.addVisual(m1)
+		m1.position(game.at(4, 3))
+		mosquitoesManager.mosquitoes().add(m1)
+		assert.equals(#{ m1 }, mosquitoesManager.mosquitoes()) // en la colección de mosquitos del juego teneos al mosquito creado.
+		backpack.reloadSpirals() // se cargan los 5 espirales después de levantar una caja de espirales.
+		const e1 = new Spiral() 
+		game.addVisual(e1)
+		e1.position(game.at(3, 3))
+		e1.killMosquitoes()
+		assert.equals(#{}, mosquitoesManager.mosquitoes()) // verificamos que m1 ya no se encuentra en la lista de mosquitos.
+	}
 
 }
+
+describe "Main character moving without obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right" {
+		mainCharacter.build()
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(3, 2))
+	}
+
+	test "main character move left" {
+		mainCharacter.build()
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(1, 2))
+	}
+
+	test "main character move top" {
+		mainCharacter.build()
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 3))
+	}
+
+	test "main character move down" {
+		mainCharacter.build()
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 1))
+	}
+
+}
+
+describe "Main character moving with obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(3, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move left with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(1, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move up with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 3))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move down with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 1))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+	
+	}
