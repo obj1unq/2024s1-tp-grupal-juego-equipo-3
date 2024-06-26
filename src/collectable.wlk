@@ -1,7 +1,7 @@
 import wollok.game.*
 import randomizer.*
-import main_character.*
-import mosquito.*
+import mainCharacter.*
+import mosquitoes.*
 import obstacles.*
 import globalConfig.*
 import backpack.*
@@ -14,18 +14,18 @@ object elementManager {
 	method build() {
 		trashFactory.trashes().clear()
 		spiralFactory.spirals().clear()
-		(1 .. 3).forEach({ t => trashFactory.createSiPuedo()})
+		(1 .. 3).forEach({ t => trashFactory.createIfPossible()})
 		factories.forEach({ factory => factory.exist(false)})
-		game.onTick(2500, "CREAR ELEMENTOS", { self.createElement()})
+		game.onTick(2500, "CREATE ELEMENTS", { self.createElement()})
 	}
 
 	method createElement() {
-		factories.forEach({ factory => factory.createSiPuedo()})
+		factories.forEach({ factory => factory.createIfPossible()})
 	}
 
 }
 
-/* ELEMENTS */
+//Elements
 class Element {
 
 	var property position = randomizer.emptyPosition()
@@ -55,7 +55,7 @@ class Vaccine inherits Element {
 	override method image() = "vaccine.png"
 
 	override method take() {
-		mainCharacter.curar()
+		mainCharacter.heal()
 		vaccineFactory.removeElement(self)
 	}
 
@@ -67,7 +67,7 @@ class Refill inherits Element {
 
 	override method take() {
 		super()
-		insecticide.recargar()
+		insecticide.reload()
 		refillFactory.removeElement(self)
 	}
 
@@ -89,40 +89,40 @@ object insecticide inherits Element {
 		return mainCharacter.direction()
 	}
 
-	method disparar() {
-		self.restarDisparo()
+	method shoot() {
+		self.decrementShot()
 		sprayFactory.createSprayBurst(shootDistance)
 		self.killMosquitoes()
 	}
 
 	method killMosquitoes() {
-		if (self.hayMosquitos(shootDistance)) {
-			self.objetivos(shootDistance).forEach({ m => m.killed()})
+		if (self.hasMosquitoes(shootDistance)) {
+			self.targets(shootDistance).forEach({ m => m.killed()})
 		}
 	}
 
-	method restarDisparo() {
+	method decrementShot() {
 		shoots -= 1
 	}
 
-	method recargar() {
+	method reload() {
 		shoots = 4
 	}
 
-	method tieneDisparos() {
+	method hasShots() {
 		return shoots > 0
 	}
 
-	method hayMosquitos(alcance) {
-		return !self.objetivos(alcance).isEmpty()
+	method hasMosquitoes(range) {
+		return !self.targets(range).isEmpty()
 	}
 
-	method objetivos(alcance) {
-		return self.posiciones(alcance).map({ d => mosquitoesManager.mosquitoesEn(d) }).flatten()
+	method targets(range) {
+		return self.positions(range).map({ d => mosquitoesManager.mosquitoesAt(d) }).flatten()
 	}
 
-	method posiciones(alcance) {
-		return (1 .. alcance).map({ n => self.direction().nextMove(self.position(), n) })
+	method positions(range) {
+		return (1 .. range).map({ n => self.direction().nextMove(self.position(), n) })
 	}
 
 	override method take() {
@@ -130,15 +130,14 @@ object insecticide inherits Element {
 
 }
 
-// TODO: Resolver conflicto de dirección con picadura de mosquito hard
 class Spray inherits Element {
 
-	const cantidad
+	const positionNumber
 	var direction = mainCharacter.direction()
 	var characterPosition = mainCharacter.position()
 
 	override method position() {
-		return direction.nextMove(characterPosition, cantidad)
+		return direction.nextMove(characterPosition, positionNumber)
 	}
 
 	override method image() = "spray.png"
@@ -189,14 +188,14 @@ class Spiral inherits Element {
 	}
 
 	method activate() {
-		game.onTick(500, self.tickEvent(), { self.killMosquitos()})
+		game.onTick(500, self.tickEvent(), { self.killMosquitoes()})
 	}
 
 	method tickEvent() {
-		return "EFECTO ESPIRAL" + self.identity()
+		return "SPIRAL EFFECT" + self.identity()
 	}
 
-	method killMosquitos() {
+	method killMosquitoes() {
 		mosquitoesManager.mosquitoesAround(self).forEach({ m => m.killed()})
 	}
 
@@ -214,20 +213,21 @@ class Spiral inherits Element {
 
 }
 
-/* FACTORIES */
+//Factories
 class ElementFactory {
 
 	var property exist = false
 
-	method createSiPuedo() {
-		if (self.puedeCrear()) {
+	method createIfPossible() {
+		if (self.canCreate()) {
 			self.create()
 		}
 	}
 
-	method create()
+	method create() {
+	}
 
-	method puedeCrear() {
+	method canCreate() {
 		return !exist
 	}
 
@@ -246,7 +246,7 @@ object vaccineFactory inherits ElementFactory {
 		exist = true
 	}
 
-	override method puedeCrear() {
+	override method canCreate() {
 		return mainCharacter.isSick() && super()
 	}
 
@@ -260,40 +260,34 @@ object refillFactory inherits ElementFactory {
 		exist = true
 	}
 
-	override method puedeCrear() {
-		return !mainCharacter.myInsecticide().tieneDisparos() && super()
+	override method canCreate() {
+		return !insecticide.hasShots() && super()
 	}
 
 }
 
 object sprayFactory {
 
-	method createSprayBurst(shootDistance) {
-		self.createSprayBurstRecursivo(shootDistance, 1)
+	method createSprayBurst(range) {
+		self.createRecursiveSprayBurst(range, 1)
 	}
 
-	method createSprayBurstRecursivo(shootDistance, current) {
-		if (current <= shootDistance && self.puedeCrear(current)) {
-			self.create(current)
-			self.createSprayBurstRecursivo(shootDistance, current + 1)
+	method createRecursiveSprayBurst(range, currentNumber) {
+		if (currentNumber <= range && self.canCreate(currentNumber)) {
+			self.create(currentNumber)
+			self.createRecursiveSprayBurst(range, currentNumber + 1)
 		}
 	}
 
-	method create(size) {
-		var spray = new Spray(cantidad = size)
+	method create(currentNumber) {
+		var spray = new Spray(positionNumber = currentNumber)
 		game.addVisual(spray)
 		game.schedule(200, { game.removeVisual(spray)})
 	}
 
-	method createSiPuedo(size) {
-		if (self.puedeCrear(size)) {
-			self.create(size)
-		}
-	}
-
-	method puedeCrear(size) {
-		var pos = mainCharacter.direction().nextMove(mainCharacter.position(), size)
-		return limit.in(pos) && !obstacleManager.isObstacleIn(pos)
+	method canCreate(currentNumber) {
+		var position = mainCharacter.direction().nextMove(mainCharacter.position(), currentNumber)
+		return limit.in(position) && !obstacleManager.isObstacleIn(position)
 	}
 
 }
@@ -308,7 +302,7 @@ object trashFactory inherits ElementFactory {
 		game.addVisual(trash)
 	}
 
-	override method puedeCrear() {
+	override method canCreate() {
 		return trashes.size() < 3
 	}
 
@@ -331,7 +325,7 @@ object spiralFactory inherits ElementFactory {
 		game.schedule(6000, {=> self.removeElement(spiral)})
 	}
 
-	override method puedeCrear() {
+	override method canCreate() {
 		return backpack.hasSpirals()
 	}
 
@@ -350,7 +344,7 @@ object spiralBoxFactory inherits ElementFactory {
 		exist = true
 	}
 
-	override method puedeCrear() {
+	override method canCreate() {
 		return !backpack.hasSpirals() && super()
 	}
 

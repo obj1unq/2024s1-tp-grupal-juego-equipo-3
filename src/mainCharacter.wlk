@@ -1,7 +1,7 @@
 import wollok.game.*
-import posiciones.*
+import positions.*
 import globalConfig.*
-import mosquito.*
+import mosquitoes.*
 import collectable.*
 import obstacles.*
 import navigation.*
@@ -15,9 +15,9 @@ object mainCharacter inherits Character {
 	var property position = null
 	var property lifes = null
 	var property myInsecticide = insecticide
-	var property estaInvertido = null
+	var property inverted = null
 	var property bites = 0
-	var property estado = ganador
+	var property estado = winner
 
 	method image() = "ch" + direction + ".png"
 
@@ -28,9 +28,9 @@ object mainCharacter inherits Character {
 		self.position(default)
 		self.lifes(2)
 		self.myInsecticide().shoots(4)
-		self.estaInvertido(false)
+		self.inverted(false)
 		self.bites(0)
-		self.estado(ganador)
+		self.estado(winner)
 	}
 
 	method goesTo(newDirection) {
@@ -42,7 +42,7 @@ object mainCharacter inherits Character {
 	}
 
 	method nextMove(newDirection) {
-		return if (estaInvertido) {
+		return if (inverted) {
 			newDirection.opossite().nextMove(position)
 		} else {
 			newDirection.nextMove(position)
@@ -54,24 +54,24 @@ object mainCharacter inherits Character {
 	}
 
 	method invert() {
-		if (!estaInvertido && self.isSick()) {
-			estaInvertido = true
+		if (!inverted && self.isSick()) {
+			inverted = true
 		} else {
-			estaInvertido = false
+			inverted = false
 		}
 	}
 
-	method curar() {
+	method heal() {
 		lifes += 1
-		soundProducer.playEffect("recarga.mp3")
+		soundProducer.playEffect("heal.mp3")
 		self.invert()
 	}
 
 	method bitten() {
-		soundProducer.playEffect("picado.mp3")
+		soundProducer.playEffect("bitten.mp3")
 		if (self.isSick()) {
-			estado = perdedor
-			self.morir()
+			estado = loser
+			self.die()
 		}
 		lifes -= 1
 		bites += 1
@@ -85,7 +85,7 @@ object mainCharacter inherits Character {
 		return lifes == 1
 	}
 
-	method morir() {
+	method die() {
 		game.removeVisual(self)
 		gameOver.endGame()
 	}
@@ -94,22 +94,22 @@ object mainCharacter inherits Character {
 		return false
 	}
 
-	method disparar() {
+	method shoot() {
 		soundProducer.playEffect("shooting.mp3")
-		self.validateDisparos()
-		insecticide.disparar()
+		self.validateShots()
+		insecticide.shoot()
 	}
 
-	// TODO: No carga disfraz de bruma
-	method validateDisparos() {
-		if (!insecticide.tieneDisparos()) {
-			self.error("Recarga tu spray!")
+	// TODO: Doesn't load mist costume
+	method validateShots() {
+		if (!insecticide.hasShots()) {
+			self.error("Recarga tu insecticida!")
 		}
 	}
 
 	method putSpiral() {
 		self.validateSpirals()
-		spiralFactory.createSiPuedo()
+		spiralFactory.createIfPossible()
 		soundProducer.playEffect("put.mp3")
 		backpack.discountSpiral()
 	}
@@ -120,13 +120,13 @@ object mainCharacter inherits Character {
 		}
 	}
 
-	method deadSound() {
+	method deathSound() {
 		return estado.sound()
 	}
 
 }
 
-object ganador {
+object winner {
 
 	method sound() {
 		soundProducer.playEffect("win.mp3")
@@ -134,10 +134,10 @@ object ganador {
 
 }
 
-object perdedor {
+object loser {
 
 	method sound() {
-		soundProducer.playEffect("loose.mp3")
+		soundProducer.playEffect("lose.mp3")
 	}
 
 }

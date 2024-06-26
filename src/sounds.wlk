@@ -1,10 +1,11 @@
 import wollok.game.*
+import wollok.game.*
 
 object soundProducer {
 
-	var cancion = null
+	var song = null
 	var provider = game
-	var volumenGeneral = 0.4
+	var generalVolume = 0.4
 
 	method provider(_provider) {
 		provider = _provider
@@ -12,48 +13,50 @@ object soundProducer {
 
 	method soundEffect(audioFile) {
 		const audio = provider.sound(audioFile)
-		audio.volume(volumenGeneral)
+		audio.volume(generalVolume)
 		return audio
 	}
 
 	method soundMusic(audioFile) {
 		const audio = provider.sound(audioFile)
-		cancion = audio
-		audio.volume(volumenGeneral)
+		song = audio
+		audio.volume(generalVolume)
 		audio.shouldLoop(true)
 		return audio
 	}
 
-	method subirVolumenMusica() {
-		volumenGeneral = (volumenGeneral + 0.1).min(1)
-		if (cancion != null) {
-			cancion.volume(volumenGeneral)
+	method increaseMusicVolume() {
+		generalVolume = (generalVolume + 0.1).min(1)
+		if (song != null) {
+			song.volume(generalVolume)
 		}
 	}
 
-	method bajarVolumenMusica() {
-		volumenGeneral= (volumenGeneral - 0.1).max(0)
-		if (cancion != null) {
-			cancion.volume(volumenGeneral)
+	method decreaseMusicVolume() {
+		generalVolume = (generalVolume - 0.1).max(0)
+		if (song != null) {
+			song.volume(generalVolume)
 		}
 	}
 
-	method playCancion(audioFile) {
+	method playSong(audioFile) {
 		self.soundMusic(audioFile).play()
 	}
 
 	method playEffect(audioFile) {
 		self.soundEffect(audioFile).play()
 	}
- 
-	method sacarCancion() {
-		cancion.stop()
-		cancion = null
+
+	method stopSong() {
+		if (song != null) {
+			song.stop()
+			song = null
+		}
 	}
 
-	method configurateSettings() {
-		keyboard.q().onPressDo{ self.subirVolumenMusica()}
-		keyboard.a().onPressDo{ self.bajarVolumenMusica()}
+	method configureSettings() {
+		keyboard.q().onPressDo{ self.increaseMusicVolume()}
+		keyboard.a().onPressDo{ self.decreaseMusicVolume()}
 	}
 
 }
