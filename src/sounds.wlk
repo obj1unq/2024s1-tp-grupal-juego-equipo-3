@@ -48,8 +48,10 @@ object soundProducer {
 	}
 
 	method stopSong() {
-		song.stop()
-		song = null
+		if (song != null) {
+			song.stop()
+			song = null
+		}
 	}
 
 	method configureSettings() {
