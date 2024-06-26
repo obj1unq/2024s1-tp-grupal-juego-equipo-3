@@ -9,19 +9,33 @@ import posiciones.*
 import obstacles.*
 import wollok.game.*
 
-describe "uso de collectables" {
+describe "Contextual tests" {
 
 	method initialize() {
 		game.clear()
+		game.height(10)
+		game.width(10)
 		mainCharacter.build()
 	}
 
-	test "usar el spray, equipar el spray, matar mosquitos" {
+	test "El main character se encuentra en su recorrido con un mosquito que lo tiene dentro de su alcance. Como inicialmente
+			está equipada su mochila con el incecticida (con 4 disparos), lo usa para matar dicho mosquito y llevárselo para 
+			analizarlo en su laboratorio luego. Por desesperación, gasta sus otros tres disparos disponibles. 
+			Al quedarse sin disparos, el juego crea una recarga de insecticida. Al toparse con esta recarga se equipa nuevamente
+			con 4 disparos. El main character, en su dirección y a su alcance, se encuentra con un mosquito al que le dispara y 
+			lo mata. En última instancia, guarda ese mosquito para analizar en su mochila" {
 		mainCharacter.position(game.at(1, 3))
 		mainCharacter.direction(rightDirection)
 		mainCharacter.disparar() // main character dispara su spray que ya tiene una carga equipada de 4 disparos
 		assert.equals(3, insecticide.shoots()) // deben quedar 3 disparos
-		insecticide.recargar() // se recarga spray
+		mainCharacter.disparar()
+		mainCharacter.disparar()
+		mainCharacter.disparar() // main character gasta sus disparos
+		assert.that(refillFactory.puedeCrear()) // verifico si el juego puede crear la recarga del insecticida
+		const r1 = new Refill()
+		game.addVisual(r1)
+		var exist = true
+		r1.collision() // se recarga spray
 		assert.equals(4, insecticide.shoots()) // vuelve a tener 4 disparos
 		const mH1 = new MosquitoHard(position = game.at(2, 3)) // se crea un Mosquito
 		game.addVisual(mH1)
@@ -34,7 +48,9 @@ describe "uso de collectables" {
 		assert.equals(1, backpack.mosquitoes()) // la mochila tiene un mosquito para analizar guardado.
 	}
 
-	test "perder una vida y recuperar con el uso de vacuna" {
+	test "El main character pierde una vida al ser picado por un mosquito soft y luego la recupera con el uso de la vacuna. 
+			Luego es picado por un mosquito hard que lo deja nuevamente con una sola vida y camina de manera invertida.
+			El main character es picado en última instancia por un mosquito soft que le quita la última vida y lo mata (se quita del tablero)." {
 		const mS1 = mosquitoFactory.create() // se crea un mosquito soft
 		const mH1 = mosquitoHardFactory.create() // se crea un mosquito hard
 		mS1.position(game.at(3, 2)) // se ubica el mosquito soft a un casillero a la derecha del main character
@@ -71,11 +87,241 @@ describe "uso de collectables" {
 		assert.that(!game.hasVisual(mainCharacter)) // main character ha muerto, por lo tanto no debe estar en el tablero
 	}
 
-//
-//	test "usar los espirales y matar mosquitos" {
+//	test "Se crea una caja de espirales. Al encontrarse con esta caja, el main character se equipa con 5 espirales para utilizar. 
+//		 Usar los espirales y matar mosquitos." {
+//		const sB1 = new SpiralBox() // se crea una caja de espirales.
+//		game.addVisual(sB1)
+//		sB1.collision() // el main character se topa con la caja de espirales.
+//		assert.equals(5, backpack.spirals()) // la mochila se equipa con 5 espirales.
+//		const m1 = mosquitoFactory.create() // se crea un mosquito.
+//		game.addVisual(m1)
+//		m1.moving()
+//		m1.position(game.at(3, 4))
+//		mosquitoesManager.mosquitoes().add(m1)
+//		assert.equals(#{ m1 }, mosquitoesManager.mosquitoes()) // en la colección de mosquitos del juego teneos al mosquito creado.
+//		assert.that(backpack.hasSpirals()) // corroboramos que la mochila tiene espirales
+//		const e1 = new Spiral() // creamos un espiral
+//		e1.position(game.at(3, 3))
+//		spiralFactory.spirals().add(e1)
+//		game.addVisual(e1)
+//		e1.killMosquitos()
+//		assert.equals(#{}, mosquitoesManager.mosquitoes())
 //	}
-//
-//	test "recolectar mosquitos, basura, cajas de spirales" {
-//	}
+}
+
+describe "Main character moving without obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right" {
+		mainCharacter.build()
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(3, 2))
+	}
+
+	test "main character move left" {
+		mainCharacter.build()
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(1, 2))
+	}
+
+	test "main character move top" {
+		mainCharacter.build()
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 3))
+	}
+
+	test "main character move down" {
+		mainCharacter.build()
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 1))
+	}
+
+}
+
+describe "Main character moving with obstacles" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	}
+
+	test "main character move right with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(3, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(rightDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move left with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(1, 2))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(leftDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move up with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 3))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(upDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+	test "main character move down with obstacle" {
+		mainCharacter.build()
+		const obstacle = new Obstacle()
+		obstacle.position(game.at(2, 1))
+		game.addVisual(obstacle)
+		mainCharacter.goesTo(downDirection)
+		assert.equals(mainCharacter.position(), game.at(2, 2))
+	}
+
+}
+
+describe "Main character bitten" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	// soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character bites one time" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		assert.equals(1, mainCharacter.lifes())
+		assert.equals(true, mainCharacter.isSick())
+	// assert.equals(ganador, mainCharacter.estado())
+	}
+
+	test "main character bites two time" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		mainCharacter.bitten()
+		assert.equals(0, mainCharacter.lifes())
+	// assert.equals(perdedor, mainCharacter.estado())
+	}
+
+	test "main character one bite and healed" {
+		mainCharacter.build()
+		mainCharacter.bitten()
+		mainCharacter.curar()
+		assert.equals(2, mainCharacter.lifes())
+		assert.equals(false, mainCharacter.isSick())
+	// assert.equals(ganador, mainCharacter.estado())
+	}
+
+}
+
+describe "Main character spirals" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	// soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character put one spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		assert.equals(4, backpack.spirals())
+	}
+
+	test "main character put two spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		assert.equals(3, backpack.spirals())
+	}
+
+	test "main character put three spiral" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		assert.equals(2, backpack.spirals())
+	}
+
+	test "main character put four spiral and reload" {
+		mainCharacter.build()
+		backpack.build()
+		backpack.reloadSpirals()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		mainCharacter.putSpiral()
+		backpack.reloadSpirals()
+		assert.equals(5, backpack.spirals())
+	}
+
+}
+
+describe "Main character shoot" {
+
+	method initialize() {
+		game.clear()
+		game.height(10)
+		game.width(10)
+	// soundProducer.provider(soundProviderMock)
+	}
+
+	test "main character shoot one time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.equals(3, insecticide.shoots())
+	}
+
+	test "main character shoot two time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.equals(2, insecticide.shoots())
+	}
+
+	test "main character shoot three time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.equals(1, insecticide.shoots())
+	}
+
+	test "main character shoot four time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.equals(0, insecticide.shoots())
+	}
+
+	test "main character shoot five time" {
+		mainCharacter.build()
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.doesNotThrowException{ mainCharacter.disparar()}
+		assert.throwsException{ mainCharacter.disparar()}
+	}
+
 }
 
