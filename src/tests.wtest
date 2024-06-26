@@ -35,18 +35,40 @@ describe "uso de collectables" {
 	}
 
 	test "perder una vida y recuperar con el uso de vacuna" {
-		const mS1 = mosquitoFactory.create()
-		const mH1 = mosquitoHardFactory.create()
-		mS1.position(game.at(3, 2)) // se ubica un mosquito soft a un casillero a la derecha del main character
+		const mS1 = mosquitoFactory.create() // se crea un mosquito soft
+		const mH1 = mosquitoHardFactory.create() // se crea un mosquito hard
+		mS1.position(game.at(3, 2)) // se ubica el mosquito soft a un casillero a la derecha del main character
 		game.addVisual(mS1)
 		mS1.moving()
 		mosquitoesManager.mosquitoes().add(mS1)
-		mH1.position(game.at(2, 3)) // se ubica un mosquito hard un casillero arriba del main character
+		mH1.position(game.at(2, 3)) // se ubica el mosquito hard un casillero arriba del main character
 		game.addVisual(mH1)
 		mH1.moving()
 		mosquitoesManager.mosquitoes().add(mH1)
-		mainCharacter.goesTo(rightDirection)
-		assert.equals([ mainCharacter, mS1 ], game.getObjectsIn(game.at(3, 2)).asList())
+		assert.equals(#{ mS1, mH1 }, mosquitoesManager.mosquitoes()) // verifico que ambos mosquitos estén en la colección
+		mainCharacter.position(game.at(3, 2)) // main character se mueve a la posición del mosquito soft
+		assert.equals([ mainCharacter, mS1 ], game.getObjectsIn(game.at(3, 2)).asList()) // verifico que estén en el mismo casillero el mosquito soft y el main character
+		mS1.collision() // el mosquito soft colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ mH1 }, mosquitoesManager.mosquitoes()) // verifico que en la colección de mosquitos del game sólo esté el mosquito hard.
+		assert.equals(1, mainCharacter.lifes()) // verifico que el main character ahora tiene una vida menos (1).
+		const v1 = new Vaccine() // se crea una vacuna
+		game.addVisual(v1)
+		v1.collision() // cuando colisiona con el main character, éste recupera una vida.
+		assert.equals(2, mainCharacter.lifes()) // verifico que el main character tiene 2 vidas nuevamente.
+		const mS2 = mosquitoFactory.create() // se crea otro mosquito soft 
+		game.addVisual(mS2)
+		mS2.moving()
+		mosquitoesManager.mosquitoes().add(mS2)
+		assert.equals(#{ mH1, mS2 }, mosquitoesManager.mosquitoes()) // verifico que ambos mosquitos están en la lista de mosquitos del game
+		mH1.collision() // el mosquito hard colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ mS2 }, mosquitoesManager.mosquitoes()) // verifico que en la colección de mosquitos del game sólo esté el mosquito soft último creado.
+		assert.equals(1, mainCharacter.lifes()) // verifico que el main character ahora tiene una vida menos (1).
+		assert.that(mainCharacter.estaInvertido()) // verifico que el main character ahora tiene la movilidad invertida
+		mS2.collision() // el mosquito soft colisiona con el main character (lo pica y muere el mosquito) 
+		assert.equals(#{ }, mosquitoesManager.mosquitoes()) // verifico que ya no hay mosquitos en la colección del game
+		assert.equals(0, mainCharacter.lifes()) // verifico que el main character tiene 0 vidas.
+		assert.equals(3, mainCharacter.bites()) // verifico que el main character acumula 3 picaduras.
+		assert.that(!game.hasVisual(mainCharacter)) // main character ha muerto, por lo tanto no debe estar en el tablero
 	}
 
 //
