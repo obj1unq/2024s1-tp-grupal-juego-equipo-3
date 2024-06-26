@@ -62,7 +62,6 @@ object start {
 	method menuName() {
 		return "start"
 	}
-
 }
 
 object controls {
