@@ -87,26 +87,29 @@ describe "Contextual tests" {
 		assert.that(!game.hasVisual(mainCharacter)) // main character ha muerto, por lo tanto no debe estar en el tablero
 	}
 
-//	test "Se crea una caja de espirales. Al encontrarse con esta caja, el main character se equipa con 5 espirales para utilizar. 
-//		 Usar los espirales y matar mosquitos." {
-//		const sB1 = new SpiralBox() // se crea una caja de espirales.
-//		game.addVisual(sB1)
-//		sB1.collision() // el main character se topa con la caja de espirales.
-//		assert.equals(5, backpack.spirals()) // la mochila se equipa con 5 espirales.
-//		const m1 = mosquitoFactory.create() // se crea un mosquito.
-//		game.addVisual(m1)
-//		m1.moving()
-//		m1.position(game.at(3, 4))
-//		mosquitoesManager.mosquitoes().add(m1)
-//		assert.equals(#{ m1 }, mosquitoesManager.mosquitoes()) // en la colección de mosquitos del juego teneos al mosquito creado.
-//		assert.that(backpack.hasSpirals()) // corroboramos que la mochila tiene espirales
-//		const e1 = new Spiral() // creamos un espiral
-//		e1.position(game.at(3, 3))
-//		spiralFactory.spirals().add(e1)
-//		game.addVisual(e1)
-//		e1.killMosquitos()
-//		assert.equals(#{}, mosquitoesManager.mosquitoes())
-//	}
+	test "Se crea una caja de espirales. Al encontrarse con esta caja, el main character se equipa con 5 espirales." {
+		const sB1 = new SpiralBox() // se crea una caja de espirales.
+		game.addVisual(sB1)
+		sB1.collision() // el main character se topa con la caja de espirales.
+		assert.equals(5, backpack.spirals()) // la mochila se equipa con 5 espirales.
+	}
+
+	test "Usar los espirales y matar mosquitos." {
+		const m1 = mosquitoFactory.create() // se crea un mosquito.
+		game.addVisual(m1)
+		m1.position(game.at(4, 3))
+		mosquitoesManager.mosquitoes().add(m1)
+		assert.equals(#{ m1 }, mosquitoesManager.mosquitoes()) // en la colección de mosquitos del juego teneos al mosquito creado.
+		backpack.reloadSpirals() // se cargan los 5 espirales después de levantar una caja de espirales.
+		const e1 = new Spiral() // creamos un espiral
+		game.addVisual(e1)
+		e1.position(game.at(3, 3))
+		const mf = mosquitoesManager.mosquitoesAround(e1)
+		assert.equals(#{ m1 }, mf)
+	// e1.killMosquitos()
+	// assert.equals(#{}, mosquitoesManager.mosquitoes())
+	}
+
 }
 
 describe "Main character moving without obstacles" {
