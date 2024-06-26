@@ -112,7 +112,7 @@ object controlsMenu {
 	}
 
 	method menuName() {
-		return "controlsMenu"
+		return "controlsMenuu"
 	}
 
 	method next(menu) {
