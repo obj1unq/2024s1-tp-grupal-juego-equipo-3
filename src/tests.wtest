@@ -7,6 +7,7 @@ import navigation.*
 import randomizer.*
 import posiciones.*
 import obstacles.*
+import sounds.*
 import wollok.game.*
 
 describe "Contextual tests" {
@@ -104,10 +105,8 @@ describe "Contextual tests" {
 		const e1 = new Spiral() // creamos un espiral
 		game.addVisual(e1)
 		e1.position(game.at(3, 3))
-		const mf = mosquitoesManager.mosquitoesAround(e1)
-		assert.equals(#{ m1 }, mf)
-	// e1.killMosquitos()
-	// assert.equals(#{}, mosquitoesManager.mosquitoes())
+		e1.killMosquitos()
+		assert.equals(#{}, mosquitoesManager.mosquitoes())
 	}
 
 }
@@ -198,7 +197,7 @@ describe "Main character bitten" {
 		game.clear()
 		game.height(10)
 		game.width(10)
-	// soundProducer.provider(soundProviderMock)
+		soundProducer.provider(soundProviderMock)
 	}
 
 	test "main character bites one time" {
@@ -206,7 +205,7 @@ describe "Main character bitten" {
 		mainCharacter.bitten()
 		assert.equals(1, mainCharacter.lifes())
 		assert.equals(true, mainCharacter.isSick())
-	// assert.equals(ganador, mainCharacter.estado())
+		assert.equals(ganador, mainCharacter.estado())
 	}
 
 	test "main character bites two time" {
@@ -214,7 +213,7 @@ describe "Main character bitten" {
 		mainCharacter.bitten()
 		mainCharacter.bitten()
 		assert.equals(0, mainCharacter.lifes())
-	// assert.equals(perdedor, mainCharacter.estado())
+		assert.equals(perdedor, mainCharacter.estado())
 	}
 
 	test "main character one bite and healed" {
@@ -223,7 +222,7 @@ describe "Main character bitten" {
 		mainCharacter.curar()
 		assert.equals(2, mainCharacter.lifes())
 		assert.equals(false, mainCharacter.isSick())
-	// assert.equals(ganador, mainCharacter.estado())
+		assert.equals(ganador, mainCharacter.estado())
 	}
 
 }
@@ -284,7 +283,7 @@ describe "Main character shoot" {
 		game.clear()
 		game.height(10)
 		game.width(10)
-	// soundProducer.provider(soundProviderMock)
+		soundProducer.provider(soundProviderMock)
 	}
 
 	test "main character shoot one time" {
